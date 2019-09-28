@@ -1,0 +1,3 @@
+/home/thiago/Desktop/poo/trab1/poo-trab1/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/thiago/Desktop/poo/trab1/poo-trab1/cmake-build-debug/CMakeFiles/trab1.dir
+/home/thiago/Desktop/poo/trab1/poo-trab1/cmake-build-debug/CMakeFiles/edit_cache.dir

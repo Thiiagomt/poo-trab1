@@ -1,0 +1,36 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/thiago/Desktop/poo/trab1/poo-trab1/Cliente.cpp
+iostream
+-
+Cliente.h
+/home/thiago/Desktop/poo/trab1/poo-trab1/Cliente.h
+
+/home/thiago/Desktop/poo/trab1/poo-trab1/Cliente.h
+string
+-
+
+/home/thiago/Desktop/poo/trab1/poo-trab1/ContaCorrente.cpp
+iostream
+-
+ContaCorrente.h
+/home/thiago/Desktop/poo/trab1/poo-trab1/ContaCorrente.h
+
+/home/thiago/Desktop/poo/trab1/poo-trab1/ContaCorrente.h
+string
+-
+
+/home/thiago/Desktop/poo/trab1/poo-trab1/main.cpp
+iostream
+-
+Cliente.h
+/home/thiago/Desktop/poo/trab1/poo-trab1/Cliente.h
+ContaCorrente.h
+/home/thiago/Desktop/poo/trab1/poo-trab1/ContaCorrente.h
+
