@@ -20,6 +20,9 @@ public:
     // Construtor
     ContaCorrente(int numConta, Data dataAbertura, string cpfCliente, float saldoAtual);
 
+    // Construtor default
+    ContaCorrente();
+
     // Destrutor
     ~ContaCorrente();
 

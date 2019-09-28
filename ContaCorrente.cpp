@@ -19,6 +19,9 @@ ContaCorrente::ContaCorrente(int numConta, Data dataAbertura, string cpfCliente,
     setConta(numConta, dataAbertura, cpfCliente, saldoAtual);
 }
 
+//Construtor default
+ContaCorrente::ContaCorrente() = default;
+
 //Destrutor
 ContaCorrente::~ContaCorrente() = default;
 
