@@ -14,18 +14,18 @@ void ContaCorrente::setConta(int numConta, Data dataAbertura, string cpfCliente,
     setSaldoAtual(saldoAtual);
 }
 
-//Construtor
+// Construtor
 ContaCorrente::ContaCorrente(int numConta, Data dataAbertura, string cpfCliente, float saldoAtual) {
     setConta(numConta, dataAbertura, cpfCliente, saldoAtual);
 }
 
-//Construtor default
+// Construtor default
 ContaCorrente::ContaCorrente() = default;
 
-//Destrutor
+// Destrutor
 ContaCorrente::~ContaCorrente() = default;
 
-//Imprime info da conta
+// Imprime info da conta
 void ContaCorrente::printConta() {
     cout << "O CPF do dono desta conta é: " << getCPFCliente() << endl;
     cout << "O número da conta é: " << getNumConta() << endl;
@@ -33,7 +33,7 @@ void ContaCorrente::printConta() {
     cout << "O saldo atual da conta é: " << "R$ " << getSaldoAtual() << endl;
 }
 
-//Setters
+// Setters
 void ContaCorrente::setNumConta(int numConta){
     this->numConta = numConta;
 }

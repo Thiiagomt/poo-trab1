@@ -26,19 +26,19 @@ public:
     // Destrutor
     ~ContaCorrente();
 
-    //Define Cliente
+    // Define Cliente
     void setConta(int numConta, Data dataAbertura, string cpfCliente, float saldoAtual);
 
-    //Imprime info conta
+    // Imprime info conta
     void printConta();
 
-    //Setters
+    // Setters
     void setNumConta(int);
     void setDataAbertura(Data);
     void setCPFCliente(string);
     void setSaldoAtual(float);
 
-    //Getters
+    // Getters
     int getNumConta();
     Data getDataAbertura();
     string getCPFCliente();
