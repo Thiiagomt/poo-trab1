@@ -5,7 +5,7 @@
 
 using namespace std;
 
-//Funções
+// Funções
 void menuPrincipal();
 void menuCliente();
 void menuConta();

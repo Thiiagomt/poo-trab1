@@ -15,18 +15,18 @@ void Cliente::setCliente(string nome, string cpf, Adress endereco, string telefo
     setEmail(email);
 } 
 
-//Construtor
+// Construtor
 Cliente::Cliente(string nome, string cpf, Adress endereco, string telefone, string email) {
     setCliente(nome, cpf, endereco, telefone, email);
 }
 
-//Construtor default
+// Construtor default
 Cliente::Cliente() = default;
 
-//Destrutor
+// Destrutor
 Cliente::~Cliente() = default;
 
-//Imprime info do cliente
+// Imprime info do cliente
 void Cliente::printCliente() {
     cout << "O dono(a) desta conta é: " << getNome() << endl;
     cout << "Portador do CPF: " << getCPF() << endl;
@@ -37,7 +37,7 @@ void Cliente::printCliente() {
 }
 
 
-//Setters
+// Setters
 void Cliente::setNome(string nome) {
     this->nome = nome;
 }
@@ -54,7 +54,7 @@ void Cliente::setEmail(string email) {
     this->email = email;
 }
 
-//Getters
+// Getters
 string Cliente::getNome(){
 	return this->nome;
 }

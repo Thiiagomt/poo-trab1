@@ -22,26 +22,26 @@ public:
     // Construtor
     Cliente(string nome, string cpf, Adress endereco, string telefone, string email);
 
-    //Construtor default
+    // Construtor default
     Cliente();
 
     // Destrutoe
     ~Cliente();
 
-    //Define Cliente
+    // Define Cliente
     void setCliente(string nome, string cpf, Adress endereco, string telefone, string email);
 
-    //Imprime info cliente
+    // Imprime info cliente
     void printCliente();
 
-    //Setters
+    // Setters
     void setNome(string);
     void setCPF(string);
     void setEndereco(Adress);
     void setTelefone(string);
     void setEmail(string);
 
-    //Getters
+    // Getters
     string getNome();
     string getCPF();
     Adress getEndereco();
