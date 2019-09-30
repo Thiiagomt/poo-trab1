@@ -44,22 +44,22 @@ void ContaCorrente::setDataAbertura(Data dataAbertura){
             cin >> dataAbertura.ano;
         }
 
-    if(dataAbertura.mes < 1 || dataAbertura.mes > 12)
-        while(dataAbertura.mes < 1 || dataAbertura.mes > 12){
+    if(dataAbertura.mes<1 || dataAbertura.mes>12)
+        while(dataAbertura.mes<1 || dataAbertura.mes>12){
             cout << "Mes inválido, insira novamente" << endl;
             cin >> dataAbertura.mes;
         }
 
     if(dataAbertura.mes == 2)
-        if(dataAbertura.dia < 1 || dataAbertura.dia > 28)
-            while(dataAbertura.dia < 1 || dataAbertura.dia > 28){
+        if(dataAbertura.dia<1 || dataAbertura.dia>28)
+            while(dataAbertura.dia<1 || dataAbertura.dia>28){
                 cout << "O mes Fevereiro não pode ultrapassar o dia 28" << endl;
                 cout << "Insira um novo dia válido" << endl;
                 cin >> dataAbertura.dia;
             }
 
-    if(dataAbertura.dia < 1 || dataAbertura.dia > 31)
-        while(dataAbertura.dia < 1 || dataAbertura.dia > 31){
+    if(dataAbertura.dia<1 || dataAbertura.dia>31)
+        while(dataAbertura.dia<1 || dataAbertura.dia>31){
             cout << "Dia inválido, insira novamente" << endl;
             cin >> dataAbertura.dia;
         }
