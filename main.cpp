@@ -16,6 +16,7 @@ int cadastrarCliente();
 int excluirCliente();
 int criarConta();
 int excluirConta();
+
 int getQuantidadeDeContas();
 int getQuantidadeDeClientes();
 float getMontanteTotal();
