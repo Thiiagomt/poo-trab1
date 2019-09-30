@@ -17,7 +17,7 @@ int excluirCliente();
 int criarConta();
 int excluirConta();
 int getQuantidadeDeContas();
-int getQuantidadeDeClientes();
+int getQuantidadeDeClientes(); 
 float getMontanteTotal();
 
 int numContasCadastradas = 0;
