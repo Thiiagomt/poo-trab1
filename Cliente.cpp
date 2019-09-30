@@ -30,7 +30,7 @@ Cliente::~Cliente() = default;
 void Cliente::printCliente() {
     cout << "O dono(a) desta conta é: " << getNome() << endl;
     cout << "Portador do CPF: " << getCPF() << endl;
-    cout << "Endereço: Rua " << getEndereco().rua << "," << getEndereco().numero << " - Bairro " << getEndereco().bairro << " - CEP: " << getEndereco().cep << endl;
+    cout << "Endereço: Rua " << getEndereco().rua << "," << getEndereco().numero << " Bairro " << getEndereco().bairro << "," << " CEP: " << getEndereco().cep << endl;
     cout << "Reside em: " << getEndereco().cidade << "," << getEndereco().uf << endl;
     cout << "Telefone: " << getTelefone() << endl;
     cout << "Email: " << getEmail() << endl;
