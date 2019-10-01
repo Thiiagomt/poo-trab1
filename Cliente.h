@@ -6,6 +6,8 @@
 #define TRAB1_CLIENTE_H
 
 #include <string>
+#include <sstream>
+
 using namespace std;
 
 typedef struct{
@@ -19,6 +21,15 @@ typedef struct{
 
 class Cliente {
 public:
+
+    //Função para transformar float em int
+    std::string to_string_with_precision(const float valor, const int num_casas){
+        std::ostringstream out;
+        out.precision(num_casas);
+        out << std::fixed << valor;
+        return out.str();
+    }
+
     // Construtor
     Cliente(string nome, string cpf, Adress endereco, string telefone, string email);
 
@@ -32,7 +43,7 @@ public:
     void setCliente(string nome, string cpf, Adress endereco, string telefone, string email);
 
     // Imprime info cliente
-    void printCliente();
+    string printCliente();
 
     // Setters
     void setNome(string);

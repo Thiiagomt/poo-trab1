@@ -6,7 +6,10 @@
 #define TRAB1_CONTACORRENTE_H
 
 #include <string>
+#include <sstream>
 using namespace std;
+
+
 
 typedef struct {
     int dia;
@@ -17,6 +20,15 @@ typedef struct {
 
 class ContaCorrente {
 public:
+
+    //Função para transformar float em int
+    std::string to_string_with_precision(const float valor, const int num_casas){
+        std::ostringstream out;
+        out.precision(num_casas);
+        out << std::fixed << valor;
+        return out.str();
+    }
+
     // Construtor
     ContaCorrente(int numConta, Data dataAbertura, string cpfCliente, float saldoAtual);
 
@@ -30,7 +42,7 @@ public:
     void setConta(int numConta, Data dataAbertura, string cpfCliente, float saldoAtual);
 
     // Imprime info conta
-    void printConta();
+    string printConta();
 
     // Setters
     void setNumConta(int);

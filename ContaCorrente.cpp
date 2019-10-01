@@ -26,11 +26,15 @@ ContaCorrente::ContaCorrente() = default;
 ContaCorrente::~ContaCorrente() = default;
 
 // Imprime info da conta
-void ContaCorrente::printConta() {
-    cout << "O CPF do dono desta conta é: " << getCPFCliente() << endl;
-    cout << "O número da conta é: " << getNumConta() << endl;
-    cout << "A data de abertura da conta é: " << getDataAbertura().dia << "/" << getDataAbertura().mes << "/" << getDataAbertura().ano << endl;
-    cout << "O saldo atual da conta é: " << "R$ " << getSaldoAtual() << endl;
+string ContaCorrente::printConta() {
+    string saida;
+
+    saida = "O CPF do dono desta conta é: " + getCPFCliente() +
+        "\nO número da conta é: " + to_string(getNumConta()) +
+            "\nA data de abertura da conta é: " + to_string(getDataAbertura().dia) + "/" + to_string(getDataAbertura().mes) + "/" + to_string(getDataAbertura().ano) +
+                "\nO saldo atual da conta é: R$" + to_string_with_precision(getSaldoAtual(), 2);
+
+    return saida;
 }
 
 // Setters

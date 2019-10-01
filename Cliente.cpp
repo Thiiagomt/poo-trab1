@@ -27,13 +27,17 @@ Cliente::Cliente() = default;
 Cliente::~Cliente() = default;
 
 // Imprime info do cliente
-void Cliente::printCliente() {
-    cout << "O dono(a) desta conta é: " << getNome() << endl;
-    cout << "Portador do CPF: " << getCPF() << endl;
-    cout << "Endereço: Rua " << getEndereco().rua << "," << getEndereco().numero << " Bairro " << getEndereco().bairro << "," << " CEP: " << getEndereco().cep << endl;
-    cout << "Reside em: " << getEndereco().cidade << "," << getEndereco().uf << endl;
-    cout << "Telefone: " << getTelefone() << endl;
-    cout << "Email: " << getEmail() << endl;
+string Cliente::printCliente() {
+    string saida;
+
+    saida = "O dono(a) desta conta é: " + getNome() +
+        "\nPortador do CPF: " + getCPF() +
+            "\nEndereço: Rua " + getEndereco().rua + "," + to_string(getEndereco().numero) + " Bairro " + getEndereco().bairro + "," + " CEP: " + to_string(getEndereco().cep) +
+                "\nReside em: " + getEndereco().cidade + "," + getEndereco().uf +
+                    "\nTelefone: " + getTelefone() +
+                        "\nEmail: " + getEmail();
+
+    return saida;
 }
 
 

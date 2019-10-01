@@ -12,6 +12,15 @@ using namespace std;
 
 class Lancamento {
 public:
+
+    //Função para transformar float em int
+    std::string to_string_with_precision(const float valor, const int num_casas){
+        std::ostringstream out;
+        out.precision(num_casas);
+        out << std::fixed << valor;
+        return out.str();
+    }
+
     // Construtor
     Lancamento(int numConta, int operacao, float valorLancamento, Data dataLancamento);
 

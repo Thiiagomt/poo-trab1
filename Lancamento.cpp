@@ -3,17 +3,9 @@
 //
 
 #include  <iostream>
-#include <sstream>
 
 #include "Lancamento.h"
 using namespace std;
-
-std::string to_string_with_precision(const float valor, const int num_casas){
-    std::ostringstream out;
-    out.precision(num_casas);
-    out << std::fixed << valor;
-    return out.str();
-}
 
 void Lancamento::setLancamento(int numConta, int operacao, float valorLancamento, Data dataLancamento){
     setNumConta(numConta);
