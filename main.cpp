@@ -2,6 +2,7 @@
 
 #include "Cliente.h"
 #include "ContaCorrente.h"
+#include "Lancamento.h"
 
 using namespace std;
 
@@ -22,6 +23,7 @@ float getMontanteTotal();
 
 int numContasCadastradas = 0;
 int numClientesCadastrados = 0;
+int numLancamentosEfetuados = 0;
 
 int main() {
     ContaCorrente * cadastroContas;
@@ -29,6 +31,9 @@ int main() {
 
     Cliente * cadastroClientes;
     cadastroClientes = (Cliente*) malloc(10 * sizeof(Cliente));
+
+    Lancamento * historicoLancamentos;
+    historicoLancamentos = (Lancamento*) malloc(10 * sizeof(Lancamento));
 
 
     Data data;

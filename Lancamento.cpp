@@ -3,9 +3,17 @@
 //
 
 #include  <iostream>
+#include <sstream>
 
 #include "Lancamento.h"
 using namespace std;
+
+std::string to_string_with_precision(const float valor, const int num_casas){
+    std::ostringstream out;
+    out.precision(num_casas);
+    out << std::fixed << valor;
+    return out.str();
+}
 
 void Lancamento::setLancamento(int numConta, int operacao, float valorLancamento, Data dataLancamento){
     setNumConta(numConta);
@@ -26,17 +34,21 @@ Lancamento::Lancamento() = default;
 Lancamento::~Lancamento() = default;
 
 // Imprime info do cliente
-void Lancamento::printLancamento() {
+string Lancamento::printLancamento() {
     string operation;
+    string saida;
+
     if(getOperacao() == 1)
         operation = "Debito";
     else
         operation = "Credito";
 
-    cout << "O número da conta onde o lançamento foi feito é: " << getNumConta() << endl;
-    cout << "Operacao de: " << operation << endl;
-    cout << "Com o valor de: R$" << getValorLancamento() << endl;
-    cout << "A data de abertura da conta é: " << getDataLancamento().dia << "/" << getDataLancamento().mes << "/" << getDataLancamento().ano << endl;
+    saida = "O número da conta onde o lançamento foi feito é: " + to_string(getNumConta()) +
+        "\nOperacao de: " + operation +
+            "\nCom o valor de: R$" + to_string_with_precision(getValorLancamento(), 2) +
+                "\nA data do lancamento na conta foi: " + to_string(getDataLancamento().dia) + "/" + to_string(getDataLancamento().mes) + "/" + to_string(getDataLancamento().ano);
+
+    return saida;
 }
 
 

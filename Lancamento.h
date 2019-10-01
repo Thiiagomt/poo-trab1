@@ -5,7 +5,9 @@
 #ifndef TRAB1_LANCAMENTO_H
 #define TRAB1_LANCAMENTO_H
 
-
+using namespace std;
+#include <string>
+#include <sstream>
 #include "ContaCorrente.h"
 
 class Lancamento {
@@ -23,7 +25,7 @@ public:
     void setLancamento(int numConta, int operacao, float valorLancamento, Data dataLancamento);
 
     // Imprime info conta
-    void printLancamento();
+    string printLancamento();
 
     // Setters
     void setNumConta(int);
