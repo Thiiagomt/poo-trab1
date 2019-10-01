@@ -94,6 +94,12 @@
 		<Unit filename="/home/thiago/Desktop/poo/trab1/poo-trab1/ContaCorrente.h">
 			<Option target="trab1"/>
 		</Unit>
+		<Unit filename="/home/thiago/Desktop/poo/trab1/poo-trab1/Lancamento.cpp">
+			<Option target="trab1"/>
+		</Unit>
+		<Unit filename="/home/thiago/Desktop/poo/trab1/poo-trab1/Lancamento.h">
+			<Option target="trab1"/>
+		</Unit>
 		<Unit filename="/home/thiago/Desktop/poo/trab1/poo-trab1/main.cpp">
 			<Option target="trab1"/>
 		</Unit>

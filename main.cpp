@@ -1,5 +1,5 @@
 #include <iostream>
- a 
+
 #include "Cliente.h"
 #include "ContaCorrente.h"
 
@@ -16,7 +16,6 @@ int cadastrarCliente();
 int excluirCliente();
 int criarConta();
 int excluirConta();
-
 int getQuantidadeDeContas();
 int getQuantidadeDeClientes();
 float getMontanteTotal();
@@ -40,6 +39,7 @@ int main() {
     ContaCorrente conta1;
     conta1.setConta(147, data, "44175184830", 147.02);
     cadastroContas[0] = conta1;
+    numContasCadastradas += 1;
 
 
     menuPrincipal(cadastroContas, cadastroClientes);
@@ -229,7 +229,7 @@ void menuLancamento(ContaCorrente * cadastroContas, Cliente * cadastroClientes) 
          << "3 - SAIR" << endl;
 
     cin >> option;
-    while (option<0 || option>6) {
+    while (option<0 || option>3) {
         cout << "Selecione uma opção válida" << endl;
         cin >> option;
     }
@@ -242,7 +242,7 @@ void menuLancamento(ContaCorrente * cadastroContas, Cliente * cadastroClientes) 
         case 1: {
             operacao = 1;
 
-            cout << endl << "Insira o numero da conta: ";
+            cout << "Insira o numero da conta: ";
             cin >> numConta;
 
             cout << "Insira o valor a ser debitado: ";
@@ -285,20 +285,83 @@ void menuLancamento(ContaCorrente * cadastroContas, Cliente * cadastroClientes) 
             comando = lancamento(numConta, operacao, valorLancamento, dataLancamento, cadastroContas);
             switch(comando){
                 case 0:
+                    cout << "Lançamento realizado com sucesso!" << endl;
+                    cout << "Você será redirecionado para o menu de lançamentos" << endl;
+                    menuLancamento(cadastroContas, cadastroClientes);
                     break;
                 case 1:
+                    cout << "ERRO! Não há nenhuma conta correspondente com o número inserido" << endl;
+                    cout << "Você será redirecionado para o menu de lançamentos" << endl;
+                    menuLancamento(cadastroContas, cadastroClientes);
                     break;
                 case 2:
+                    cout << "ERRO! A conta não tem saldo suficiente para o lançamento" << endl;
+                    cout << "Você será redirecionado para o menu de lançamentos" << endl;
+                    menuLancamento(cadastroContas, cadastroClientes);
                     break;
                 default:
                     break;
             }
-
-
             break;
         }
         case 2: {
-            //
+            operacao = 2;
+
+            cout << "Insira o numero da conta: ";
+            cin >> numConta;
+
+            cout << "Insira o valor a ser adicionado a conta: ";
+            cin >> valorLancamento;
+
+            cout << "Para controle insira a data do lancamento na seguinte ordem";
+            cout << endl << "Ano: ";
+            cin >> dataLancamento.ano;
+            while (dataLancamento.ano != 2019) {
+                cout << "O ano digitado é invalido! Tente novamente" << endl;
+                cout << "Ano: ";
+                cin >> dataLancamento.ano;
+            }
+            cout << "Mes: ";
+            cin >> dataLancamento.mes;
+            while (dataLancamento.mes<1 || dataLancamento.mes>12) {
+                cout << "O mes digitado é invalido! Tente novamente" << endl;
+                cout << "Mes: ";
+                cin >> dataLancamento.mes;
+            }
+            cout << "Dia: ";
+            cin >> dataLancamento.dia;
+            if (dataLancamento.mes == 2){
+                if (dataLancamento.dia<1 || dataLancamento.dia>28)
+                    while (dataLancamento.dia<1 || dataLancamento.dia>28) {
+                        cout << "O dia digitado é invalido! Tente novamente" << endl;
+                        cout << "Dia: ";
+                        cin >> dataLancamento.dia;
+                    }
+            }
+            else {
+                if (dataLancamento.dia<1 || dataLancamento.dia>31)
+                    while (dataLancamento.dia<1 || dataLancamento.dia>31) {
+                        cout << "O dia digitado é invalido! Tente noamente" << endl;
+                        cout << "Dia: ";
+                        cin >> dataLancamento.dia;
+                    }
+            }
+
+            comando = lancamento(numConta, operacao, valorLancamento, dataLancamento, cadastroContas);
+            switch(comando){
+                case 0:
+                    cout << "Lançamento realizado com sucesso!" << endl;
+                    cout << "Você será redirecionado para o menu de lançamentos" << endl;
+                    menuLancamento(cadastroContas, cadastroClientes);
+                    break;
+                case 1:
+                    cout << "ERRO! Não há nenhuma conta correspondente com o número inserido" << endl;
+                    cout << "Você será redirecionado para o menu de lançamentos" << endl;
+                    menuLancamento(cadastroContas, cadastroClientes);
+                    break;
+                default:
+                    break;
+            }
             break;
         }
         case 3: {
@@ -310,12 +373,19 @@ void menuLancamento(ContaCorrente * cadastroContas, Cliente * cadastroClientes) 
 }
 
 int lancamento(int numConta, int operacao, float valor, Data data, ContaCorrente * cadastroContas){
-    int i;
+    int i=0;
     int cont=0;
+    float novoValor=0;
 
-    for(i=0; i<numContasCadastradas; i++)
+    do{
         if(numConta == cadastroContas[i].getNumConta())
             cont += 1;
+
+        i += 1;
+    }while(i<numContasCadastradas);
+
+    //Subtrai 1 do i para voltar para a posição da conta desejada no vetor
+    i -= 1;
 
     //Não existe esse numero de conta
     if(cont == 0)
@@ -324,9 +394,17 @@ int lancamento(int numConta, int operacao, float valor, Data data, ContaCorrente
     //Operação 1 = Débito
     //Operação 2 = Crédito
     if(operacao == 1){
-
+        if((cadastroContas[i].getSaldoAtual() - valor) < 0)
+            return 2;
+        else {
+            novoValor = cadastroContas[i].getSaldoAtual() - valor;
+            cadastroContas[i].setSaldoAtual(novoValor);
+            return 0;
+        }
     }
-    else if(operacao == 2){
-
+    else{
+        novoValor = cadastroContas[i].getSaldoAtual() + valor;
+        cadastroContas[i].setSaldoAtual(novoValor);
+        return 0;
     }
 }

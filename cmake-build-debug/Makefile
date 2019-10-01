@@ -177,6 +177,33 @@ ContaCorrente.cpp.s:
 	$(MAKE) -f CMakeFiles/trab1.dir/build.make CMakeFiles/trab1.dir/ContaCorrente.cpp.s
 .PHONY : ContaCorrente.cpp.s
 
+Lancamento.o: Lancamento.cpp.o
+
+.PHONY : Lancamento.o
+
+# target to build an object file
+Lancamento.cpp.o:
+	$(MAKE) -f CMakeFiles/trab1.dir/build.make CMakeFiles/trab1.dir/Lancamento.cpp.o
+.PHONY : Lancamento.cpp.o
+
+Lancamento.i: Lancamento.cpp.i
+
+.PHONY : Lancamento.i
+
+# target to preprocess a source file
+Lancamento.cpp.i:
+	$(MAKE) -f CMakeFiles/trab1.dir/build.make CMakeFiles/trab1.dir/Lancamento.cpp.i
+.PHONY : Lancamento.cpp.i
+
+Lancamento.s: Lancamento.cpp.s
+
+.PHONY : Lancamento.s
+
+# target to generate assembly for a file
+Lancamento.cpp.s:
+	$(MAKE) -f CMakeFiles/trab1.dir/build.make CMakeFiles/trab1.dir/Lancamento.cpp.s
+.PHONY : Lancamento.cpp.s
+
 main.o: main.cpp.o
 
 .PHONY : main.o
@@ -219,6 +246,9 @@ help:
 	@echo "... ContaCorrente.o"
 	@echo "... ContaCorrente.i"
 	@echo "... ContaCorrente.s"
+	@echo "... Lancamento.o"
+	@echo "... Lancamento.i"
+	@echo "... Lancamento.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

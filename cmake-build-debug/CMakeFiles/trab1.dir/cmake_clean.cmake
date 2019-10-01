@@ -2,6 +2,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/trab1.dir/main.cpp.o"
   "CMakeFiles/trab1.dir/ContaCorrente.cpp.o"
   "CMakeFiles/trab1.dir/Cliente.cpp.o"
+  "CMakeFiles/trab1.dir/Lancamento.cpp.o"
   "trab1.pdb"
   "trab1"
 )

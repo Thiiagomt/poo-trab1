@@ -6,12 +6,6 @@
 
 #IncludeRegexTransform: 
 
-/home/thiago/Desktop/poo/trab1/poo-trab1/Cliente.cpp
-iostream
--
-Cliente.h
-/home/thiago/Desktop/poo/trab1/poo-trab1/Cliente.h
-
 /home/thiago/Desktop/poo/trab1/poo-trab1/Cliente.h
 string
 -
