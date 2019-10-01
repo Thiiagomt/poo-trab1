@@ -48,7 +48,6 @@ int main() {
     cadastroContas[0] = conta1;
     numContasCadastradas += 1;
 
-
     menuPrincipal(cadastroContas, cadastroClientes, historicoLancamentos);
 
     return 0;
