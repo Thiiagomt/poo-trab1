@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 
 #include "Cliente.h"
 #include "ContaCorrente.h"
@@ -7,11 +8,11 @@
 using namespace std;
 
 // Funções
-void menuPrincipal(ContaCorrente * cadastroContas, Cliente * cadastroClientes);
-void menuCliente(ContaCorrente * cadastroContas, Cliente * cadastroClientes);
-void menuConta(ContaCorrente * cadastroContas, Cliente * cadastroClientes);
-void menuBanco(ContaCorrente * cadastroContas, Cliente * cadastroClientes);
-void menuLancamento(ContaCorrente * cadastroContas, Cliente * cadastroClientes);
+void menuPrincipal(ContaCorrente * cadastroContas, Cliente * cadastroClientes, Lancamento * historicoLancamentos);
+void menuCliente(ContaCorrente * cadastroContas, Cliente * cadastroClientes, Lancamento * historicoLancamentos);
+void menuConta(ContaCorrente * cadastroContas, Cliente * cadastroClientes, Lancamento * historicoLancamentos);
+void menuBanco(ContaCorrente * cadastroContas, Cliente * cadastroClientes, Lancamento * historicoLancamentos);
+void menuLancamento(ContaCorrente * cadastroContas, Cliente * cadastroClientes, Lancamento * historicoLancamentos);
 int lancamento(int numConta, int operacao, float valor, Data dataLancamento, ContaCorrente * cadastroContas);
 int cadastrarCliente();
 int excluirCliente();
@@ -19,7 +20,7 @@ int criarConta();
 int excluirConta();
 int getQuantidadeDeContas();
 int getQuantidadeDeClientes();
-float getMontanteTotal();
+float getMontanteTotal(ContaCorrente * cadastroContas);
 
 int numContasCadastradas = 0;
 int numClientesCadastrados = 0;
@@ -41,18 +42,19 @@ int main() {
     data.mes = 7;
     data.ano = 2019;
 
+
     ContaCorrente conta1;
     conta1.setConta(147, data, "44175184830", 147.02);
     cadastroContas[0] = conta1;
     numContasCadastradas += 1;
 
 
-    menuPrincipal(cadastroContas, cadastroClientes);
+    menuPrincipal(cadastroContas, cadastroClientes, historicoLancamentos);
 
     return 0;
 }
 
-void menuPrincipal(ContaCorrente * cadastroContas, Cliente * cadastroClientes){
+void menuPrincipal(ContaCorrente * cadastroContas, Cliente * cadastroClientes, Lancamento * historicoLancamentos){
 
     int option;
     cout << endl << "--- BEM VINDO AO SISTEMA DO BANCO ---" << endl
@@ -71,15 +73,15 @@ void menuPrincipal(ContaCorrente * cadastroContas, Cliente * cadastroClientes){
 
     switch(option){
         case 1: {
-            menuCliente(cadastroContas, cadastroClientes);
+            menuCliente(cadastroContas, cadastroClientes, historicoLancamentos);
             break;
         }
         case 2: {
-            menuConta(cadastroContas, cadastroClientes);
+            menuConta(cadastroContas, cadastroClientes, historicoLancamentos);
             break;
         }
         case 3: {
-            menuBanco(cadastroContas, cadastroClientes);
+            menuBanco(cadastroContas, cadastroClientes, historicoLancamentos);
             break;
         }
         case 4: {
@@ -90,7 +92,7 @@ void menuPrincipal(ContaCorrente * cadastroContas, Cliente * cadastroClientes){
     }
 }
 
-void menuCliente(ContaCorrente * cadastroContas, Cliente * cadastroClientes){
+void menuCliente(ContaCorrente * cadastroContas, Cliente * cadastroClientes, Lancamento * historicoLancamentos){
     int option;
     cout << endl << "--- MENU CLIENTES ---" << endl
     << "0 - Menu anterior" << endl
@@ -107,7 +109,7 @@ void menuCliente(ContaCorrente * cadastroContas, Cliente * cadastroClientes){
 
     switch(option){
         case 0:{
-            menuPrincipal(cadastroContas, cadastroClientes);
+            menuPrincipal(cadastroContas, cadastroClientes, historicoLancamentos);
             break;
         }
         case 1:{
@@ -130,25 +132,24 @@ void menuCliente(ContaCorrente * cadastroContas, Cliente * cadastroClientes){
     }
 }
 
-void menuConta(ContaCorrente * cadastroContas, Cliente * cadastroClientes){
+void menuConta(ContaCorrente * cadastroContas, Cliente * cadastroClientes, Lancamento * historicoLancamentos){
     int option;
     cout << endl << "--- MENU CONTAS ---" << endl
     << "0 - Menu anterior" << endl
     << "1 - Abrir uma nova conta" << endl
     << "2 - Alterar dados de uma conta" << endl
     << "3 - Excluir uma conta" << endl
-    << "4 - Extrato de uma conta" << endl
-    << "5 - Sair" << endl;
+    << "4 - Sair" << endl;
 
     cin >> option;
-    while(option<0 || option>5){
+    while(option<0 || option>4){
         cout << "Selecione uma opção válida" << endl;
         cin >> option;
     }
 
     switch(option){
         case 0:{
-            menuPrincipal(cadastroContas, cadastroClientes);
+            menuPrincipal(cadastroContas, cadastroClientes, historicoLancamentos);
             break;
         }
         case 1:{
@@ -164,10 +165,6 @@ void menuConta(ContaCorrente * cadastroContas, Cliente * cadastroClientes){
             break;
         }
         case 4:{
-            //
-            break;
-        }
-        case 5:{
             exit(1);
         }
         default:
@@ -175,7 +172,7 @@ void menuConta(ContaCorrente * cadastroContas, Cliente * cadastroClientes){
     }
 }
 
-void menuBanco(ContaCorrente * cadastroContas, Cliente * cadastroClientes){
+void menuBanco(ContaCorrente * cadastroContas, Cliente * cadastroClientes, Lancamento * historicoLancamentos){
     int option;
     cout << endl << "--- GERENCIAMENTO DO BANCO ---" << endl
     << "0 - Menu anterior" << endl
@@ -183,7 +180,8 @@ void menuBanco(ContaCorrente * cadastroContas, Cliente * cadastroClientes){
     << "2 - Exibir número total de contas" << endl
     << "3 - Exibir número total de clientes cadastrados" << endl
     << "4 - Exibir montante total presente no banco" << endl
-    << "5 - Sair" << endl;
+    << "5 - Exibir extrato de uma conta" << endl
+    << "6 - Sair" << endl;
 
     cin >> option;
     while(option<0 || option>6){
@@ -193,11 +191,11 @@ void menuBanco(ContaCorrente * cadastroContas, Cliente * cadastroClientes){
 
     switch(option){
         case 0:{
-            menuPrincipal(cadastroContas, cadastroClientes);
+            menuPrincipal(cadastroContas, cadastroClientes, historicoLancamentos);
             break;
         }
         case 1:{
-            menuLancamento(cadastroContas, cadastroClientes);
+            menuLancamento(cadastroContas, cadastroClientes, historicoLancamentos);
             break;
         }
         case 2:{
@@ -213,6 +211,10 @@ void menuBanco(ContaCorrente * cadastroContas, Cliente * cadastroClientes){
             break;
         }
         case 5:{
+            //
+            break;
+        }
+        case 6:{
             exit(1);
         }
         default:
@@ -220,7 +222,7 @@ void menuBanco(ContaCorrente * cadastroContas, Cliente * cadastroClientes){
     }
 }
 
-void menuLancamento(ContaCorrente * cadastroContas, Cliente * cadastroClientes) {
+void menuLancamento(ContaCorrente * cadastroContas, Cliente * cadastroClientes, Lancamento * historicoLancamentos) {
     int comando;
     int numConta;
     int operacao = 0;
@@ -241,7 +243,7 @@ void menuLancamento(ContaCorrente * cadastroContas, Cliente * cadastroClientes) 
 
     switch (option) {
         case 0: {
-            menuBanco(cadastroContas, cadastroClientes);
+            menuBanco(cadastroContas, cadastroClientes, historicoLancamentos);
             break;
         }
         case 1: {
@@ -289,21 +291,29 @@ void menuLancamento(ContaCorrente * cadastroContas, Cliente * cadastroClientes) 
 
             comando = lancamento(numConta, operacao, valorLancamento, dataLancamento, cadastroContas);
             switch(comando){
-                case 0:
-                    cout << "Lançamento realizado com sucesso!" << endl;
+                case 0: {
+                    Lancamento *lancamento = (Lancamento *) malloc(sizeof(Lancamento));
+                    lancamento->setLancamento(numConta, operacao, valorLancamento, dataLancamento);
+                    historicoLancamentos[numLancamentosEfetuados] = *lancamento;
+                    numLancamentosEfetuados += 1;
+
+                    cout << endl << "Lançamento realizado com sucesso!" << endl;
                     cout << "Você será redirecionado para o menu de lançamentos" << endl;
-                    menuLancamento(cadastroContas, cadastroClientes);
+                    menuLancamento(cadastroContas, cadastroClientes, historicoLancamentos);
                     break;
-                case 1:
-                    cout << "ERRO! Não há nenhuma conta correspondente com o número inserido" << endl;
+                }
+                case 1: {
+                    cout << endl << "ERRO! Não há nenhuma conta correspondente com o número inserido" << endl;
                     cout << "Você será redirecionado para o menu de lançamentos" << endl;
-                    menuLancamento(cadastroContas, cadastroClientes);
+                    menuLancamento(cadastroContas, cadastroClientes, historicoLancamentos);
                     break;
-                case 2:
-                    cout << "ERRO! A conta não tem saldo suficiente para o lançamento" << endl;
+                }
+                case 2: {
+                    cout << endl << "ERRO! A conta não tem saldo suficiente para o débito" << endl;
                     cout << "Você será redirecionado para o menu de lançamentos" << endl;
-                    menuLancamento(cadastroContas, cadastroClientes);
+                    menuLancamento(cadastroContas, cadastroClientes, historicoLancamentos);
                     break;
+                }
                 default:
                     break;
             }
@@ -315,7 +325,7 @@ void menuLancamento(ContaCorrente * cadastroContas, Cliente * cadastroClientes) 
             cout << "Insira o numero da conta: ";
             cin >> numConta;
 
-            cout << "Insira o valor a ser adicionado a conta: ";
+            cout << "Insira o valor a ser depositado: ";
             cin >> valorLancamento;
 
             cout << "Para controle insira a data do lancamento na seguinte ordem";
@@ -354,16 +364,23 @@ void menuLancamento(ContaCorrente * cadastroContas, Cliente * cadastroClientes) 
 
             comando = lancamento(numConta, operacao, valorLancamento, dataLancamento, cadastroContas);
             switch(comando){
-                case 0:
-                    cout << "Lançamento realizado com sucesso!" << endl;
+                case 0: {
+                    Lancamento *lancamento = (Lancamento *) malloc(sizeof(Lancamento));
+                    lancamento->setLancamento(numConta, operacao, valorLancamento, dataLancamento);
+                    historicoLancamentos[numLancamentosEfetuados] = *lancamento;
+                    numLancamentosEfetuados += 1;
+
+                    cout << endl << "Lançamento realizado com sucesso!" << endl;
                     cout << "Você será redirecionado para o menu de lançamentos" << endl;
-                    menuLancamento(cadastroContas, cadastroClientes);
+                    menuLancamento(cadastroContas, cadastroClientes, historicoLancamentos);
                     break;
-                case 1:
-                    cout << "ERRO! Não há nenhuma conta correspondente com o número inserido" << endl;
+                }
+                case 1: {
+                    cout << endl << "ERRO! Não há nenhuma conta correspondente com o número inserido" << endl;
                     cout << "Você será redirecionado para o menu de lançamentos" << endl;
-                    menuLancamento(cadastroContas, cadastroClientes);
+                    menuLancamento(cadastroContas, cadastroClientes, historicoLancamentos);
                     break;
+                }
                 default:
                     break;
             }
@@ -412,4 +429,22 @@ int lancamento(int numConta, int operacao, float valor, Data data, ContaCorrente
         cadastroContas[i].setSaldoAtual(novoValor);
         return 0;
     }
+}
+
+int getQuantidadeDeContas(){
+    return numContasCadastradas;
+}
+
+int getQuantidadeDeClientes(){
+    return numClientesCadastrados;
+}
+
+float getMontanteTotal(ContaCorrente * cadastroContas){
+    int i;
+    float montanteTotal=0;
+
+    for(i=0; i<numContasCadastradas; i++)
+        montanteTotal = cadastroContas[i].getSaldoAtual() + montanteTotal;
+
+    return montanteTotal;
 }

@@ -7,7 +7,12 @@ CMakeFiles/trab1.dir/Cliente.cpp.o: ../Cliente.h
 CMakeFiles/trab1.dir/ContaCorrente.cpp.o: ../ContaCorrente.cpp
 CMakeFiles/trab1.dir/ContaCorrente.cpp.o: ../ContaCorrente.h
 
+CMakeFiles/trab1.dir/Lancamento.cpp.o: ../ContaCorrente.h
+CMakeFiles/trab1.dir/Lancamento.cpp.o: ../Lancamento.cpp
+CMakeFiles/trab1.dir/Lancamento.cpp.o: ../Lancamento.h
+
 CMakeFiles/trab1.dir/main.cpp.o: ../Cliente.h
 CMakeFiles/trab1.dir/main.cpp.o: ../ContaCorrente.h
+CMakeFiles/trab1.dir/main.cpp.o: ../Lancamento.h
 CMakeFiles/trab1.dir/main.cpp.o: ../main.cpp
 

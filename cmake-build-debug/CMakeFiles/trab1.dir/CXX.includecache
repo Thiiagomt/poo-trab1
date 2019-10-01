@@ -14,11 +14,23 @@ string
 string
 -
 
+/home/thiago/Desktop/poo/trab1/poo-trab1/Lancamento.h
+string
+-
+sstream
+-
+ContaCorrente.h
+/home/thiago/Desktop/poo/trab1/poo-trab1/ContaCorrente.h
+
 /home/thiago/Desktop/poo/trab1/poo-trab1/main.cpp
 iostream
+-
+sstream
 -
 Cliente.h
 /home/thiago/Desktop/poo/trab1/poo-trab1/Cliente.h
 ContaCorrente.h
 /home/thiago/Desktop/poo/trab1/poo-trab1/ContaCorrente.h
+Lancamento.h
+/home/thiago/Desktop/poo/trab1/poo-trab1/Lancamento.h
 
