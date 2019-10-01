@@ -9,9 +9,13 @@
 /home/thiago/Desktop/poo/trab1/poo-trab1/Cliente.h
 string
 -
+sstream
+-
 
 /home/thiago/Desktop/poo/trab1/poo-trab1/ContaCorrente.h
 string
+-
+sstream
 -
 
 /home/thiago/Desktop/poo/trab1/poo-trab1/Lancamento.h
