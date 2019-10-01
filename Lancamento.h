@@ -7,6 +7,11 @@
 
 
 class Lancamento {
+public:
+
+
+private:
+
 
 };
 
