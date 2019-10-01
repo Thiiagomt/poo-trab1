@@ -6,13 +6,42 @@
 #define TRAB1_LANCAMENTO_H
 
 
+#include "ContaCorrente.h"
+
 class Lancamento {
 public:
+    // Construtor
+    Lancamento(int numConta, int operacao, float valorLancamento, Data dataLancamento);
 
+    // Construtor default
+    Lancamento();
+
+    // Destrutor
+    ~Lancamento();
+
+    // Define Cliente
+    void setLancamento(int numConta, int operacao, float valorLancamento, Data dataLancamento);
+
+    // Imprime info conta
+    void printLancamento();
+
+    // Setters
+    void setNumConta(int);
+    void setOperacao(int);
+    void setValorLancamento(float);
+    void setDataLancamento(Data);
+
+    // Getters
+    int getNumConta();
+    int getOperacao();
+    float getValorLancamento();
+    Data getDataLancamento();
 
 private:
-
-
+    int numConta;
+    int operacao;
+    float valorLancamento;
+    Data dataLancamento;
 };
 
 
