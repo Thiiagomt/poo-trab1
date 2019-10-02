@@ -112,7 +112,8 @@ void menuCliente(ContaCorrente * cadastroContas, Cliente * cadastroClientes, Lan
             break;
         }
         case 1:{
-            //
+            Cliente people1;
+            cout << "\n" << people1.printCliente();
             break;
         }
         case 2:{

@@ -15,7 +15,7 @@ typedef struct{
     string bairro;
     string cidade;
     string uf;
-    int cep;
+    string cep;
     int numero;
 } Adress;
 
@@ -31,26 +31,23 @@ public:
     }
 
     // Construtor
-    Cliente(string nome, string cpf, Adress endereco, string telefone, string email);
-
-    // Construtor default
     Cliente();
 
     // Destrutoe
     ~Cliente();
 
     // Define Cliente
-    void setCliente(string nome, string cpf, Adress endereco, string telefone, string email);
+    void setCliente();
 
     // Imprime info cliente
     string printCliente();
 
     // Setters
-    void setNome(string);
-    void setCPF(string);
-    void setEndereco(Adress);
-    void setTelefone(string);
-    void setEmail(string);
+    void setNome();
+    void setCPF();
+    void setEndereco();
+    void setTelefone();
+    void setEmail();
 
     // Getters
     string getNome();

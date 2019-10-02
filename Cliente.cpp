@@ -7,21 +7,18 @@
 #include "Cliente.h"
 using namespace std;
 
-void Cliente::setCliente(string nome, string cpf, Adress endereco, string telefone, string email){
-    setNome(nome);
-    setCPF(cpf);
-    setEndereco(endereco);
-    setTelefone(telefone);
-    setEmail(email);
+void Cliente::setCliente(){
+    setNome();
+    setCPF();
+    setEndereco();
+    setTelefone();
+    setEmail();
 } 
 
 // Construtor
-Cliente::Cliente(string nome, string cpf, Adress endereco, string telefone, string email) {
-    setCliente(nome, cpf, endereco, telefone, email);
+Cliente::Cliente() {
+    setCliente();
 }
-
-// Construtor default
-Cliente::Cliente() = default;
 
 // Destrutor
 Cliente::~Cliente() = default;
@@ -32,30 +29,66 @@ string Cliente::printCliente() {
 
     saida = "O dono(a) desta conta é: " + getNome() +
         "\nPortador do CPF: " + getCPF() +
-            "\nEndereço: Rua " + getEndereco().rua + "," + to_string(getEndereco().numero) + " Bairro " + getEndereco().bairro + "," + " CEP: " + to_string(getEndereco().cep) +
+            "\nEndereço: Rua " + getEndereco().rua + "," + to_string(getEndereco().numero) + " Bairro " + getEndereco().bairro + "," + " CEP: " + getEndereco().cep +
                 "\nReside em: " + getEndereco().cidade + "," + getEndereco().uf +
                     "\nTelefone: " + getTelefone() +
-                        "\nEmail: " + getEmail();
+                        "\nEmail: " + getEmail() + "\n";
 
     return saida;
 }
 
 
 // Setters
-void Cliente::setNome(string nome) {
-    this->nome = nome;
+void Cliente::setNome() {
+    cout << "Digite seu nome: ";
+    cin.ignore();                   // Retira do buffer o '\n' vindo do switch
+    getline(cin, this->nome);       // Pega a string do nome
 }
-void Cliente::setCPF(string cpf) {
-    this->cpf = cpf;
+void Cliente::setCPF() {
+    int verif = 0;
+    do {
+        cout << "Digite seu cpf: ";
+        getline(cin, this->cpf);        // Pega a string do cpf
+        if (cpf.size() == 11) {         // Verifica se há 11 digitos, senão retorna ao for
+            verif = 1;
+        } else {
+            cout << "CPF inválido! Verifique os dígitos\n";
+        }
+    } while (!verif);
 }
-void Cliente::setEndereco(Adress endereco) {
-    this->endereco = endereco;
+void Cliente::setEndereco() {
+
+    Adress endereco;
+    
+    // Tavoni: Tentei fazer o mesmo laço para o CPF, mas não estava retornando o tamanho da string (não sei o porque...)
+    cout << "CEP: ";
+    getline(cin, this->endereco.cep);
+
+    cout << "Rua: ";
+    getline(cin, this->endereco.rua);
+    
+    cout << "Numero: ";
+    cin >> this->endereco.numero;
+
+    cout << "Bairro: ";
+    cin.ignore();
+    getline(cin, this->endereco.bairro);
+
+    cout << "Cidade: ";
+    getline(cin, this->endereco.cidade);
+
+    cout << "Uf: ";
+    getline(cin, this->endereco.uf);
 }
-void Cliente::setTelefone(string telefone){
-    this->telefone = telefone;
+
+void Cliente::setTelefone(){
+    cout << "Digite seu telefone: ";
+    getline(cin, this->telefone);   // Pega a string do telefone
 }
-void Cliente::setEmail(string email) {
-    this->email = email;
+
+void Cliente::setEmail() {
+    cout << "Digite seu email: ";
+    getline(cin, this->email);      // Pega a string do email
 }
 
 // Getters
