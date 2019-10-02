@@ -25,6 +25,7 @@ float getMontanteTotal(ContaCorrente * cadastroContas);
 int numContasCadastradas = 0;
 int numClientesCadastrados = 0;
 int numLancamentosEfetuados = 0;
+Cliente *id_Cliente[10];
 
 int main() {
     ContaCorrente * cadastroContas;
@@ -42,11 +43,12 @@ int main() {
     data.mes = 7;
     data.ano = 2019;
 
-
+    /*
     ContaCorrente conta1;
     conta1.setConta(147, data, "44175184830", 147.02);
     cadastroContas[0] = conta1;
     numContasCadastradas += 1;
+    */
 
     menuPrincipal(cadastroContas, cadastroClientes, historicoLancamentos);
 
@@ -55,39 +57,41 @@ int main() {
 
 void menuPrincipal(ContaCorrente * cadastroContas, Cliente * cadastroClientes, Lancamento * historicoLancamentos){
 
-    int option;
-    cout << endl << "--- BEM VINDO AO SISTEMA DO BANCO ---" << endl
-         << "ESCOLHA O MENU QUE DESEJAR" << endl
-         << "1 - MENU CLIENTES" << endl
-         << "2 - MENU CONTAS" << endl
-         << "3 - GERENCIAMENTO DO BANCO" << endl
-         << "4 - SAIR" << endl;
+    int option = -1;
 
-    cin >> option;
-    if(option<1 || option>4)
-        while(option<1 || option>3){
-            cout << "Selecione uma opção válida" << endl;
-            cin >> option;
+    while (option != 0) {
+
+        cout << endl << "--- BEM VINDO AO SISTEMA DO BANCO ---" << endl
+             << "ESCOLHA O MENU QUE DESEJAR" << endl
+             << "0 - SAIR" << endl
+             << "1 - MENU CLIENTES" << endl
+             << "2 - MENU CONTAS" << endl
+             << "3 - GERENCIAMENTO DO BANCO" << endl;
+
+        cin >> option;
+        if(option<0 || option>4)
+            while(option<1 || option>3){
+                cout << "Selecione uma opção válida" << endl;
+                cin >> option;
+            }
+
+        switch(option){
+            case 1: {
+                menuCliente(cadastroContas, cadastroClientes, historicoLancamentos);
+                break;
+            }
+            case 2: {
+                menuConta(cadastroContas, cadastroClientes, historicoLancamentos);
+                break;
+            }
+            case 3: {
+                menuBanco(cadastroContas, cadastroClientes, historicoLancamentos);
+                break;
+            }
+            default:
+                break;
         }
 
-    switch(option){
-        case 1: {
-            menuCliente(cadastroContas, cadastroClientes, historicoLancamentos);
-            break;
-        }
-        case 2: {
-            menuConta(cadastroContas, cadastroClientes, historicoLancamentos);
-            break;
-        }
-        case 3: {
-            menuBanco(cadastroContas, cadastroClientes, historicoLancamentos);
-            break;
-        }
-        case 4: {
-            exit(1);
-        }
-        default:
-            break;
     }
 }
 
@@ -112,12 +116,32 @@ void menuCliente(ContaCorrente * cadastroContas, Cliente * cadastroClientes, Lan
             break;
         }
         case 1:{
-            Cliente people1;
-            cout << "\n" << people1.printCliente();
+            // Cadastra-se um cliente em ordem
+            id_Cliente[numClientesCadastrados] = new Cliente;
+            numClientesCadastrados++;
+            /*
+            Cadastro de todos os clientes*/
+            for (int i=0; i<numClientesCadastrados; i++)
+                cout << id_Cliente[i]->printCliente();
+            
             break;
         }
         case 2:{
-            //
+            string aux;
+            int found = 0;
+            // Busca de cliente por CPF
+            // Após a inserção do cpf, o laço for verifica os multiplos perfis, localizando o do cliente e modificando o dado apontado
+            while (!found) {
+                cout << "Digite seu cpf: ";
+                cin.ignore();
+                getline(cin, aux);
+                for (int i=0; i<numClientesCadastrados; i++){
+                    if (aux == (id_Cliente[i]->getCPF()))
+                        cout << "Qual alteração deseja realizar? (**email no caso**)";
+                        id_Cliente[i]->setEmail();
+                }
+            }
+
             break;
         }
         case 3:{
