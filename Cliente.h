@@ -42,6 +42,9 @@ public:
     // Imprime info cliente
     string printCliente();
 
+    // Editar Dados
+    void EditaCliente(int option);
+
     // Setters
     void setNome();
     void setCPF();

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <sstream>
+#define N_CLIENTES 20
 
 #include "Cliente.h"
 #include "ContaCorrente.h"
@@ -25,7 +26,7 @@ float getMontanteTotal(ContaCorrente * cadastroContas);
 int numContasCadastradas = 0;
 int numClientesCadastrados = 0;
 int numLancamentosEfetuados = 0;
-Cliente *id_Cliente[10];
+Cliente *id_Cliente[N_CLIENTES];
 
 int main() {
     ContaCorrente * cadastroContas;
@@ -102,7 +103,8 @@ void menuCliente(ContaCorrente * cadastroContas, Cliente * cadastroClientes, Lan
     << "1 - Efetuar um novo cadastro" << endl
     << "2 - Alterar um cadastro existente" << endl
     << "3 - Excluir um cadastro" << endl
-    << "4 - Sair" << endl;
+    << "4 - Ver Clientes" << endl
+    << "5 - Sair" << endl;
 
     cin >> option;
     while(option<0 || option>4){
@@ -119,36 +121,75 @@ void menuCliente(ContaCorrente * cadastroContas, Cliente * cadastroClientes, Lan
             // Cadastra-se um cliente em ordem
             id_Cliente[numClientesCadastrados] = new Cliente;
             numClientesCadastrados++;
-            /*
-            Cadastro de todos os clientes*/
-            for (int i=0; i<numClientesCadastrados; i++)
-                cout << id_Cliente[i]->printCliente();
-            
             break;
         }
         case 2:{
             string aux;
-            int found = 0;
+            int i=0, quebra=0;
+            int altera_opcao;
             // Busca de cliente por CPF
             // Após a inserção do cpf, o laço for verifica os multiplos perfis, localizando o do cliente e modificando o dado apontado
-            while (!found) {
-                cout << "Digite seu cpf: ";
-                cin.ignore();
-                getline(cin, aux);
-                for (int i=0; i<numClientesCadastrados; i++){
-                    if (aux == (id_Cliente[i]->getCPF()))
-                        cout << "Qual alteração deseja realizar? (**email no caso**)";
+            cout << "Digite seu cpf: ";
+            cin.ignore();
+            getline(cin, aux);
+            do {
+                if (aux == (id_Cliente[i]->getCPF())) {
+                    cout << "Qual alteração deseja realizar?\n1 - Telefone\n2 - Endereco\n3 - Email\n4 - Nome\n5 - CPF\nOpcao: ";
+                    cin >> altera_opcao;
+                    if (altera_opcao == 1) {
+                        cin.ignore();
+                        id_Cliente[i]->setTelefone();
+                    } else if (altera_opcao == 2) {
+                        cin.ignore();
+                        id_Cliente[i]->setEndereco();
+                    } else if (altera_opcao == 3) {
+                        cin.ignore();
                         id_Cliente[i]->setEmail();
-                }
-            }
+                    } else if (altera_opcao == 4) {
+                        id_Cliente[i]->setNome();
+                    } else if (altera_opcao == 5) {
+                        cin.ignore();
+                        id_Cliente[i]->setCPF();
+                    }
+                    quebra = 1;
+                } 
+                i++;
+            } while ((i < numClientesCadastrados) && !quebra);
+
+            if (quebra = 0)
+                cout << "Nenhum cliente encontrado!";
 
             break;
         }
         case 3:{
-            //
+            int count_aux;
+            string aux;
+            count_aux = numClientesCadastrados;
+            cout << "Digite seu cpf: ";
+            cin.ignore();
+            getline(cin, aux);
+            for (int i=0; i<numClientesCadastrados; i++) {
+                if (aux == (id_Cliente[i]->getCPF())) {
+                    delete id_Cliente[i];
+                    numClientesCadastrados--;
+                    for (int j=i; j<numClientesCadastrados; j++) {
+                        id_Cliente[j] = id_Cliente[j+1];
+                    }
+                }
+            }
+            if (count_aux == numClientesCadastrados) {
+                cout << "Cliente não encontrado!";
+            }
+
             break;
         }
         case 4:{
+            /*Cadastro de todos os clientes*/
+            for (int i=0; i<numClientesCadastrados; i++)
+                cout << id_Cliente[i]->printCliente();
+            break;
+        }
+        case 5:{
             exit(1);
         }
         default:

@@ -91,6 +91,20 @@ void Cliente::setEmail() {
     getline(cin, this->email);      // Pega a string do email
 }
 
+void Cliente::EditaCliente(int option){
+    if (option == 1) {
+        setTelefone();
+    } else if (option == 2) {
+        setEndereco();
+    } else if (option == 3) {
+        setEmail();
+    } else if (option == 4) {
+        setNome();
+    } else if (option == 5) {
+        setCPF();
+    }
+}
+
 // Getters
 string Cliente::getNome(){
 	return this->nome;
