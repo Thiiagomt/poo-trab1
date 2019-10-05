@@ -1,6 +1,7 @@
 #include <iostream>
 #include <sstream>
-#define N_CLIENTES 20
+// N° de contas nunca será superior ao de clientes
+#define N_CLIENTES_CONTAS 20
 
 #include "Cliente.h"
 #include "ContaCorrente.h"
@@ -26,7 +27,8 @@ float getMontanteTotal(ContaCorrente * cadastroContas);
 int numContasCadastradas = 0;
 int numClientesCadastrados = 0;
 int numLancamentosEfetuados = 0;
-Cliente *id_Cliente[N_CLIENTES];
+Cliente *id_Cliente[N_CLIENTES_CONTAS];
+ContaCorrente *id_ContaCorrente[N_CLIENTES_CONTAS];
 
 int main() {
     ContaCorrente * cadastroContas;
@@ -38,13 +40,13 @@ int main() {
     Lancamento * historicoLancamentos;
     historicoLancamentos = (Lancamento*) malloc(10 * sizeof(Lancamento));
 
-
+    /*
     Data data;
     data.dia = 12;
     data.mes = 7;
     data.ano = 2019;
 
-    /*
+
     ContaCorrente conta1;
     conta1.setConta(147, data, "44175184830", 147.02);
     cadastroContas[0] = conta1;
@@ -180,7 +182,6 @@ void menuCliente(ContaCorrente * cadastroContas, Cliente * cadastroClientes, Lan
             if (count_aux == numClientesCadastrados) {
                 cout << "Cliente não encontrado!";
             }
-
             break;
         }
         case 4:{
@@ -218,7 +219,18 @@ void menuConta(ContaCorrente * cadastroContas, Cliente * cadastroClientes, Lanca
             break;
         }
         case 1:{
-            //
+            // Falta a verificação de o cliente estar ou não cadastrado e se a conta já foi criada
+            string aux;
+            cout << "Digite seu cpf: ";
+            cin.ignore();
+            getline(cin, aux);
+            for (int i=0; i<numClientesCadastrados; i++) {
+                if (aux == (id_Cliente[i]->getCPF())) {
+                    id_ContaCorrente[numContasCadastradas] = new ContaCorrente(*id_Cliente[i]);
+                    cout << id_ContaCorrente[numContasCadastradas]->printConta();
+                    numContasCadastradas++;
+                }
+            }
             break;
         }
         case 2:{

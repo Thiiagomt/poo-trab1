@@ -9,7 +9,7 @@
 #include <sstream>
 using namespace std;
 
-
+#include "Cliente.h"
 
 typedef struct {
     int dia;
@@ -30,25 +30,22 @@ public:
     }
 
     // Construtor
-    ContaCorrente(int numConta, Data dataAbertura, string cpfCliente, float saldoAtual);
-
-    // Construtor default
-    ContaCorrente();
+    ContaCorrente(Cliente);
 
     // Destrutor
     ~ContaCorrente();
 
     // Define Cliente
-    void setConta(int numConta, Data dataAbertura, string cpfCliente, float saldoAtual);
+    void setContaCorrente(Cliente);
 
     // Imprime info conta
     string printConta();
 
     // Setters
-    void setNumConta(int);
-    void setDataAbertura(Data);
-    void setCPFCliente(string);
-    void setSaldoAtual(float);
+    void setNumConta();
+    void setDataAbertura();
+    void setCPFCliente(Cliente);
+    void setSaldoAtual(float value);
 
     // Getters
     int getNumConta();

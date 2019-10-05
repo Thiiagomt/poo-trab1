@@ -3,24 +3,23 @@
 //
 
 #include <iostream>
+#include <stdlib.h>     /* srand, rand */
+#include <time.h>       /* time */
 
 #include "ContaCorrente.h"
 using namespace std;
 
-void ContaCorrente::setConta(int numConta, Data dataAbertura, string cpfCliente, float saldoAtual) {
-    setNumConta(numConta);
-    setDataAbertura(dataAbertura);
-    setCPFCliente(cpfCliente);
-    setSaldoAtual(saldoAtual);
+void ContaCorrente::setContaCorrente(Cliente x) {
+    setNumConta();
+    setDataAbertura();
+    setCPFCliente(x);
+    setSaldoAtual(0);
 }
 
 // Construtor
-ContaCorrente::ContaCorrente(int numConta, Data dataAbertura, string cpfCliente, float saldoAtual) {
-    setConta(numConta, dataAbertura, cpfCliente, saldoAtual);
+ContaCorrente::ContaCorrente(Cliente x) {
+    setContaCorrente(x);
 }
-
-// Construtor default
-ContaCorrente::ContaCorrente() = default;
 
 // Destrutor
 ContaCorrente::~ContaCorrente() = default;
@@ -38,10 +37,17 @@ string ContaCorrente::printConta() {
 }
 
 // Setters
-void ContaCorrente::setNumConta(int numConta){
-    this->numConta = numConta;
+void ContaCorrente::setNumConta(){
+    /* generate secret number between 1 and 1000000: */
+    this->numConta = rand() % 1000000 + 1;
 }
-void ContaCorrente::setDataAbertura(Data dataAbertura){
+void ContaCorrente::setDataAbertura(){
+    cout << "Dia: ";
+    cin >> dataAbertura.dia;
+    cout << "Mes: ";
+    cin >> dataAbertura.mes;
+    cout << "Ano: ";
+    cin >> dataAbertura.ano;
     if(dataAbertura.ano != 2019)
         while(dataAbertura.ano != 2019) {
             cout << "Ano inválido, insira novamente" << endl;
@@ -70,11 +76,11 @@ void ContaCorrente::setDataAbertura(Data dataAbertura){
 
     this->dataAbertura = dataAbertura;
 }
-void ContaCorrente::setCPFCliente(string cpfCliente){
-    this->cpfCliente = cpfCliente;
+void ContaCorrente::setCPFCliente(Cliente x){
+    this->cpfCliente = x.getCPF();
 }
-void ContaCorrente::setSaldoAtual(float saldoAtual){
-    this->saldoAtual = saldoAtual;
+void ContaCorrente::setSaldoAtual(float x){
+    this->saldoAtual = x;
 }
 
 // Getters
