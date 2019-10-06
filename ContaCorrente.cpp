@@ -31,7 +31,8 @@ string ContaCorrente::printConta() {
     saida = "O CPF do dono desta conta é: " + getCPFCliente() +
         "\nO número da conta é: " + to_string(getNumConta()) +
             "\nA data de abertura da conta é: " + to_string(getDataAbertura().dia) + "/" + to_string(getDataAbertura().mes) + "/" + to_string(getDataAbertura().ano) +
-                "\nO saldo atual da conta é: R$" + to_string_with_precision(getSaldoAtual(), 2);
+                "\nO saldo atual da conta é: R$" + to_string_with_precision(getSaldoAtual(), 2)
+                    + "\n";
 
     return saida;
 }

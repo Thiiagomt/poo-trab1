@@ -33,7 +33,8 @@ string Cliente::printCliente() {
             "\nEndereço: Rua " + getEndereco().rua + "," + to_string(getEndereco().numero) + " Bairro " + getEndereco().bairro + "," + " CEP: " + getEndereco().cep +
                 "\nReside em: " + getEndereco().cidade + "," + getEndereco().uf +
                     "\nTelefone: " + getTelefone() +
-                        "\nEmail: " + getEmail() + "\n";
+                        "\nEmail: " + getEmail()
+                            + "\n";
 
     return saida;
 }

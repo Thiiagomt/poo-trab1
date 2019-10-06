@@ -38,7 +38,8 @@ string Lancamento::printLancamento() {
     saida = "O número da conta onde o lançamento foi feito é: " + to_string(getNumConta()) +
         "\nOperacao de: " + operation +
             "\nCom o valor de: R$" + to_string_with_precision(getValorLancamento(), 2) +
-                "\nA data do lancamento na conta foi: " + to_string(getDataLancamento().dia) + "/" + to_string(getDataLancamento().mes) + "/" + to_string(getDataLancamento().ano);
+                "\nA data do lancamento na conta foi: " + to_string(getDataLancamento().dia) + "/" + to_string(getDataLancamento().mes) + "/" + to_string(getDataLancamento().ano)
+                    + "\n";
 
     return saida;
 }
