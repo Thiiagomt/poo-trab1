@@ -51,6 +51,7 @@ public:
     void setEndereco();
     void setTelefone();
     void setEmail();
+    void setContaAtiva(int);
 
     // Getters
     string getNome();
@@ -58,6 +59,7 @@ public:
     Adress getEndereco();
     string getTelefone();
     string getEmail();
+    int getContaAtiva();
 
 private:
     string nome;
@@ -65,6 +67,7 @@ private:
     Adress endereco;
     string telefone;
     string email;
+    int conta_ativa;
 };
 
 #endif //TRAB1_CLIENTE_H

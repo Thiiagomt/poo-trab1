@@ -13,6 +13,7 @@ void Cliente::setCliente(){
     setEndereco();
     setTelefone();
     setEmail();
+    setContaAtiva(0);
 } 
 
 // Construtor
@@ -91,6 +92,10 @@ void Cliente::setEmail() {
     getline(cin, this->email);      // Pega a string do email
 }
 
+void Cliente::setContaAtiva(int x) {
+    this->conta_ativa = x;
+}
+
 void Cliente::EditaCliente(int option){
     if (option == 1) {
         setTelefone();
@@ -120,5 +125,9 @@ string Cliente::getTelefone(){
 }
 string Cliente::getEmail(){
     return this->email;
+}
+
+int Cliente::getContaAtiva(){
+    return this->conta_ativa;
 }
 

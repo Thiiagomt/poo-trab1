@@ -152,34 +152,51 @@ void menuCliente(ContaCorrente * cadastroContas, Cliente * cadastroClientes, Lan
                     } else if (altera_opcao == 5) {
                         cin.ignore();
                         id_Cliente[i]->setCPF();
+                        id_ContaCorrente[i]->setCPFCliente(*id_Cliente[i]);
                     }
                     quebra = 1;
                 } 
                 i++;
             } while ((i < numClientesCadastrados) && !quebra);
 
-            if (quebra = 0)
+            if (quebra == 0)
                 cout << "Nenhum cliente encontrado!";
 
             break;
         }
         case 3:{
-            int count_aux;
-            string aux;
-            count_aux = numClientesCadastrados;
+            int i=0, quebra=0;
+            string aux, cpf_conta;
             cout << "Digite seu cpf: ";
             cin.ignore();
             getline(cin, aux);
-            for (int i=0; i<numClientesCadastrados; i++) {
+            do {
+                // Busca de clientes por cpf, deletando-o quando achar junto com sua respectiva conta corrente (se houver)
+                // É ajustado também a alocação
                 if (aux == (id_Cliente[i]->getCPF())) {
+                    if (id_Cliente[i]->getContaAtiva() == 1) {
+                        cpf_conta = id_Cliente[i]->getCPF();
+                        for (int f=0; f<numContasCadastradas; f++) {
+                            if (cpf_conta == (id_ContaCorrente[f]->getCPFCliente())) {
+                                delete id_ContaCorrente[f];
+                                numContasCadastradas--;
+                                for (int k=f; k<numClientesCadastrados; k++) {
+                                    id_ContaCorrente[k] = id_ContaCorrente[k+1];
+                                }
+                            }
+                        }
+                    }
                     delete id_Cliente[i];
                     numClientesCadastrados--;
                     for (int j=i; j<numClientesCadastrados; j++) {
                         id_Cliente[j] = id_Cliente[j+1];
                     }
+                    quebra = 1;
                 }
-            }
-            if (count_aux == numClientesCadastrados) {
+                i++;
+            } while ((i < numClientesCadastrados) && !quebra);
+
+            if (quebra == 0) {
                 cout << "Cliente não encontrado!";
             }
             break;
@@ -205,7 +222,8 @@ void menuConta(ContaCorrente * cadastroContas, Cliente * cadastroClientes, Lanca
     << "1 - Abrir uma nova conta" << endl
     << "2 - Alterar dados de uma conta" << endl
     << "3 - Excluir uma conta" << endl
-    << "4 - Sair" << endl;
+    << "4 - Ver Contas Criadas" << endl
+    << "5 - Sair" << endl;
 
     cin >> option;
     while(option<0 || option>4){
@@ -219,29 +237,88 @@ void menuConta(ContaCorrente * cadastroContas, Cliente * cadastroClientes, Lanca
             break;
         }
         case 1:{
-            // Falta a verificação de o cliente estar ou não cadastrado e se a conta já foi criada
+            // Busca o cliente peo seu cpf, para verificar se já há um cadastro
+            // assim, cria a contaa ou avisa se o cliente não foi encontrado
+            int quebra=0, i=0;
             string aux;
             cout << "Digite seu cpf: ";
             cin.ignore();
             getline(cin, aux);
-            for (int i=0; i<numClientesCadastrados; i++) {
+            do {
                 if (aux == (id_Cliente[i]->getCPF())) {
-                    id_ContaCorrente[numContasCadastradas] = new ContaCorrente(*id_Cliente[i]);
-                    cout << id_ContaCorrente[numContasCadastradas]->printConta();
-                    numContasCadastradas++;
+                    if (id_Cliente[i]->getContaAtiva() == 1) {
+                        cout << "Cliente já possui uma conta\n";
+                        quebra = 1;
+                    } else {
+                        id_ContaCorrente[numContasCadastradas] = new ContaCorrente(*id_Cliente[i]);
+                        cout << id_ContaCorrente[numContasCadastradas]->printConta();
+                        numContasCadastradas++;
+                        id_Cliente[i]->setContaAtiva(1);
+                        cout << "\nConta Criada Com Sucesso!\n";
+                        quebra = 1;
+                    }
                 }
-            }
+                i++;
+            } while ((i < numClientesCadastrados) && !quebra);
+
+            if (quebra == 0)
+                cout << "Nenhum cliente encontrado!\nFavor cadastrar-se\n";
+
             break;
         }
         case 2:{
-            //
+            int i=0, quebra=0, aux;
+            int altera_opcao;
+            cout << "Digite o numero da conta: ";
+            cin >> aux;
+            do {
+                if (aux == (id_ContaCorrente[i]->getNumConta())) {
+                    cout << "Qual alteração deseja realizar?\n1 - Alterar numero da conta(geracao aleatoria)\n2 - Data de Abertura\n3 - CPF\nOpcao: ";
+                    cin >> altera_opcao;
+                    if (altera_opcao == 1) {
+                        id_ContaCorrente[i]->setNumConta();
+                    } else if (altera_opcao == 2) {
+                        id_ContaCorrente[i]->setDataAbertura();
+                    } else if (altera_opcao == 3) {
+                        id_Cliente[i]->setCPF();
+                        id_ContaCorrente[i]->setCPFCliente(*id_Cliente[i]);
+                    }
+                    quebra = 1;
+                } 
+                i++;
+            } while ((i < numContasCadastradas) && !quebra);
+
+            if (quebra == 0)
+                cout << "Nenhum cliente encontrado!";
             break;
         }
         case 3:{
-            //
+            int aux, i=0, quebra=0;
+            cout << "Digite o numero da conta: ";
+            cin >> aux;
+            do {
+                if (aux == (id_ContaCorrente[i]->getNumConta())) {
+                    delete id_ContaCorrente[i];
+                    numClientesCadastrados--;
+                    for (int j=i; j<numClientesCadastrados; j++) {
+                        id_Cliente[j] = id_Cliente[j+1];
+                    }
+                    quebra = 1;
+                }
+                i++;
+            } while ((i < numContasCadastradas) && !quebra);
+
+            if (quebra == 0) {
+                cout << "Cliente não encontrado!";
+            }
             break;
         }
         case 4:{
+            for (int i=0; i<numContasCadastradas; i++)
+                cout << id_ContaCorrente[i]->printConta();
+            break;
+        }
+        case 5:{
             exit(1);
         }
         default:
