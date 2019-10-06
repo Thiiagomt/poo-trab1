@@ -16,10 +16,6 @@ void menuConta(ContaCorrente * cadastroContas, Cliente * cadastroClientes, Lanca
 void menuBanco(ContaCorrente * cadastroContas, Cliente * cadastroClientes, Lancamento * historicoLancamentos);
 void menuLancamento(ContaCorrente * cadastroContas, Cliente * cadastroClientes, Lancamento * historicoLancamentos);
 int lancamento(int numConta, int operacao, float valor, Data dataLancamento, ContaCorrente * cadastroContas);
-int cadastrarCliente();
-int excluirCliente();
-int criarConta();
-int excluirConta();
 int getQuantidadeDeContas();
 int getQuantidadeDeClientes();
 float getMontanteTotal(ContaCorrente * cadastroContas);
