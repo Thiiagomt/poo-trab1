@@ -334,7 +334,7 @@ void menuBanco(ContaCorrente * cadastroContas, Cliente * cadastroClientes, Lanca
     << "2 - Exibir número total de contas" << endl
     << "3 - Exibir número total de clientes cadastrados" << endl
     << "4 - Exibir montante total presente no banco" << endl
-    << "5 - Exibir extrato de uma conta" << endl
+    << "5 - Exibir histórico de lançamentos de uma conta" << endl
     << "6 - Sair" << endl;
 
     cin >> option;
@@ -353,19 +353,42 @@ void menuBanco(ContaCorrente * cadastroContas, Cliente * cadastroClientes, Lanca
             break;
         }
         case 2:{
-            //
+            cout << "Total de contas cadastradas no banco: " + to_string(getQuantidadeDeContas()) << endl;
+            cout << "Você será redirecionado para o menu de gerenciamento do banco" << endl;
+            menuBanco(cadastroContas, cadastroClientes, historicoLancamentos);
             break;
         }
         case 3:{
-            //
+            cout << "Total de cliente cadastrados no banco: " + to_string(getQuantidadeDeClientes()) << endl;
+            cout << "Você será redirecionado para o menu de gerenciamento do banco" << endl;
+            menuBanco(cadastroContas, cadastroClientes, historicoLancamentos);
             break;
         }
         case 4:{
-            //
+            cout << "Montante total presente no bando: R$" + to_string(getMontanteTotal(cadastroContas)) << endl;
+            cout << "Você será redirecionado para o menu de gerenciamento do banco" << endl;
+            menuBanco(cadastroContas, cadastroClientes, historicoLancamentos);
             break;
         }
         case 5:{
-            //
+            int numConta, lancamentosExibidos;
+            lancamentosExibidos=0;
+
+            cout << "Insira o número da conta desejada: ";
+            cin >> numConta;
+
+            for(int i=0; i<numLancamentosEfetuados; i++){
+                if(historicoLancamentos->getNumConta() == numConta) {
+                    historicoLancamentos->printLancamento();
+                    lancamentosExibidos++;
+                }
+            }
+
+            if(lancamentosExibidos==0)
+                cout << "Não há lançamentos para essa conta ainda!";
+
+            cout << "Você será redirecionado para o menu de gerenciamento do banco" << endl;
+            menuBanco(cadastroContas, cadastroClientes, historicoLancamentos);
             break;
         }
         case 6:{
@@ -446,7 +469,7 @@ void menuLancamento(ContaCorrente * cadastroContas, Cliente * cadastroClientes, 
             comando = lancamento(numConta, operacao, valorLancamento, dataLancamento, cadastroContas);
             switch(comando){
                 case 0: {
-                    Lancamento *lancamento = (Lancamento *) malloc(sizeof(Lancamento));
+                    Lancamento *lancamento = (Lancamento*) malloc(sizeof(Lancamento));
                     lancamento->setLancamento(numConta, operacao, valorLancamento, dataLancamento);
                     historicoLancamentos[numLancamentosEfetuados] = *lancamento;
                     numLancamentosEfetuados += 1;
@@ -519,7 +542,7 @@ void menuLancamento(ContaCorrente * cadastroContas, Cliente * cadastroClientes, 
             comando = lancamento(numConta, operacao, valorLancamento, dataLancamento, cadastroContas);
             switch(comando){
                 case 0: {
-                    Lancamento *lancamento = (Lancamento *) malloc(sizeof(Lancamento));
+                    Lancamento *lancamento = (Lancamento*) malloc(sizeof(Lancamento));
                     lancamento->setLancamento(numConta, operacao, valorLancamento, dataLancamento);
                     historicoLancamentos[numLancamentosEfetuados] = *lancamento;
                     numLancamentosEfetuados += 1;
