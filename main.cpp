@@ -378,8 +378,8 @@ void menuBanco(ContaCorrente * cadastroContas, Cliente * cadastroClientes, Lanca
             cin >> numConta;
 
             for(int i=0; i<numLancamentosEfetuados; i++){
-                if(historicoLancamentos->getNumConta() == numConta) {
-                    historicoLancamentos->printLancamento();
+                if(historicoLancamentos[i].getNumConta() == numConta) {
+                    historicoLancamentos[i].printLancamento();
                     lancamentosExibidos++;
                 }
             }
