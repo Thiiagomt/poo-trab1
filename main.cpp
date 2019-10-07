@@ -73,13 +73,16 @@ void menuPrincipal(){
              << "3 - GERENCIAMENTO DO BANCO" << endl;
 
         cin >> option;
-        if(option<0 || option>4)
+        if(option<0 || option>3)
             while(option<1 || option>3){
                 cout << "Selecione uma opção válida" << endl;
                 cin >> option;
             }
 
         switch(option){
+            case 0:{
+                exit(1);
+            }
             case 1: {
                 menuCliente();
                 break;
