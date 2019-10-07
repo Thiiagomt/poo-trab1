@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #include <sstream>
 // N° de contas nunca será superior ao de clientes
 #define N_CLIENTES_CONTAS 20
@@ -19,6 +20,14 @@ int lancamento(int numConta, int operacao, float valor, Data dataLancamento, Con
 int getQuantidadeDeContas();
 int getQuantidadeDeClientes();
 float getMontanteTotal(ContaCorrente * cadastroContas);
+
+//Função para transformar float em int
+std::string to_string_with_precision(const float valor, const int num_casas){
+    std::ostringstream out;
+    out.precision(num_casas);
+    out << std::fixed << valor;
+    return out.str();
+}
 
 int numContasCadastradas = 0;
 int numClientesCadastrados = 0;
@@ -105,7 +114,7 @@ void menuCliente(ContaCorrente * cadastroContas, Cliente * cadastroClientes, Lan
     << "5 - Sair" << endl;
 
     cin >> option;
-    while(option<0 || option>4){
+    while(option<0 || option>5){
         cout << "Selecione uma opção válida" << endl;
         cin >> option;
     }
@@ -361,7 +370,7 @@ void menuBanco(ContaCorrente * cadastroContas, Cliente * cadastroClientes, Lanca
             break;
         }
         case 4:{
-            cout << "Montante total presente no bando: R$" + to_string(getMontanteTotal(cadastroContas)) << endl;
+            cout << "Montante total presente no bando: R$" + to_string_with_precision(getMontanteTotal(cadastroContas), 2) << endl;
             cout << "Você será redirecionado para o menu de gerenciamento do banco" << endl;
             menuBanco(cadastroContas, cadastroClientes, historicoLancamentos);
             break;
@@ -573,7 +582,7 @@ int lancamento(int numConta, int operacao, float valor, Data data, ContaCorrente
     float novoValor=0;
 
     do{
-        if(numConta == cadastroContas[i].getNumConta())
+        if(numConta == id_ContaCorrente[i]->getNumConta())
             cont += 1;
 
         i += 1;
@@ -616,8 +625,12 @@ float getMontanteTotal(ContaCorrente * cadastroContas){
     int i;
     float montanteTotal=0;
 
-    for(i=0; i<numContasCadastradas; i++)
-        montanteTotal = cadastroContas[i].getSaldoAtual() + montanteTotal;
+    if(numContasCadastradas == 0)
+        montanteTotal=0;
+    else
+        for(i=0; i<numContasCadastradas; i++)
+            montanteTotal = cadastroContas[i].getSaldoAtual() + montanteTotal;
 
     return montanteTotal;
 }
+
