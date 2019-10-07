@@ -33,6 +33,8 @@ iostream
 -
 string
 -
+cstring
+-
 sstream
 -
 Cliente.h
