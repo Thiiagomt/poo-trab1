@@ -229,7 +229,7 @@ void menuConta(){
     << "5 - Sair" << endl;
 
     cin >> option;
-    while(option<0 || option>4){
+    while(option<0 || option>5){
         cout << "Selecione uma opção válida" << endl;
         cin >> option;
     }
