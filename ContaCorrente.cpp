@@ -39,7 +39,7 @@ string ContaCorrente::printConta() {
 
 // Setters
 void ContaCorrente::setNumConta(){
-    /* Gera um numero 1000000 e 10000000: */
+    /* Gera um numero 1000000 e 10000000: */  
     this->numConta = rand() % (10000000 + 1 - 1000000) + 1000000;
 }
 
