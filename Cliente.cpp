@@ -30,7 +30,7 @@ string Cliente::printCliente() {
 
     saida = "O dono(a) desta conta é: " + getNome() +
         "\nPortador do CPF: " + getCPF() +
-            "\nEndereço: Rua " + getEndereco().rua + "," + to_string(getEndereco().numero) + " Bairro " + getEndereco().bairro + "," + " CEP: " + getEndereco().cep +
+            "\nEndereço: Rua " + getEndereco().rua + "," + getEndereco().numero + " Bairro " + getEndereco().bairro + "," + " CEP: " + getEndereco().cep +
                 "\nReside em: " + getEndereco().cidade + "," + getEndereco().uf +
                     "\nTelefone: " + getTelefone() +
                         "\nEmail: " + getEmail()

@@ -40,20 +40,6 @@ Lancamento * id_Lancamentos[N_CLIENTES_CONTAS];
 
 int main() {
 
-
-    /*
-    Data data;
-    data.dia = 12;
-    data.mes = 7;
-    data.ano = 2019;
-
-
-    ContaCorrente conta1;
-    conta1.setConta(147, data, "44175184830", 147.02);
-    cadastroContas[0] = conta1;
-    numContasCadastradas += 1;
-    */
-
     menuPrincipal();
 
     return 0;
@@ -128,6 +114,7 @@ void menuCliente(){
             // Cadastra-se um cliente em ordem
             id_Cliente[numClientesCadastrados] = new Cliente;
             numClientesCadastrados++;
+            // Cria o cliente e verifica se tal já existe. Se já existir, então é deletado o objeto criado
             while ( (i<(numClientesCadastrados - 1)) && !quebra ) {
                 if (id_Cliente[numClientesCadastrados-1]->getCPF() == id_Cliente[i]->getCPF()) {
                     quebra = 1;
@@ -216,7 +203,7 @@ void menuCliente(){
             break;
         }
         case 4:{
-            /*Cadastro de todos os clientes*/
+            //Cadastro de todos os clientes
             for (int i=0; i<numClientesCadastrados; i++)
                 cout << id_Cliente[i]->printCliente();
             break;
@@ -251,36 +238,43 @@ void menuConta(){
             break;
         }
         case 1:{
-            // Busca o cliente peo seu cpf, para verificar se já há um cadastro
-            // assim, cria a contaa ou avisa se o cliente não foi encontrado
-            int quebra=0, i=0;
-            string aux;
-            cout << "Digite seu cpf: ";
-            cin.ignore();
-            getline(cin, aux);
-            do {
-                if (aux == (id_Cliente[i]->getCPF())) {
-                    if (id_Cliente[i]->getContaAtiva() == 1) {
-                        cout << "Cliente já possui uma conta\n";
-                        quebra = 1;
-                    } else {
-                        id_ContaCorrente[numContasCadastradas] = new ContaCorrente(*id_Cliente[i]);
-                        cout << id_ContaCorrente[numContasCadastradas]->printConta();
-                        numContasCadastradas++;
-                        id_Cliente[i]->setContaAtiva(1);
-                        cout << "\nConta Criada Com Sucesso!\n";
-                        quebra = 1;
+            // Verifica antes se há pelo menos 1 cliente para criação de conta
+            if (numClientesCadastrados != 0) {
+                // Busca o cliente pelo seu cpf, para verificar se já há um cadastro
+                // assim, cria a contaa ou avisa se o cliente não foi encontrado
+                int quebra=0, i=0;
+                string aux;
+                cout << "Digite seu cpf: ";
+                cin.ignore();
+                getline(cin, aux);
+                do {
+                    if (aux == (id_Cliente[i]->getCPF())) {
+                        if (id_Cliente[i]->getContaAtiva() == 1) {
+                            cout << "Cliente já possui uma conta\n";
+                            quebra = 1;
+                        } else {
+                            id_ContaCorrente[numContasCadastradas] = new ContaCorrente(*id_Cliente[i]);
+                            cout << id_ContaCorrente[numContasCadastradas]->printConta();
+                            numContasCadastradas++;
+                            id_Cliente[i]->setContaAtiva(1);
+                            cout << "\nConta Criada Com Sucesso!\n";
+                            quebra = 1;
+                        }
                     }
-                }
-                i++;
-            } while ((i < numClientesCadastrados) && !quebra);
+                    i++;
+                } while ((i < numClientesCadastrados) && !quebra);
 
-            if (quebra == 0)
-                cout << "Nenhum cliente encontrado!\nFavor cadastrar-se\n";
+                if (quebra == 0)
+                    cout << "Nenhum cliente encontrado!\nFavor cadastrar-se\n";
+
+            } else {
+                cout << "\nNão ha clientes para ciação de contas\n";
+            }
 
             break;
         }
         case 2:{
+            // Procura a conta pelo seu número. Quando achava, solicita ao usuário a mudança a ser feito
             int i=0, quebra=0, aux;
             int altera_opcao;
             cout << "Digite o numero da conta: ";
@@ -291,6 +285,7 @@ void menuConta(){
                     cin >> altera_opcao;
                     if (altera_opcao == 1) {
                         id_ContaCorrente[i]->setNumConta();
+                        cout << "\nConta alterada com sucesso!\n";
                     } else if (altera_opcao == 2) {
                         id_ContaCorrente[i]->setDataAbertura();
                     } else if (altera_opcao == 3) {
@@ -306,7 +301,8 @@ void menuConta(){
                 cout << "Nenhum cliente encontrado!";
             break;
         }
-        case 3:{
+        case 3: {
+            // Deleta a conta segundo o número da conta
             int aux, i=0, quebra=0;
             cout << "Digite o numero da conta: ";
             cin >> aux;
@@ -328,6 +324,7 @@ void menuConta(){
             break;
         }
         case 4:{
+            // Imprime todas as contas cadastradas
             for (int i=0; i<numContasCadastradas; i++)
                 cout << id_ContaCorrente[i]->printConta();
             break;
@@ -438,49 +435,53 @@ void menuLancamento() {
             break;
         }
         case 1: {
-            operacao = 1;
+            if (numContasCadastradas != 0) {
+                operacao = 1;
 
-            cout << "Insira o numero da conta: ";
-            cin >> numConta;
+                cout << "Insira o numero da conta: ";
+                cin >> numConta;
 
-            cout << "Insira o valor a ser debitado: ";
-            cin >> valorLancamento;
+                cout << "Insira o valor a ser debitado: ";
+                cin >> valorLancamento;
 
-            cout << "Para controle insira a data do lancamento na seguinte ordem";
-            cout << endl << "Ano: ";
-            cin >> dataLancamento.ano;
-            while (dataLancamento.ano != 2019) {
-                cout << "O ano digitado é invalido! Tente novamente" << endl;
-                cout << "Ano: ";
+                cout << "Para controle insira a data do lancamento na seguinte ordem";
+                cout << endl << "Ano: ";
                 cin >> dataLancamento.ano;
-            }
-            cout << "Mes: ";
-            cin >> dataLancamento.mes;
-            while (dataLancamento.mes<1 || dataLancamento.mes>12) {
-                cout << "O mes digitado é invalido! Tente novamente" << endl;
+                while (dataLancamento.ano != 2019) {
+                    cout << "O ano digitado é invalido! Tente novamente" << endl;
+                    cout << "Ano: ";
+                    cin >> dataLancamento.ano;
+                }
                 cout << "Mes: ";
                 cin >> dataLancamento.mes;
-            }
-            cout << "Dia: ";
-            cin >> dataLancamento.dia;
-            if (dataLancamento.mes == 2){
-                if (dataLancamento.dia<1 || dataLancamento.dia>28)
-                    while (dataLancamento.dia<1 || dataLancamento.dia>28) {
-                        cout << "O dia digitado é invalido! Tente novamente" << endl;
-                        cout << "Dia: ";
-                        cin >> dataLancamento.dia;
-                    }
-            }
-            else {
-                if (dataLancamento.dia<1 || dataLancamento.dia>31)
-                    while (dataLancamento.dia<1 || dataLancamento.dia>31) {
-                        cout << "O dia digitado é invalido! Tente noamente" << endl;
-                        cout << "Dia: ";
-                        cin >> dataLancamento.dia;
-                    }
-            }
+                while (dataLancamento.mes<1 || dataLancamento.mes>12) {
+                    cout << "O mes digitado é invalido! Tente novamente" << endl;
+                    cout << "Mes: ";
+                    cin >> dataLancamento.mes;
+                }
+                cout << "Dia: ";
+                cin >> dataLancamento.dia;
+                if (dataLancamento.mes == 2){
+                    if (dataLancamento.dia<1 || dataLancamento.dia>28)
+                        while (dataLancamento.dia<1 || dataLancamento.dia>28) {
+                            cout << "O dia digitado é invalido! Tente novamente" << endl;
+                            cout << "Dia: ";
+                            cin >> dataLancamento.dia;
+                        }
+                }
+                else {
+                    if (dataLancamento.dia<1 || dataLancamento.dia>31)
+                        while (dataLancamento.dia<1 || dataLancamento.dia>31) {
+                            cout << "O dia digitado é invalido! Tente noamente" << endl;
+                            cout << "Dia: ";
+                            cin >> dataLancamento.dia;
+                        }
+                }
 
-            comando = lancamento(numConta, operacao, valorLancamento, dataLancamento);
+                comando = lancamento(numConta, operacao, valorLancamento, dataLancamento);
+            } else {
+                cout << "\nSem contas cadastradas!\n";
+            }
             switch(comando){
                 case 0: {
                     Lancamento *lancamento = (Lancamento*) malloc(sizeof(Lancamento));

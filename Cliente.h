@@ -16,7 +16,7 @@ typedef struct{
     string cidade;
     string uf;
     string cep;
-    int numero;
+    string numero;
 } Adress;
 
 class Cliente {
