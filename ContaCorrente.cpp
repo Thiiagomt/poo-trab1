@@ -39,9 +39,10 @@ string ContaCorrente::printConta() {
 
 // Setters
 void ContaCorrente::setNumConta(){
-    /* generate secret number between 1 and 1000000: */
-    this->numConta = rand() % 1000000 + 1;
+    /* Gera um numero 1000000 e 10000000: */
+    this->numConta = rand() % (10000000 + 1 - 1000000) + 1000000;
 }
+
 void ContaCorrente::setDataAbertura(){
     cout << "Dia: ";
     cin >> dataAbertura.dia;

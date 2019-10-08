@@ -124,11 +124,19 @@ void menuCliente(){
             break;
         }
         case 1:{
+            int quebra=0, i=0;
             // Cadastra-se um cliente em ordem
-            int quebra = 0;
             id_Cliente[numClientesCadastrados] = new Cliente;
             numClientesCadastrados++;
-            for(int i=0; i<numClientesCadastrados; i++)
+            while ( (i<(numClientesCadastrados - 1)) && !quebra ) {
+                if (id_Cliente[numClientesCadastrados-1]->getCPF() == id_Cliente[i]->getCPF()) {
+                    quebra = 1;
+                    cout << "\nCliente com CPF já existente!\n";
+                    delete id_Cliente[numClientesCadastrados-1];
+                    numClientesCadastrados--;
+                }
+                i++;
+            }
             break;
         }
         case 2:{
