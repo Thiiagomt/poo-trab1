@@ -28,13 +28,14 @@ Cliente::~Cliente() = default;
 string Cliente::printCliente() {
     string saida;
 
-    saida = "O dono(a) desta conta é: " + getNome() +
+    saida = "\n\nO dono(a) desta conta é: " + getNome() +
         "\nPortador do CPF: " + getCPF() +
-            "\nEndereço: Rua " + getEndereco().rua + "," + getEndereco().numero + " Bairro " + getEndereco().bairro + "," + " CEP: " + getEndereco().cep +
-                "\nReside em: " + getEndereco().cidade + "," + getEndereco().uf +
-                    "\nTelefone: " + getTelefone() +
-                        "\nEmail: " + getEmail()
-                            + "\n";
+            "\nRua " + getEndereco().rua + ", " + getEndereco().numero + 
+                "\nBairro " + getEndereco().bairro + " - " + "CEP: " + getEndereco().cep +
+                    "\nReside em: " + getEndereco().cidade + "- " + getEndereco().uf +
+                        "\nTelefone: " + getTelefone() +
+                            "\nE-mail: " + getEmail()
+                                + "\n";
 
     return saida;
 }
@@ -62,7 +63,7 @@ void Cliente::setEndereco() {
 
     Adress endereco;
     
-    // Tavoni: Tentei fazer o mesmo laço para o CPF, mas não estava retornando o tamanho da string (não sei o porque...)
+    //Tentei fazer o mesmo laço para o CPF, mas não estava retornando o tamanho da string (não sei o porque...)
     cout << "CEP: ";
     getline(cin, this->endereco.cep);
 
@@ -91,6 +92,7 @@ void Cliente::setTelefone(){
 void Cliente::setEmail() {
     cout << "Digite seu email: ";
     getline(cin, this->email);      // Pega a string do email
+    cout << "\n\n\nCliente cadastrado com sucesso!" << endl;
 }
 
 void Cliente::setContaAtiva(int x) {
