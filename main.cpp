@@ -399,7 +399,7 @@ void menuBanco(){
 
                 for(int i=0; i<numLancamentosEfetuados; i++){
                     if(id_Lancamentos[i]->getNumConta() == numConta) {
-                        id_Lancamentos[i]->printLancamento();
+                        cout << id_Lancamentos[i]->printLancamento() << endl;
                         lancamentosExibidos++;
                     }
                 }
