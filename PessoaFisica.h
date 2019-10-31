@@ -2,24 +2,17 @@
 // Created by thiago on 20/09/2019.
 //
 
-#ifndef TRAB1_CLIENTE_H
-#define TRAB1_CLIENTE_H
+#ifndef TRAB1_PESSOAFISICA_H
+#define TRAB1_PESSOAFISICA_H
 
 #include <string>
 #include <sstream>
 
+#include "Endereco.h"
+
 using namespace std;
 
-typedef struct{
-    string rua;
-    string bairro;
-    string cidade;
-    string uf;
-    string cep;
-    string numero;
-} Adress;
-
-class Cliente {
+class PessoaFisica {
 public:
 
     //Função para transformar float em int
@@ -31,19 +24,19 @@ public:
     }
 
     // Construtor
-    Cliente();
+    PessoaFisica();
 
     // Destrutoe
-    ~Cliente();
+    ~PessoaFisica();
 
-    // Define Cliente
-    void setCliente();
+    // Define PessoaFisica
+    void setPessoaFisica();
 
-    // Imprime info cliente
-    string printCliente();
+    // Imprime info PessoaFisica
+    string printPessoaFisica();
 
     // Editar Dados
-    void EditaCliente(int option);
+    void EditaPessoaFisica(int option);
 
     // Setters
     void setNome();
@@ -56,7 +49,7 @@ public:
     // Getters
     string getNome();
     string getCPF();
-    Adress getEndereco();
+    Endereco getEndereco();
     string getTelefone();
     string getEmail();
     int getContaAtiva();
@@ -64,10 +57,10 @@ public:
 private:
     string nome;
     string cpf;
-    Adress endereco;
+    Endereco *endereco;
     string telefone;
     string email;
     int conta_ativa;
 };
 
-#endif //TRAB1_CLIENTE_H
+#endif //TRAB1_PessoaFisica_H

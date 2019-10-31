@@ -2,23 +2,17 @@
 // Created by thiago on 20/09/2019.
 //
 
-#ifndef TRAB1_CONTACORRENTE_H
-#define TRAB1_CONTACORRENTE_H
+#ifndef TRAB1_ContaPoupanca_H
+#define TRAB1_ContaPoupanca_H
 
 #include <string>
 #include <sstream>
 using namespace std;
 
-#include "Cliente.h"
+#include "PessoaFisica.h"
+#include "Data.h"
 
-typedef struct {
-    int dia;
-    int mes;
-    int ano;
-} Data;
-
-
-class ContaCorrente {
+class ContaPoupanca {
 public:
 
     //Função para transformar float em int
@@ -30,13 +24,13 @@ public:
     }
 
     // Construtor
-    ContaCorrente(Cliente);
+    ContaPoupanca(PessoaFisica);
 
     // Destrutor
-    ~ContaCorrente();
+    ~ContaPoupanca();
 
-    // Define Cliente
-    void setContaCorrente(Cliente);
+    // Define PessoaFisica
+    void setContaPoupanca(PessoaFisica);
 
     // Imprime info conta
     string printConta();
@@ -44,20 +38,20 @@ public:
     // Setters
     void setNumConta();
     void setDataAbertura();
-    void setCPFCliente(Cliente);
+    void setCPFPessoaFisica(PessoaFisica);
     void setSaldoAtual(float value);
 
     // Getters
     int getNumConta();
     Data getDataAbertura();
-    string getCPFCliente();
+    string getCPFPessoaFisica();
     float getSaldoAtual();
 
 private:
     int numConta;
-    Data dataAbertura;
-    string cpfCliente;
+    Data *dataAbertura;
+    string cpfPessoaFisica;
     float saldoAtual;
 };
 
-#endif //TRAB1_CONTACORRENTE_H
+#endif //TRAB1_ContaPoupanca_H

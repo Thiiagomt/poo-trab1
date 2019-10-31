@@ -4,19 +4,21 @@
 
 #include  <iostream>
 
+#include "Data.h"
 #include "Lancamento.h"
+
 using namespace std;
 
-void Lancamento::setLancamento(int numConta, int operacao, float valorLancamento, Data dataLancamento){
+void Lancamento::setLancamento(int numConta, int operacao, float valorLancamento){
     setNumConta(numConta);
     setOperacao(operacao);
     setValorLancamento(valorLancamento);
-    setDataLancamento(dataLancamento);
+    setDataLancamento();
 }
 
 // Construtor
-Lancamento::Lancamento(int numConta, int operacao, float valorLancamento, Data dataLancamento) {
-    setLancamento(numConta, operacao, valorLancamento, dataLancamento);
+Lancamento::Lancamento(int numConta, int operacao, float valorLancamento) {
+    setLancamento(numConta, operacao, valorLancamento);
 }
 
 // Construtor default
@@ -38,7 +40,7 @@ string Lancamento::printLancamento() {
     saida = "O número da conta onde o lançamento foi feito é: " + to_string(getNumConta()) +
         "\nOperacao de: " + operation +
             "\nCom o valor de: R$" + to_string_with_precision(getValorLancamento(), 2) +
-                "\nA data do lancamento na conta foi: " + to_string(getDataLancamento().dia) + "/" + to_string(getDataLancamento().mes) + "/" + to_string(getDataLancamento().ano)
+                "\nA data do lancamento na conta foi: " + to_string(this->dataLancamento->getDia()) + "/" + to_string(this->dataLancamento->getMes()) + "/" + to_string(this->dataLancamento->getAno())
                     + "\n";
 
     return saida;
@@ -55,8 +57,8 @@ void Lancamento::setOperacao(int operacao){
 void Lancamento::setValorLancamento(float valorLancamento){
     this->valorLancamento = valorLancamento;
 }
-void Lancamento::setDataLancamento(Data dataLancamento){
-    this->dataLancamento = dataLancamento;
+void Lancamento::setDataLancamento(){
+    this->dataLancamento = new Data;
 }
 
 
@@ -71,5 +73,5 @@ float Lancamento::getValorLancamento(){
     return this->valorLancamento;
 }
 Data Lancamento::getDataLancamento(){
-    return this->dataLancamento;
+    return *dataLancamento;
 }

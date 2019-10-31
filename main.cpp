@@ -13,8 +13,8 @@ Thiago de Moraes Teixeira           RA:760667
 // N° de contas nunca será superior ao de clientes
 #define N_CLIENTES_CONTAS 20
 
-#include "Cliente.h"
-#include "ContaCorrente.h"
+#include "PessoaFisica.h"
+#include "ContaPoupanca.h"
 #include "Lancamento.h"
 
 using namespace std;
@@ -25,7 +25,7 @@ void menuCliente();
 void menuConta();
 void menuBanco();
 void menuLancamento();
-int lancamento(int numConta, int operacao, float valor, Data dataLancamento);
+int lancamento(int numConta, int operacao, float valor);
 int getQuantidadeDeContas();
 int getQuantidadeDeClientes();
 float getMontanteTotal();
@@ -42,9 +42,9 @@ int numContasCadastradas = 0;
 int numClientesCadastrados = 0;
 int numLancamentosEfetuados = 0;
 
-Cliente * id_Cliente[N_CLIENTES_CONTAS];
-ContaCorrente * id_ContaCorrente[N_CLIENTES_CONTAS];
-Lancamento * id_Lancamentos[N_CLIENTES_CONTAS];
+PessoaFisica *id_Cliente[N_CLIENTES_CONTAS];
+ContaPoupanca *id_ContaPoupanca[N_CLIENTES_CONTAS];
+Lancamento *id_Lancamentos[N_CLIENTES_CONTAS];
 
 int main() {
 
@@ -120,7 +120,7 @@ void menuCliente(){
         case 1:{
             int quebra=0, i=0;
             // Cadastra-se um cliente em ordem
-            id_Cliente[numClientesCadastrados] = new Cliente;
+            id_Cliente[numClientesCadastrados] = new PessoaFisica;
             numClientesCadastrados++;
             // Cria o cliente e verifica se tal já existe. Se já existir, então é deletado o objeto criado
             while ( (i<(numClientesCadastrados - 1)) && !quebra ) {
@@ -161,7 +161,7 @@ void menuCliente(){
                     } else if (altera_opcao == 5) {
                         cin.ignore();
                         id_Cliente[i]->setCPF();
-                        id_ContaCorrente[i]->setCPFCliente(*id_Cliente[i]);
+                        id_ContaPoupanca[i]->setCPFPessoaFisica(*id_Cliente[i]);
                     }
                     quebra = 1;
                 } 
@@ -186,11 +186,11 @@ void menuCliente(){
                     if (id_Cliente[i]->getContaAtiva() == 1) {
                         cpf_conta = id_Cliente[i]->getCPF();
                         for (int f=0; f<numContasCadastradas; f++) {
-                            if (cpf_conta == (id_ContaCorrente[f]->getCPFCliente())) {
-                                delete id_ContaCorrente[f];
+                            if (cpf_conta == (id_ContaPoupanca[f]->getCPFPessoaFisica())) {
+                                delete id_ContaPoupanca[f];
                                 numContasCadastradas--;
                                 for (int k=f; k<numClientesCadastrados; k++) {
-                                    id_ContaCorrente[k] = id_ContaCorrente[k+1];
+                                    id_ContaPoupanca[k] = id_ContaPoupanca[k+1];
                                 }
                             }
                         }
@@ -213,7 +213,7 @@ void menuCliente(){
         case 4:{
             //Cadastro de todos os clientes
             for (int i=0; i<numClientesCadastrados; i++)
-                cout << id_Cliente[i]->printCliente();
+                cout << id_Cliente[i]->printPessoaFisica();
             break;
         }
         case 5:{
@@ -261,8 +261,8 @@ void menuConta(){
                             cout << "Cliente já possui uma conta\n";
                             quebra = 1;
                         } else {
-                            id_ContaCorrente[numContasCadastradas] = new ContaCorrente(*id_Cliente[i]);
-                            cout << id_ContaCorrente[numContasCadastradas]->printConta();
+                            id_ContaPoupanca[numContasCadastradas] = new ContaPoupanca(*id_Cliente[i]);
+                            cout << id_ContaPoupanca[numContasCadastradas]->printConta();
                             numContasCadastradas++;
                             id_Cliente[i]->setContaAtiva(1);
                             cout << "\nConta Criada Com Sucesso!\n";
@@ -288,17 +288,17 @@ void menuConta(){
             cout << "Digite o numero da conta: ";
             cin >> aux;
             do {
-                if (aux == (id_ContaCorrente[i]->getNumConta())) {
+                if (aux == (id_ContaPoupanca[i]->getNumConta())) {
                     cout << "Qual alteração deseja realizar?\n1 - Alterar numero da conta(geracao aleatoria)\n2 - Data de Abertura\n3 - CPF\nOpcao: ";
                     cin >> altera_opcao;
                     if (altera_opcao == 1) {
-                        id_ContaCorrente[i]->setNumConta();
+                        id_ContaPoupanca[i]->setNumConta();
                         cout << "\nConta alterada com sucesso!\n";
                     } else if (altera_opcao == 2) {
-                        id_ContaCorrente[i]->setDataAbertura();
+                        id_ContaPoupanca[i]->setDataAbertura();
                     } else if (altera_opcao == 3) {
                         id_Cliente[i]->setCPF();
-                        id_ContaCorrente[i]->setCPFCliente(*id_Cliente[i]);
+                        id_ContaPoupanca[i]->setCPFPessoaFisica(*id_Cliente[i]);
                     }
                     quebra = 1;
                 } 
@@ -315,8 +315,8 @@ void menuConta(){
             cout << "Digite o numero da conta: ";
             cin >> aux;
             do {
-                if (aux == (id_ContaCorrente[i]->getNumConta())) {
-                    delete id_ContaCorrente[i];
+                if (aux == (id_ContaPoupanca[i]->getNumConta())) {
+                    delete id_ContaPoupanca[i];
                     numClientesCadastrados--;
                     for (int j=i; j<numClientesCadastrados; j++) {
                         id_Cliente[j] = id_Cliente[j+1];
@@ -334,7 +334,7 @@ void menuConta(){
         case 4:{
             // Imprime todas as contas cadastradas
             for (int i=0; i<numContasCadastradas; i++)
-                cout << id_ContaCorrente[i]->printConta();
+                cout << id_ContaPoupanca[i]->printConta();
             break;
         }
         case 5:{
@@ -427,7 +427,6 @@ void menuLancamento() {
     int numConta;
     int operacao = 0;
     float valorLancamento;
-    Data dataLancamento;
     int option;
     cout << endl << "--- LANÇAMENTOS ---" << endl
          << "0 - Menu anterior" << endl
@@ -456,48 +455,14 @@ void menuLancamento() {
                 cout << "Insira o valor a ser debitado: ";
                 cin >> valorLancamento;
 
-                cout << "Para controle insira a data do lancamento na seguinte ordem";
-                cout << endl << "Ano: ";
-                cin >> dataLancamento.ano;
-                while (dataLancamento.ano != 2019) {
-                    cout << "O ano digitado é invalido! Tente novamente" << endl;
-                    cout << "Ano: ";
-                    cin >> dataLancamento.ano;
-                }
-                cout << "Mes: ";
-                cin >> dataLancamento.mes;
-                while (dataLancamento.mes<1 || dataLancamento.mes>12) {
-                    cout << "O mes digitado é invalido! Tente novamente" << endl;
-                    cout << "Mes: ";
-                    cin >> dataLancamento.mes;
-                }
-                cout << "Dia: ";
-                cin >> dataLancamento.dia;
-                if (dataLancamento.mes == 2){
-                    if (dataLancamento.dia<1 || dataLancamento.dia>28)
-                        while (dataLancamento.dia<1 || dataLancamento.dia>28) {
-                            cout << "O dia digitado é invalido! Tente novamente" << endl;
-                            cout << "Dia: ";
-                            cin >> dataLancamento.dia;
-                        }
-                }
-                else {
-                    if (dataLancamento.dia<1 || dataLancamento.dia>31)
-                        while (dataLancamento.dia<1 || dataLancamento.dia>31) {
-                            cout << "O dia digitado é invalido! Tente noamente" << endl;
-                            cout << "Dia: ";
-                            cin >> dataLancamento.dia;
-                        }
-                }
-
-                comando = lancamento(numConta, operacao, valorLancamento, dataLancamento);
+                comando = lancamento(numConta, operacao, valorLancamento);
             } else {
                 cout << "\nSem contas cadastradas!\n";
             }
             switch(comando){
                 case 0: {
                     Lancamento *lancamento = (Lancamento*) malloc(sizeof(Lancamento));
-                    lancamento->setLancamento(numConta, operacao, valorLancamento, dataLancamento);
+                    lancamento->setLancamento(numConta, operacao, valorLancamento);
                     id_Lancamentos[numLancamentosEfetuados] = lancamento;
                     numLancamentosEfetuados += 1;
 
@@ -533,41 +498,7 @@ void menuLancamento() {
                 cout << "Insira o valor a ser depositado: ";
                 cin >> valorLancamento;
 
-                cout << "Para controle insira a data do lancamento na seguinte ordem";
-                cout << endl << "Ano: ";
-                cin >> dataLancamento.ano;
-                while (dataLancamento.ano != 2019) {
-                    cout << "O ano digitado é invalido! Tente novamente" << endl;
-                    cout << "Ano: ";
-                    cin >> dataLancamento.ano;
-                }
-                cout << "Mes: ";
-                cin >> dataLancamento.mes;
-                while (dataLancamento.mes<1 || dataLancamento.mes>12) {
-                    cout << "O mes digitado é invalido! Tente novamente" << endl;
-                    cout << "Mes: ";
-                    cin >> dataLancamento.mes;
-                }
-                cout << "Dia: ";
-                cin >> dataLancamento.dia;
-                if (dataLancamento.mes == 2){
-                    if (dataLancamento.dia<1 || dataLancamento.dia>28)
-                        while (dataLancamento.dia<1 || dataLancamento.dia>28) {
-                            cout << "O dia digitado é invalido! Tente novamente" << endl;
-                            cout << "Dia: ";
-                            cin >> dataLancamento.dia;
-                        }
-                }
-                else {
-                    if (dataLancamento.dia<1 || dataLancamento.dia>31)
-                        while (dataLancamento.dia<1 || dataLancamento.dia>31) {
-                            cout << "O dia digitado é invalido! Tente novamente" << endl;
-                            cout << "Dia: ";
-                            cin >> dataLancamento.dia;
-                        }
-                }
-
-                comando = lancamento(numConta, operacao, valorLancamento, dataLancamento);
+                comando = lancamento(numConta, operacao, valorLancamento);
             } else {
                 cout << "\nSem contas cadastradas!\n";
             }
@@ -575,7 +506,7 @@ void menuLancamento() {
             switch(comando){
                 case 0: {
                     Lancamento *lancamento = (Lancamento*) malloc(sizeof(Lancamento));
-                    lancamento->setLancamento(numConta, operacao, valorLancamento, dataLancamento);
+                    lancamento->setLancamento(numConta, operacao, valorLancamento);
                     id_Lancamentos[numLancamentosEfetuados] = lancamento;
                     numLancamentosEfetuados += 1;
 
@@ -603,13 +534,13 @@ void menuLancamento() {
     }
 }
 
-int lancamento(int numConta, int operacao, float valor, Data data){
+int lancamento(int numConta, int operacao, float valor){
     int i=0;
     int cont=0;
     float novoValor=0;
 
     do{
-        if(numConta == id_ContaCorrente[i]->getNumConta())
+        if(numConta == id_ContaPoupanca[i]->getNumConta())
             cont += 1;
 
         i += 1;
@@ -625,17 +556,17 @@ int lancamento(int numConta, int operacao, float valor, Data data){
     //Operação 1 = Débito
     //Operação 2 = Crédito
     if(operacao == 1){
-        if((id_ContaCorrente[i]->getSaldoAtual() - valor) < 0)
+        if((id_ContaPoupanca[i]->getSaldoAtual() - valor) < 0)
             return 2;
         else {
-            novoValor = id_ContaCorrente[i]->getSaldoAtual() - valor;
-            id_ContaCorrente[i]->setSaldoAtual(novoValor);
+            novoValor = id_ContaPoupanca[i]->getSaldoAtual() - valor;
+            id_ContaPoupanca[i]->setSaldoAtual(novoValor);
             return 0;
         }
     }
     else{
-        novoValor = id_ContaCorrente[i]->getSaldoAtual() + valor;
-        id_ContaCorrente[i]->setSaldoAtual(novoValor);
+        novoValor = id_ContaPoupanca[i]->getSaldoAtual() + valor;
+        id_ContaPoupanca[i]->setSaldoAtual(novoValor);
         return 0;
     }
 }
@@ -656,7 +587,7 @@ float getMontanteTotal(){
         montanteTotal=0;
     else
         for(i=0; i<numContasCadastradas; i++)
-            montanteTotal = id_ContaCorrente[i]->getSaldoAtual() + montanteTotal;
+            montanteTotal = id_ContaPoupanca[i]->getSaldoAtual() + montanteTotal;
 
     return montanteTotal;
 }

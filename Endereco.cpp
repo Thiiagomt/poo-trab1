@@ -21,7 +21,7 @@ Endereco::~Endereco() = default;
 
 // Imprime info da Endereco
 void Endereco::printEndereco() const {
-    cout << "Endereco: " << getRua() << ", " << getBairro() << ", " << ", " << getNumero() << 
+    cout << "Endereco:\n" << "Rua: " << getRua() << ", " << getBairro() << ", " << ", " << getNumero() << 
     "\nCEP: " + getCep() + ", " + getCidade() << ", " << getUf();
 }
 

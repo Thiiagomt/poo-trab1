@@ -7,10 +7,14 @@
 using namespace std;
 
 // Construtor
-Data::Data(int x, int y, int z) {
-    this->dia = x;
-    this->mes = y;
-    this->ano = z;
+Data::Data() {
+    valido = 0;
+    while (!valido) {
+        setDia();
+        setMes();
+        setAno();
+        validaData();
+    }
 }
 
 // Destrutor
@@ -59,43 +63,38 @@ int Data::getAno() const {
     return ano;
 }
 
-int Data::validaData() const {
+void Data::validaData() {
     /*
      *  Ano Bissexto -> É divisível por 400 ou não é divisível por 100 e é divisível por 4
      */
-    int validado = 0;
 
-    if ( dia >= 1) {
-        if (dia <= 28) {
-            if ( (mes==2) && ( (ano % 400 == 0) || ( (ano % 4 == 0) && (ano % 100 !=0) ) ) ) {
-                validado = 1;
+    while (!valido) {
+
+        if ( dia >= 1) {
+            if (dia <= 28) {
+                if ( (mes==2) && ( (ano % 400 == 0) || ( (ano % 4 == 0) && (ano % 100 !=0) ) ) ) {
+                    valido = 1;
+                }
+            }
+            if (dia == 29) {
+                if ( (mes ==2) && ( (ano % 400 == 0) || ( (ano % 4 == 0) && (ano % 100 !=0) ) ) ) {
+                    valido = 1;
+                } 
+            }
+            else if ( (mes == 2) && (dia <=28) ) {
+                valido = 1;
+            }
+            if (dia <= 30) {
+                if ( (mes == 4) || (mes==6) || (mes==9) || (mes==11) ) {
+                    valido = 1;
+                }
+            }
+            if (dia <= 31) {
+                if ( (mes == 1) || (mes==3) || (mes==5) || (mes==7) || (mes==8) || (mes==10) || (mes==12) ) {
+                    valido = 1;
+                }
             }
         }
-        if (dia == 29) {
-            if ( (mes ==2) && ( (ano % 400 == 0) || ( (ano % 4 == 0) && (ano % 100 !=0) ) ) ) {
-                validado = 1;
-            } 
-        }
-        else if ( (mes == 2) && (dia <=28) ) {
-            validado = 1;
-        }
-        if (dia <= 30) {
-            if ( (mes == 4) || (mes==6) || (mes==9) || (mes==11) ) {
-                validado = 1;
-            }
-        }
-        if (dia <= 31) {
-            if ( (mes == 1) || (mes==3) || (mes==5) || (mes==7) || (mes==8) || (mes==10) || (mes==12) ) {
-                validado = 1;
-            }
-        }
+
     }
-
-    if (validado == 1)
-        cout << "Data Valida!\n";
-    else
-        cout << "Data Invalida! Tente novamente!\n";
-
-    return validado;
-
 }

@@ -13,7 +13,7 @@ using namespace std;
 class Data {
 public:
     // Construtor com parâmetros
-    Data(int, int, int);
+    Data();
 
     // Destrutor
     ~Data();
@@ -22,7 +22,7 @@ public:
     void printData() const;
 
     // Valida Data e método toString
-    int validaData() const;
+    void validaData();
     string toString() const;
 
     // Setters
@@ -39,6 +39,7 @@ private:
     int dia;
     int mes;
     int ano;
+    int valido;
 };
 
 #endif //TRAB2_DATA_H

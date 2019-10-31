@@ -8,7 +8,9 @@
 using namespace std;
 #include <string>
 #include <sstream>
-#include "ContaCorrente.h"
+
+#include "Data.h"
+#include "ContaPoupanca.h"
 
 class Lancamento {
 public:
@@ -22,7 +24,7 @@ public:
     }
 
     // Construtor
-    Lancamento(int numConta, int operacao, float valorLancamento, Data dataLancamento);
+    Lancamento(int numConta, int operacao, float valorLancamento);
 
     // Construtor default
     Lancamento();
@@ -31,7 +33,7 @@ public:
     ~Lancamento();
 
     // Define Cliente
-    void setLancamento(int numConta, int operacao, float valorLancamento, Data dataLancamento);
+    void setLancamento(int numConta, int operacao, float valorLancamento);
 
     // Imprime info conta
     string printLancamento();
@@ -40,7 +42,7 @@ public:
     void setNumConta(int);
     void setOperacao(int);
     void setValorLancamento(float);
-    void setDataLancamento(Data);
+    void setDataLancamento();
 
     // Getters
     int getNumConta();
@@ -52,7 +54,7 @@ private:
     int numConta;
     int operacao;
     float valorLancamento;
-    Data dataLancamento;
+    Data *dataLancamento;
 };
 
 
