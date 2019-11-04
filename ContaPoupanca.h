@@ -24,19 +24,19 @@ public:
     }
 
     // Construtor
-    ContaPoupanca(PessoaFisica);
+    ContaPoupanca(int, PessoaFisica);
 
     // Destrutor
     ~ContaPoupanca();
 
     // Define PessoaFisica
-    void setContaPoupanca(PessoaFisica);
+    void setContaPoupanca(int, PessoaFisica);
 
     // Imprime info conta
     string printConta();
 
     // Setters
-    void setNumConta();
+    void setNumConta(int);
     void setDataAbertura();
     void setCPFPessoaFisica(PessoaFisica);
     void setSaldoAtual(float value);

@@ -1,7 +1,3 @@
-//
-// Created by thiago on 20/09/2019.
-//
-
 #ifndef TRAB1_PESSOAFISICA_H
 #define TRAB1_PESSOAFISICA_H
 
@@ -45,6 +41,7 @@ public:
     void setTelefone();
     void setEmail();
     void setContaAtiva(int);
+    void setTipoConta();
 
     // Getters
     string getNome();
@@ -53,6 +50,7 @@ public:
     string getTelefone();
     string getEmail();
     int getContaAtiva();
+    int getTipoConta();
 
 private:
     string nome;
@@ -61,6 +59,7 @@ private:
     string telefone;
     string email;
     int conta_ativa;
+    int tipo_conta;         // 1 - Fisica & 2 - Juridica
 };
 
 #endif //TRAB1_PessoaFisica_H

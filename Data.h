@@ -1,7 +1,3 @@
-//
-// Created by felipe on 24/10/2019.
-//
-
 #ifndef TRAB2_DATA_H
 #define TRAB2_DATA_H
 

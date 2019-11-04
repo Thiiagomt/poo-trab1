@@ -1,7 +1,3 @@
-//
-// Created by thiago on 20/09/2019.
-//
-
 #include  <iostream>
 
 #include "PessoaFisica.h"
@@ -16,6 +12,7 @@ void PessoaFisica::setPessoaFisica(){
     setTelefone();
     setEmail();
     setContaAtiva(0);
+    setTipoConta();
 } 
 
 // Construtor
@@ -81,6 +78,10 @@ void PessoaFisica::setContaAtiva(int x) {
     this->conta_ativa = x;
 }
 
+void PessoaFisica::setTipoConta() {
+    this->tipo_conta = 1;
+}
+
 void PessoaFisica::EditaPessoaFisica(int option){
     if (option == 1) {
         setTelefone();
@@ -114,5 +115,9 @@ string PessoaFisica::getEmail(){
 
 int PessoaFisica::getContaAtiva(){
     return this->conta_ativa;
+}
+
+int PessoaFisica::getTipoConta(){
+    return this->tipo_conta;
 }
 

@@ -5,6 +5,7 @@ Felipe Tavoni                       RA:758707
 Guilherme Lorençato G Lamonato      RA:758665
 Nathaelly Boni                      RA:758963
 Thiago de Moraes Teixeira           RA:760667
+Clara Gruber                        RA:
 */
 #include <iostream>
 #include <string>
@@ -18,6 +19,8 @@ Thiago de Moraes Teixeira           RA:760667
 #include "Lancamento.h"
 
 using namespace std;
+// A variável "quebra" pode ser encontrada em multiplas funções. Ela é similar ao comportamento
+// do "break", pois irá interromper o while quando tal objetivo for cumprido.
 
 // Funções
 void menuPrincipal();
@@ -41,6 +44,8 @@ std::string to_string_with_precision(const float valor, const int num_casas){
 int numContasCadastradas = 0;
 int numClientesCadastrados = 0;
 int numLancamentosEfetuados = 0;
+// Esse contador sempre sera incrementado, determinando o numero da conta (nunca será repetido)
+int numProxConta = 1;
 
 PessoaFisica *id_Cliente[N_CLIENTES_CONTAS];
 ContaPoupanca *id_ContaPoupanca[N_CLIENTES_CONTAS];
@@ -122,7 +127,8 @@ void menuCliente(){
             // Cadastra-se um cliente em ordem
             id_Cliente[numClientesCadastrados] = new PessoaFisica;
             numClientesCadastrados++;
-            // Cria o cliente e verifica se tal já existe. Se já existir, então é deletado o objeto criado
+            // Cria o cliente e verifica se tal já existe por meio  do cpf. 
+            // Se já existir (cpf já usado), então é deletado o objeto criado
             while ( (i<(numClientesCadastrados - 1)) && !quebra ) {
                 if (id_Cliente[numClientesCadastrados-1]->getCPF() == id_Cliente[i]->getCPF()) {
                     quebra = 1;
@@ -150,18 +156,27 @@ void menuCliente(){
                     if (altera_opcao == 1) {
                         cin.ignore();
                         id_Cliente[i]->setTelefone();
+                        cout << "Cadastro alterado com sucesso!\n";
                     } else if (altera_opcao == 2) {
                         cin.ignore();
                         id_Cliente[i]->setEndereco();
+                        cout << "Cadastro alterado com sucesso!\n";
                     } else if (altera_opcao == 3) {
                         cin.ignore();
                         id_Cliente[i]->setEmail();
+                        cout << "Cadastro alterado com sucesso!\n";
                     } else if (altera_opcao == 4) {
                         id_Cliente[i]->setNome();
+                        cout << "Cadastro alterado com sucesso!\n";
                     } else if (altera_opcao == 5) {
-                        cin.ignore();
-                        id_Cliente[i]->setCPF();
-                        id_ContaPoupanca[i]->setCPFPessoaFisica(*id_Cliente[i]);
+                        if (id_Cliente[i]->getContaAtiva() == 0) {
+                            cin.ignore();
+                            id_Cliente[i]->setCPF();
+                            cout << "Cadastro alterado com sucesso!\n";
+                        }
+                        else {
+                            cout << "Falha na alteracao!\nExiste uma conta vinculada a este CPF no momento!\n";
+                        }
                     }
                     quebra = 1;
                 } 
@@ -175,32 +190,24 @@ void menuCliente(){
         }
         case 3:{
             int i=0, quebra=0;
-            string aux, cpf_conta;
+            string aux;
             cout << "Digite seu cpf: ";
             cin.ignore();
             getline(cin, aux);
             do {
-                // Busca de clientes por cpf, deletando-o quando achar junto com sua respectiva conta corrente (se houver)
-                // É ajustado também a alocação
+                // Busca de cliente por meio do cpf
+                // Se o cliente possuir uma conta ativa no momento, seu cadastro não poderá ser excluído
                 if (aux == (id_Cliente[i]->getCPF())) {
                     if (id_Cliente[i]->getContaAtiva() == 1) {
-                        cpf_conta = id_Cliente[i]->getCPF();
-                        for (int f=0; f<numContasCadastradas; f++) {
-                            if (cpf_conta == (id_ContaPoupanca[f]->getCPFPessoaFisica())) {
-                                delete id_ContaPoupanca[f];
-                                numContasCadastradas--;
-                                for (int k=f; k<numClientesCadastrados; k++) {
-                                    id_ContaPoupanca[k] = id_ContaPoupanca[k+1];
-                                }
-                            }
+                        cout << "Nao foi possivel deletar sua conta!\nVoce possui uma conta ativa no momento!\n";
+                    } else {
+                        delete id_Cliente[i];
+                        numClientesCadastrados--;
+                        for (int j=i; j<numClientesCadastrados; j++) {
+                            id_Cliente[j] = id_Cliente[j+1];
                         }
+                        quebra = 1;
                     }
-                    delete id_Cliente[i];
-                    numClientesCadastrados--;
-                    for (int j=i; j<numClientesCadastrados; j++) {
-                        id_Cliente[j] = id_Cliente[j+1];
-                    }
-                    quebra = 1;
                 }
                 i++;
             } while ((i < numClientesCadastrados) && !quebra);
@@ -250,7 +257,7 @@ void menuConta(){
             if (numClientesCadastrados != 0) {
                 // Busca o cliente pelo seu cpf, para verificar se já há um cadastro
                 // assim, cria a contaa ou avisa se o cliente não foi encontrado
-                int quebra=0, i=0;
+                int quebra=0, i=0, k=0;
                 string aux;
                 cout << "Digite seu cpf: ";
                 cin.ignore();
@@ -261,12 +268,27 @@ void menuConta(){
                             cout << "Cliente já possui uma conta\n";
                             quebra = 1;
                         } else {
-                            id_ContaPoupanca[numContasCadastradas] = new ContaPoupanca(*id_Cliente[i]);
-                            cout << id_ContaPoupanca[numContasCadastradas]->printConta();
-                            numContasCadastradas++;
-                            id_Cliente[i]->setContaAtiva(1);
-                            cout << "\nConta Criada Com Sucesso!\n";
-                            quebra = 1;
+                            // Pessoa Juridica
+                            if (id_Cliente[i]->getTipoConta() == 2) {
+                                
+                            }
+                            // Pessoa Fisica
+                            else {
+                                // Verificar se o numero da conta a ser criada pode ser usado
+                                while (k < numContasCadastradas) {
+                                    if (id_ContaPoupanca[k]->getNumConta() == numProxConta) {
+                                        numProxConta++;     // Incrementa para ser diferente
+                                        k = -1;              // Reseta a verificação
+                                    }
+                                    k++;
+                                }
+                                id_ContaPoupanca[numContasCadastradas] = new ContaPoupanca(numProxConta, *id_Cliente[i]);
+                                cout << id_ContaPoupanca[numContasCadastradas]->printConta();
+                                numContasCadastradas++;
+                                id_Cliente[i]->setContaAtiva(1);
+                                cout << "\nConta Criada Com Sucesso!\n";
+                                quebra = 1;
+                            }
                         }
                     }
                     i++;
@@ -283,25 +305,45 @@ void menuConta(){
         }
         case 2:{
             // Procura a conta pelo seu número. Quando achava, solicita ao usuário a mudança a ser feito
-            int i=0, quebra=0, aux;
+            int i=0, quebra=0, aux, novo_num=0, alterado=0, conta_tipo;
             int altera_opcao;
             cout << "Digite o numero da conta: ";
             cin >> aux;
+            cout << "Tipo da conta: 1 - Fisica & 2 - Juridica\n";
+            cin >> conta_tipo;
             do {
-                if (aux == (id_ContaPoupanca[i]->getNumConta())) {
-                    cout << "Qual alteração deseja realizar?\n1 - Alterar numero da conta(geracao aleatoria)\n2 - Data de Abertura\n3 - CPF\nOpcao: ";
-                    cin >> altera_opcao;
-                    if (altera_opcao == 1) {
-                        id_ContaPoupanca[i]->setNumConta();
-                        cout << "\nConta alterada com sucesso!\n";
-                    } else if (altera_opcao == 2) {
-                        id_ContaPoupanca[i]->setDataAbertura();
-                    } else if (altera_opcao == 3) {
-                        id_Cliente[i]->setCPF();
-                        id_ContaPoupanca[i]->setCPFPessoaFisica(*id_Cliente[i]);
+                if (conta_tipo == 1) {
+                    if (aux == (id_ContaPoupanca[i]->getNumConta())) {
+                        cout << "Qual alteração deseja realizar?\n1 - Alterar numero da conta\n2 - Data de Abertura\nOpcao: ";
+                        cin >> altera_opcao;
+                        if (altera_opcao == 1) {
+                            do {
+                                cout << "Digite o numero da conta: ";
+                                cin >> novo_num;
+                                int k=0;
+                                // Verifica se o numero ja pertence a outra conta
+                                do {
+                                    if (id_ContaPoupanca[k]->getNumConta() == novo_num)
+                                        cout << "Digite novamente!\n";
+                                    else {
+                                        id_ContaPoupanca[k]->setNumConta(novo_num);
+                                        k = numContasCadastradas;      // Condicao de parada
+                                    }
+                                    k++;
+                                } while (k < numContasCadastradas);
+                                alterado = 1;
+                            } while (!alterado);
+                            cout << "\nConta alterada com sucesso!\n";
+                        } else if (altera_opcao == 2) {
+                            id_ContaPoupanca[i]->setDataAbertura();
+                            cout << "\nConta alterada com sucesso!\n";
+                        }
+                        quebra = 1;
                     }
-                    quebra = 1;
-                } 
+                }
+                else {
+                // Alteração aqui para as contas de cunho juridicas
+                }
                 i++;
             } while ((i < numContasCadastradas) && !quebra);
 
@@ -312,16 +354,24 @@ void menuConta(){
         case 3: {
             // Deleta a conta segundo o número da conta
             int aux, i=0, quebra=0;
+            string cpf_aux;
             cout << "Digite o numero da conta: ";
             cin >> aux;
             do {
+                // Varre até obter a conta baseada no numero digitado
                 if (aux == (id_ContaPoupanca[i]->getNumConta())) {
+                    cpf_aux = id_ContaPoupanca[i]->getCPFPessoaFisica();
                     delete id_ContaPoupanca[i];
-                    numClientesCadastrados--;
+                    numContasCadastradas--;
                     for (int j=i; j<numClientesCadastrados; j++) {
-                        id_Cliente[j] = id_Cliente[j+1];
+                        id_ContaPoupanca[j] = id_ContaPoupanca[j+1];
+                    }
+                    for (int j=0; j<numClientesCadastrados; j++) {
+                        if (cpf_aux == id_Cliente[j]->getCPF())
+                            id_Cliente[j]->setContaAtiva(0);
                     }
                     quebra = 1;
+                    cout << "Conta excluida com sucesso!\n";
                 }
                 i++;
             } while ((i < numContasCadastradas) && !quebra);
@@ -591,4 +641,3 @@ float getMontanteTotal(){
 
     return montanteTotal;
 }
-

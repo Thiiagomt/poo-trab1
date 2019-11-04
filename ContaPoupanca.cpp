@@ -1,25 +1,19 @@
-//
-// Created by thiago on 20/09/2019.
-//
-
 #include <iostream>
-#include <stdlib.h>     /* srand, rand */
-#include <time.h>       /* time */
 
 #include "ContaPoupanca.h"
 #include "Data.h"
 using namespace std;
 
-void ContaPoupanca::setContaPoupanca(PessoaFisica x) {
-    setNumConta();
+void ContaPoupanca::setContaPoupanca(int y, PessoaFisica x) {
+    setNumConta(y);
     setDataAbertura();
     setCPFPessoaFisica(x);
     setSaldoAtual(0);
 }
 
 // Construtor
-ContaPoupanca::ContaPoupanca(PessoaFisica x) {
-    setContaPoupanca(x);
+ContaPoupanca::ContaPoupanca(int y, PessoaFisica x) {
+    setContaPoupanca(y, x);
 }
 
 // Destrutor
@@ -30,7 +24,7 @@ string ContaPoupanca::printConta() {
     string saida;
 
     saida = "O CPF do dono desta conta é: " + getCPFPessoaFisica() +
-        "\nO número da conta é: " + to_string(getNumConta()) +
+        "\nO número da conta é: 000" + to_string(getNumConta()) +
             "\nA data de abertura da conta é: " + to_string(this->dataAbertura->getDia()) + "/" + to_string(this->dataAbertura->getMes()) + "/" + to_string(this->dataAbertura->getAno()) +
                 "\nO saldo atual da conta é: R$" + to_string_with_precision(getSaldoAtual(), 2)
                     + "\n";
@@ -39,9 +33,8 @@ string ContaPoupanca::printConta() {
 }
 
 // Setters
-void ContaPoupanca::setNumConta(){
-    /* Gera um numero 1000000 e 10000000: */  
-    this->numConta = rand() % (10000000 + 1 - 1000000) + 1000000;
+void ContaPoupanca::setNumConta(int y){
+    this->numConta = y;
 }
 
 void ContaPoupanca::setDataAbertura(){
