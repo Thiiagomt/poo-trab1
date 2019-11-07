@@ -238,11 +238,12 @@ void menuConta(){
     << "1 - Abrir uma nova conta" << endl
     << "2 - Alterar dados de uma conta" << endl
     << "3 - Excluir uma conta" << endl
-    << "4 - Ver Contas Criadas" << endl
-    << "5 - Sair" << endl;
+    << "4 - Realizar lancamento em conta" << endl
+    << "5 - Ver Contas Criadas" << endl
+    << "6 - Sair" << endl;
 
     cin >> option;
-    while(option<0 || option>5){
+    while(option<0 || option>6){
         cout << "Selecione uma opção válida" << endl;
         cin >> option;
     }
@@ -382,12 +383,16 @@ void menuConta(){
             break;
         }
         case 4:{
+            menuLancamento();
+            break;
+        }
+        case 5:{
             // Imprime todas as contas cadastradas
             for (int i=0; i<numContasCadastradas; i++)
                 cout << id_ContaPoupanca[i]->printConta();
             break;
         }
-        case 5:{
+        case 6:{
             exit(1);
         }
         default:
@@ -399,15 +404,14 @@ void menuBanco(){
     int option;
     cout << endl << "--- GERENCIAMENTO DO BANCO ---" << endl
     << "0 - Menu anterior" << endl
-    << "1 - Realizar lançamento em conta" << endl
-    << "2 - Exibir número total de contas" << endl
-    << "3 - Exibir número total de clientes cadastrados" << endl
-    << "4 - Exibir montante total presente no banco" << endl
-    << "5 - Exibir histórico de lançamentos de uma conta" << endl
-    << "6 - Sair" << endl;
+    << "1 - Exibir número total de contas" << endl
+    << "2 - Exibir número total de clientes cadastrados" << endl
+    << "3 - Exibir montante total presente no banco" << endl
+    << "4 - Exibir histórico de lançamentos de uma conta" << endl
+    << "5 - Sair" << endl;
 
     cin >> option;
-    while(option<0 || option>6){
+    while(option<0 || option>5){
         cout << "Selecione uma opção válida" << endl;
         cin >> option;
     }
@@ -418,28 +422,24 @@ void menuBanco(){
             break;
         }
         case 1:{
-            menuLancamento();
-            break;
-        }
-        case 2:{
             cout << "Total de contas cadastradas no banco: " + to_string(getQuantidadeDeContas()) << endl;
             cout << "Você será redirecionado para o menu de gerenciamento do banco" << endl;
             menuBanco();
             break;
         }
-        case 3:{
+        case 2:{
             cout << "Total de cliente cadastrados no banco: " + to_string(getQuantidadeDeClientes()) << endl;
             cout << "Você será redirecionado para o menu de gerenciamento do banco" << endl;
             menuBanco();
             break;
         }
-        case 4:{
+        case 3:{
             cout << "Montante total presente no banco: R$" + to_string_with_precision(getMontanteTotal(), 2) << endl;
             cout << "Você será redirecionado para o menu de gerenciamento do banco" << endl;
             menuBanco();
             break;
         }
-        case 5:{
+        case 4:{
             int numConta, lancamentosExibidos;
             lancamentosExibidos=0;
 
@@ -464,7 +464,7 @@ void menuBanco(){
             }
             break;
         }
-        case 6:{
+        case 5:{
             exit(1);
         }
         default:
