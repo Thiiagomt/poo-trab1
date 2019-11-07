@@ -33,8 +33,8 @@ string PessoaFisica::printPessoaFisica() {
                         "\nBairro " + this->endereco->getBairro() + " - " + "CEP: " + this->endereco->getCep() +
                             "\nReside em: " + this->endereco->getCidade() + "- " + this->endereco->getUf() +
                                 "\nTelefone: " + getTelefone() +
-                                    "\nE-mail: " + getEmail()
-                                        + "\n";
+                                    "\nE-mail: " + getEmail() +
+                                        "\n";
 
     return saida;
 }
