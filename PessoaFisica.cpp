@@ -46,6 +46,7 @@ void PessoaFisica::setNome() {
     cin.ignore();                   // Retira do buffer o '\n' vindo do switch
     getline(cin, this->nome);       // Pega a string do nome
 }
+
 void PessoaFisica::setCPF() {
     int verif = 0;
     do {
@@ -58,6 +59,7 @@ void PessoaFisica::setCPF() {
         }
     } while (!verif);
 }
+
 void PessoaFisica::setEndereco() {
     this->endereco = new Endereco();
 }
@@ -71,7 +73,6 @@ void PessoaFisica::setTelefone(){
 void PessoaFisica::setEmail() {
     cout << "Digite seu email: ";
     getline(cin, this->email);      // Pega a string do email
-    cout << "\n\n\nPessoaFisica cadastrado com sucesso!" << endl;
 }
 
 void PessoaFisica::setContaAtiva(int x) {
@@ -84,15 +85,15 @@ void PessoaFisica::setTipoConta() {
 
 void PessoaFisica::EditaPessoaFisica(int option){
     if (option == 1) {
-        setTelefone();
-    } else if (option == 2) {
-        setEndereco();
-    } else if (option == 3) {
-        setEmail();
-    } else if (option == 4) {
         setNome();
-    } else if (option == 5) {
+    } else if (option == 2) {
         setCPF();
+    } else if (option == 3) {
+        setEndereco();
+    } else if (option == 4) {
+        setTelefone();
+    } else if (option == 5) {
+        setEmail();
     }
 }
 

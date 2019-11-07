@@ -11,7 +11,7 @@ using namespace std;
 class Lancamento {
 public:
 
-    //Função para transformar float em int
+    //Função para transformar float em string com 2 casas decimais
     std::string to_string_with_precision(const float valor, const int num_casas){
         std::ostringstream out;
         out.precision(num_casas);

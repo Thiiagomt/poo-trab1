@@ -10,6 +10,7 @@ Clara Gruber                        RA:
 #include <iostream>
 #include <string>
 #include <cstring>
+
 #include <sstream>
 // N° de contas nunca será superior ao de clientes
 #define N_CLIENTES_CONTAS 20
@@ -33,7 +34,7 @@ int getQuantidadeDeContas();
 int getQuantidadeDeClientes();
 float getMontanteTotal();
 
-//Função para transformar float em int
+//Função para transformar float em string com 2 casas decimais
 std::string to_string_with_precision(const float valor, const int num_casas){
     std::ostringstream out;
     out.precision(num_casas);
@@ -44,12 +45,13 @@ std::string to_string_with_precision(const float valor, const int num_casas){
 int numContasCadastradas = 0;
 int numClientesCadastrados = 0;
 int numLancamentosEfetuados = 0;
+
 // Esse contador sempre sera incrementado, determinando o numero da conta (nunca será repetido)
 int numProxConta = 1;
 
-PessoaFisica *id_Cliente[N_CLIENTES_CONTAS];
-ContaPoupanca *id_ContaPoupanca[N_CLIENTES_CONTAS];
-Lancamento *id_Lancamentos[N_CLIENTES_CONTAS];
+PessoaFisica * id_Cliente[N_CLIENTES_CONTAS];
+ContaPoupanca * id_ContaPoupanca[N_CLIENTES_CONTAS];
+Lancamento * id_Lancamentos[N_CLIENTES_CONTAS];
 
 int main() {
 
@@ -138,6 +140,7 @@ void menuCliente(){
                 }
                 i++;
             }
+            cout << "\n\nPessoaFisica cadastrado com sucesso!" << endl;
             break;
         }
         case 2:{
@@ -151,32 +154,33 @@ void menuCliente(){
             getline(cin, aux);
             do {
                 if (aux == (id_Cliente[i]->getCPF())) {
-                    cout << "Qual alteração deseja realizar?\n1 - Telefone\n2 - Endereco\n3 - Email\n4 - Nome\n5 - CPF\nOpcao: ";
+                    cout << "Qual alteração deseja realizar?\n1 - Nome\n2 - CPF\n3 - Endereco\n4 - Telefone\n5 - Email\nOpcao: ";
                     cin >> altera_opcao;
                     if (altera_opcao == 1) {
                         cin.ignore();
-                        id_Cliente[i]->setTelefone();
-                        cout << "Cadastro alterado com sucesso!\n";
-                    } else if (altera_opcao == 2) {
-                        cin.ignore();
-                        id_Cliente[i]->setEndereco();
-                        cout << "Cadastro alterado com sucesso!\n";
-                    } else if (altera_opcao == 3) {
-                        cin.ignore();
-                        id_Cliente[i]->setEmail();
-                        cout << "Cadastro alterado com sucesso!\n";
-                    } else if (altera_opcao == 4) {
                         id_Cliente[i]->setNome();
                         cout << "Cadastro alterado com sucesso!\n";
-                    } else if (altera_opcao == 5) {
-                        if (id_Cliente[i]->getContaAtiva() == 0) {
+                    } else if (altera_opcao == 2) {
+                        if(id_Cliente[i]->getContaAtiva() == 0){
                             cin.ignore();
                             id_Cliente[i]->setCPF();
                             cout << "Cadastro alterado com sucesso!\n";
                         }
-                        else {
-                            cout << "Falha na alteracao!\nExiste uma conta vinculada a este CPF no momento!\n";
+                        else{
+                            cout << "Falha na alteração!\nExiste uma conta vinculada a este CPF no momento!\n";
                         }
+                    } else if (altera_opcao == 3) {
+                        cin.ignore();
+                        id_Cliente[i]->setEndereco();
+                        cout << "Cadastro alterado com sucesso!\n";
+                    } else if (altera_opcao == 4) {
+                        cin.ignore();
+                        id_Cliente[i]->setTelefone();
+                        cout << "Cadastro alterado com sucesso!\n";
+                    } else if (altera_opcao == 5) {
+                        cin.ignore();
+                        id_Cliente[i]->setEmail();
+                        cout << "Cadastro alterado com sucesso!\n";
                     }
                     quebra = 1;
                 } 

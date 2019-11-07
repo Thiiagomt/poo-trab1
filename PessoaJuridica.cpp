@@ -49,16 +49,24 @@ string PessoaJuridica::printPessoaJuridica() {
 }
 
 
-// Setters
-void PessoaFisica::setNome() {
-    cout << "Digite seu nome: ";
-    cin.ignore();                   // Retira do buffer o '\n' vindo do switch
-    getline(cin, this->nome);       // Pega a string do nome
+// Setters,
+void PessoaJuridica::setRazaoSocial() {
+    cout << "Digite o nome da empresa: ";
+    cin.ignore();                           // Retira do buffer o '\n' vindo do switch
+    getline(cin, this->razao_social);       // Pega a string do nome
 }
-void PessoaFisica::setCPF() {
+
+void PessoaJuridica::setCNPJ() {
     int verif = 0;
     do {
-        cout << "Digite seu cpf: ";
+        cout << "Digite o cnpj: ";
+        getline(cin, this->cnpj);        // Pega a string do cnpj
+}
+
+void PessoaJuridica::setCPFProprietarioMajor() {
+    int verif = 0;
+    do {
+        cout << "Digite o CPF do proprietario majoritario: ";
         getline(cin, this->cpf);        // Pega a string do cpf
         if (cpf.size() == 11) {         // Verifica se há 11 digitos, senão retorna ao for
             verif = 1;
@@ -67,66 +75,88 @@ void PessoaFisica::setCPF() {
         }
     } while (!verif);
 }
-void PessoaFisica::setEndereco() {
+
+void PessoaJuridica::setEndereco() {
     this->endereco = new Endereco();
 }
 
-void PessoaFisica::setTelefone(){
+void PessoaJuridica::setTelefone() {
     cout << "Digite seu telefone: ";
     cin.ignore();
-    getline(cin, this->telefone);   // Pega a string do telefone
+    getline(cin, this->telefone);   
 }
 
-void PessoaFisica::setEmail() {
+void PessoaJuridica::setEmail() {
     cout << "Digite seu email: ";
-    getline(cin, this->email);      // Pega a string do email
-    cout << "\n\n\nPessoaFisica cadastrado com sucesso!" << endl;
+    getline(cin, this->email);      
 }
 
-void PessoaFisica::setContaAtiva(int x) {
+void PessoaJuridica::setContaAtiva(int x) {
     this->conta_ativa = x;
 }
 
-void PessoaFisica::setTipoConta() {
-    this->tipo_conta = 1;
+void PessoaJuridica::setTipoConta() {
+    this->tipo_conta = 2;
 }
 
-void PessoaFisica::EditaPessoaFisica(int option){
+void PessoaJuridica::EditaPessoaJuridica(int option){
     if (option == 1) {
-        setTelefone();
+        setRazaoSocial();
     } else if (option == 2) {
-        setEndereco();
+        setCNPJ();
     } else if (option == 3) {
-        setEmail();
+        setCPFProprietarioMajor();
     } else if (option == 4) {
-        setNome();
+        setEndereco();
     } else if (option == 5) {
-        setCPF();
+        setTelefone();
+    } else if (option == 6){
+        setEmail();
     }
 }
 
 // Getters
-string PessoaFisica::getNome(){
-	return this->nome;
+string PessoaJuridica::getRazaoSocial(){
+	return this->razao_social;
 }
-string PessoaFisica::getCPF(){
-	return this->cpf;
+
+string PessoaJuridica::getCNPJ(){
+	return this->cnpj;
 }
-Endereco PessoaFisica::getEndereco(){
+
+string PessoaJuridica::getCPFProprietarioMajor(){
+    return this->cpf_proprietario_major;
+}
+
+Endereco PessoaJuridica::getEndereco(){
     return *endereco;
 }
-string PessoaFisica::getTelefone(){
+
+string PessoaJuridica::getTelefone(){
     return this->telefone;
 }
-string PessoaFisica::getEmail(){
+
+string PessoaJuridica::getEmail(){
     return this->email;
 }
 
-int PessoaFisica::getContaAtiva(){
+string PessoaJuridica::getRamoAtuacao(){
+    return this->ramo_atuacao;
+}
+
+Data PessoaJuridica::getDataFundacao(){
+    return *data_fundacao;
+}
+
+Data PessoaJuridica::getDataUltimaAtt(){
+    return *data_ultima_att;
+}
+
+int PessoaJuridica::getContaAtiva(){
     return this->conta_ativa;
 }
 
-int PessoaFisica::getTipoConta(){
+int PessoaJuridica::getTipoConta(){
     return this->tipo_conta;
 }
 
