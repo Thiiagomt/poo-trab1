@@ -34,7 +34,7 @@ string PessoaFisica::printPessoaFisica() {
                             "\nReside em: " + this->endereco->getCidade() + "- " + this->endereco->getUf() +
                                 "\nTelefone: " + getTelefone() +
                                     "\nE-mail: " + getEmail() +
-                                        "\n";
+                                        "\n\n";
 
     return saida;
 }
