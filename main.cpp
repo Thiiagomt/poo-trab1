@@ -16,8 +16,10 @@ Clara Gruber                        RA:
 #define N_CLIENTES_CONTAS 20
 
 #include "PessoaFisica.h"
+#include "PessoaJuridica.h"
 #include "ContaPoupanca.h"
 #include "Lancamento.h"
+#include "Data.h"
 
 using namespace std;
 // A variável "quebra" pode ser encontrada em multiplas funções. Ela é similar ao comportamento
@@ -42,14 +44,17 @@ std::string to_string_with_precision(const float valor, const int num_casas){
     return out.str();
 }
 
-int numContasCadastradas = 0;
-int numClientesCadastrados = 0;
+int numContasPoupanca = 0;
+int numContasCorrente = 0;
+int numClientesFisicos = 0;
+int numClientesJuridicos = 0;
 int numLancamentosEfetuados = 0;
 
 // Esse contador sempre sera incrementado, determinando o numero da conta (nunca será repetido)
 int numProxConta = 1;
-
-PessoaFisica * id_Cliente[N_CLIENTES_CONTAS];
+    
+PessoaFisica * id_ClienteFisico[N_CLIENTES_CONTAS];
+PessoaJuridica * id_ClienteJuridico[N_CLIENTES_CONTAS];
 ContaPoupanca * id_ContaPoupanca[N_CLIENTES_CONTAS];
 Lancamento * id_Lancamentos[N_CLIENTES_CONTAS];
 
@@ -107,14 +112,12 @@ void menuCliente(){
     int option;
     cout << endl << "--- MENU CLIENTES ---" << endl
     << "0 - Menu anterior" << endl
-    << "1 - Efetuar um novo cadastro" << endl
-    << "2 - Alterar um cadastro existente" << endl
-    << "3 - Excluir um cadastro" << endl
-    << "4 - Ver Clientes" << endl
-    << "5 - Sair" << endl;
+    << "1 - Menu Pessoa Jurídica" << endl
+    << "2 - Menu Pessoa Física" << endl
+    << "3 - Sair" << endl;
 
     cin >> option;
-    while(option<0 || option>5){
+    while(option<0 || option>3){
         cout << "Selecione uma opção válida" << endl;
         cin >> option;
     }
@@ -125,18 +128,210 @@ void menuCliente(){
             break;
         }
         case 1:{
+            menuClienteJuridico();
+            break;
+        }
+        case 2:{
+            menuClienteFisico();
+            break;
+        }
+        case 3:{
+            exit(1);
+        }
+        default:
+            break;
+    }
+}
+
+void menuClienteJuridico(){
+    int option;
+    cout << endl << "--- MENU PESSOA JURÍDICA ---" << endl
+    << "0 - Menu anterior" << endl
+    << "1 - Efetuar um novo cadastro" << endl
+    << "2 - Alterar um cadastro existente" << endl
+    << "3 - Excluir um cadastro" << endl
+    << "4 - Ver Clientes Pessoa Jurídica" << endl
+    << "5 - Sair" << endl;
+
+    cin >> option;
+    while(option<0 || option>5){
+        cout << "Selecione uma opção válida" << endl;
+        cin >> option;
+    }
+
+    switch(option){
+        case 0:{
+            menuCliente();
+            break;
+        }
+        case 1:{
+            int quebra=0, i=0, quebra2=0, j=0;
+            // Cadastra-se um cliente em ordem
+            id_ClienteJuridico[numClientesJuridicos] = new PessoaJuridica;
+            numClientesJuridicos++;
+            // Cria o cliente e verifica se tal já existe por meio  do CNPJ. 
+            // Se já existir (CNPJ já usado), então é deletado o objeto criado
+            while ((i<(numClientesJuridicos - 1)) && !quebra ) {
+                if (id_ClienteJuridico[numClientesJuridicos-1]->getCNPJ() == id_ClienteJuridico[i]->getCNPJ()) {
+                    quebra = 1;
+                    cout << "\nCliente com CNPJ já existente!\n";
+                    delete id_ClienteJuridico[numClientesJuridicos-1];
+                    numClientesJuridicos--;
+                }
+                i++;
+            }
+            //Se o proprietário majoritário não estiver cadastrado em pessoa física, então é deletado o objeto criado
+            while ((j<(numClientesFisicos-1)) && !quebra2){
+                //if se achar o CPF do proprietario majoritario cadastrado em pessoas fisicas
+                if(id_ClienteJuridico[numClientesJuridicos-1]->getCPFProprietarioMajor() == id_ClienteFisico[j]->getCPF())
+                    quebra2 = 1;
+                j++;
+            }
+            //verifica se o while anterior não achar o cpf do proprietario majoritario cadastrado em pessoas fisicas e deleta o objeto criado
+            if(quebra2 == 0){
+                cout << "\nO proprietario majoritario não está cadastrado em pessoas físicas\n";
+                delete id_ClienteJuridico[numClientesJuridicos-1];
+                numClientesJuridicos--;
+            } 
+            
+            cout << "\n\nPessoa Jurídica cadastrado com sucesso!\n" << endl;
+            break;
+        }
+        case 2:{
+            string aux;
+            int i=0, quebra=0;
+            int altera_opcao;
+            // Busca de cliente por CNPJ
+            // Após a inserção do CNPJ, o laço for verifica os multiplos perfis, localizando o do cliente e modificando o dado apontado
+            cout << "Digite seu CNPJ: ";
+            cin.ignore();
+            getline(cin, aux);
+            do {
+                if (aux == (id_ClienteJuridico[i]->getCNPJ())) {
+                    cout << "Qual alteração deseja realizar?\n1 - Razão Social\n2 - CNPJ\n3 - CPF do Proprietário Majoritário\n4 - Endereço\n5 - Telefone\n6 - Email\n7 - Ramo Atuação\n8- Data da última atualização do contrato social\nOpcao: ";
+                    cin >> altera_opcao;
+                    if (altera_opcao == 1) {
+                        cin.ignore();
+                        id_ClienteJuridico[i]->setRazaoSocial();
+                        cout << "Cadastro alterado com sucesso!\n";
+                    } else if (altera_opcao == 2) {
+                        if(id_ClienteJuridico[i]->getContaAtiva() == 0){
+                            cin.ignore();
+                            id_ClienteJuridico[i]->setCNPJ();
+                            cout << "Cadastro alterado com sucesso!\n";
+                        }
+                        else{
+                            cout << "Falha na alteração!\nExiste uma conta vinculada a este CNPJ no momento!\n";
+                        }
+                    } else if (altera_opcao == 3) {
+                        cin.ignore();
+                        id_ClienteJuridico[i]->setCPFProprietarioMajor();
+                        cout << "Cadastro alterado com sucesso!\n";
+                    } else if (altera_opcao == 4) {
+                        cin.ignore();
+                        id_ClienteJuridico[i]->setEndereco();
+                        cout << "Cadastro alterado com sucesso!\n";
+                    } else if (altera_opcao == 5) {
+                        cin.ignore();
+                        id_ClienteJuridico[i]->setTelefone();
+                        cout << "Cadastro alterado com sucesso!\n";
+                    } else if (altera_opcao == 6) {
+                        cin.ignore();
+                        id_ClienteJuridico[i]->setEmail();
+                    } else if (altera_opcao == 7) {
+                        cin.ignore();
+                        id_ClienteJuridico->setRamoAtuacao();
+                    } else if (altera_opcao == 8) {
+                        cin.ignore();
+                        id_ClienteJuridico->setDataUltimaAtt();
+                    }
+                    quebra = 1;
+                } 
+                i++;
+            } while ((i < numClientesJuridicos) && !quebra);
+
+            if (quebra == 0)
+                cout << "Nenhum cliente encontrado!";
+
+            break;
+        }
+        case 3:{
+            int i=0, quebra=0;
+            string aux;
+            cout << "Digite seu CNPJ: ";
+            cin.ignore();
+            getline(cin, aux);
+            do {
+                // Busca de cliente por meio do CNPJ
+                // Se o cliente possuir uma conta ativa no momento, seu cadastro não poderá ser excluído
+                if (aux == (id_ClienteJuridico[i]->getCNPJ())) {
+                    if (id_ClienteJuridico[i]->getContaAtiva() == 1) {
+                        cout << "Nao foi possivel deletar sua conta!\nVoce possui uma conta ativa no momento!\n";
+                    } else {
+                        delete id_ClienteJuridico[i];
+                        numClientesJuridicos--;
+                        for (int j=i; j<numClientesJuridicos; j++) {
+                            id_ClienteJuridico[j] = id_ClienteJuridico[j+1];
+                        }
+                        quebra = 1;
+                    }
+                }
+                i++;
+            } while ((i < numClientesJuridicos) && !quebra);
+
+            if (quebra == 0) {
+                cout << "Cliente não encontrado!";
+            }
+            break;
+        }
+        case 4:{
+            //Cadastro de todos os clientes
+            for (int i=0; i<numClientesJuridicos; i++)
+                cout << id_ClienteJuridico[i]->printPessoaJuridica();
+            break;
+        }
+        case 5:{
+            exit(1);
+        }
+        default:
+            break;
+    }
+}
+
+void menuClienteFisico(){
+    int option;
+    cout << endl << "--- MENU PESSOA FÍSICA ---" << endl
+    << "0 - Menu anterior" << endl
+    << "1 - Efetuar um novo cadastro" << endl
+    << "2 - Alterar um cadastro existente" << endl
+    << "3 - Excluir um cadastro" << endl
+    << "4 - Ver Clientes Pessoa Física" << endl
+    << "5 - Sair" << endl;
+
+    cin >> option;
+    while(option<0 || option>5){
+        cout << "Selecione uma opção válida" << endl;
+        cin >> option;
+    }
+
+    switch(option){
+        case 0:{
+            menuCliente();
+            break;
+        }
+        case 1:{
             int quebra=0, i=0;
             // Cadastra-se um cliente em ordem
-            id_Cliente[numClientesCadastrados] = new PessoaFisica;
-            numClientesCadastrados++;
-            // Cria o cliente e verifica se tal já existe por meio  do cpf. 
-            // Se já existir (cpf já usado), então é deletado o objeto criado
-            while ( (i<(numClientesCadastrados - 1)) && !quebra ) {
-                if (id_Cliente[numClientesCadastrados-1]->getCPF() == id_Cliente[i]->getCPF()) {
+            id_ClienteFisico[numClientesFisicos] = new PessoaFisica;
+            numClientesFisicos++;
+            // Cria o cliente e verifica se tal já existe por meio  do CPF. 
+            // Se já existir (CPF já usado), então é deletado o objeto criado
+            while ( (i<(numClientesFisicos - 1)) && !quebra ) {
+                if (id_ClienteFisico[numClientesFisicos-1]->getCPF() == id_ClienteFisico[i]->getCPF()) {
                     quebra = 1;
                     cout << "\nCliente com CPF já existente!\n";
-                    delete id_Cliente[numClientesCadastrados-1];
-                    numClientesCadastrados--;
+                    delete id_ClienteFisico[numClientesFisicos-1];
+                    numClientesFisicos--;
                 }
                 i++;
             }
@@ -148,22 +343,22 @@ void menuCliente(){
             int i=0, quebra=0;
             int altera_opcao;
             // Busca de cliente por CPF
-            // Após a inserção do cpf, o laço for verifica os multiplos perfis, localizando o do cliente e modificando o dado apontado
-            cout << "Digite seu cpf: ";
+            // Após a inserção do CPF, o laço for verifica os multiplos perfis, localizando o do cliente e modificando o dado apontado
+            cout << "Digite seu CPF: ";
             cin.ignore();
             getline(cin, aux);
             do {
-                if (aux == (id_Cliente[i]->getCPF())) {
+                if (aux == (id_ClienteFisico[i]->getCPF())) {
                     cout << "Qual alteração deseja realizar?\n1 - Nome\n2 - CPF\n3 - Endereco\n4 - Telefone\n5 - Email\nOpcao: ";
                     cin >> altera_opcao;
                     if (altera_opcao == 1) {
                         cin.ignore();
-                        id_Cliente[i]->setNome();
+                        id_ClienteFisico[i]->setNome();
                         cout << "Cadastro alterado com sucesso!\n";
                     } else if (altera_opcao == 2) {
-                        if(id_Cliente[i]->getContaAtiva() == 0){
+                        if(id_ClienteFisico[i]->getContaAtiva() == 0){
                             cin.ignore();
-                            id_Cliente[i]->setCPF();
+                            id_ClienteFisico[i]->setCPF();
                             cout << "Cadastro alterado com sucesso!\n";
                         }
                         else{
@@ -171,21 +366,21 @@ void menuCliente(){
                         }
                     } else if (altera_opcao == 3) {
                         cin.ignore();
-                        id_Cliente[i]->setEndereco();
+                        id_ClienteFisico[i]->setEndereco();
                         cout << "Cadastro alterado com sucesso!\n";
                     } else if (altera_opcao == 4) {
                         cin.ignore();
-                        id_Cliente[i]->setTelefone();
+                        id_ClienteFisico[i]->setTelefone();
                         cout << "Cadastro alterado com sucesso!\n";
                     } else if (altera_opcao == 5) {
                         cin.ignore();
-                        id_Cliente[i]->setEmail();
+                        id_ClienteFisico[i]->setEmail();
                         cout << "Cadastro alterado com sucesso!\n";
                     }
                     quebra = 1;
                 } 
                 i++;
-            } while ((i < numClientesCadastrados) && !quebra);
+            } while ((i < numClientesFisicos) && !quebra);
 
             if (quebra == 0)
                 cout << "Nenhum cliente encontrado!";
@@ -195,26 +390,26 @@ void menuCliente(){
         case 3:{
             int i=0, quebra=0;
             string aux;
-            cout << "Digite seu cpf: ";
+            cout << "Digite seu CPF: ";
             cin.ignore();
             getline(cin, aux);
             do {
-                // Busca de cliente por meio do cpf
+                // Busca de cliente por meio do CPF
                 // Se o cliente possuir uma conta ativa no momento, seu cadastro não poderá ser excluído
-                if (aux == (id_Cliente[i]->getCPF())) {
-                    if (id_Cliente[i]->getContaAtiva() == 1) {
+                if (aux == (id_ClienteFisico[i]->getCPF())) {
+                    if (id_ClienteFisico[i]->getContaAtiva() == 1) {
                         cout << "Nao foi possivel deletar sua conta!\nVoce possui uma conta ativa no momento!\n";
                     } else {
-                        delete id_Cliente[i];
-                        numClientesCadastrados--;
-                        for (int j=i; j<numClientesCadastrados; j++) {
-                            id_Cliente[j] = id_Cliente[j+1];
+                        delete id_ClienteFisico[i];
+                        numClientesFisicos--;
+                        for (int j=i; j<numClientesFisicos; j++) {
+                            id_ClienteFisico[j] = id_ClienteFisico[j+1];
                         }
                         quebra = 1;
                     }
                 }
                 i++;
-            } while ((i < numClientesCadastrados) && !quebra);
+            } while ((i < numClientesFisicos) && !quebra);
 
             if (quebra == 0) {
                 cout << "Cliente não encontrado!";
@@ -223,8 +418,8 @@ void menuCliente(){
         }
         case 4:{
             //Cadastro de todos os clientes
-            for (int i=0; i<numClientesCadastrados; i++)
-                cout << id_Cliente[i]->printPessoaFisica();
+            for (int i=0; i<numClientesFisicos; i++)
+                cout << id_ClienteFisico[i]->printPessoaFisica();
             break;
         }
         case 5:{
@@ -259,7 +454,7 @@ void menuConta(){
         }
         case 1:{
             // Verifica antes se há pelo menos 1 cliente para criação de conta
-            if (numClientesCadastrados != 0) {
+            if (numClientesFisicos != 0) {
                 // Busca o cliente pelo seu cpf, para verificar se já há um cadastro
                 // assim, cria a contaa ou avisa se o cliente não foi encontrado
                 int quebra=0, i=0, k=0;
@@ -268,36 +463,36 @@ void menuConta(){
                 cin.ignore();
                 getline(cin, aux);
                 do {
-                    if (aux == (id_Cliente[i]->getCPF())) {
-                        if (id_Cliente[i]->getContaAtiva() == 1) {
+                    if (aux == (id_ClienteFisico[i]->getCPF())) {
+                        if (id_ClienteFisico[i]->getContaAtiva() == 1) {
                             cout << "Cliente já possui uma conta\n";
                             quebra = 1;
                         } else {
                             // Pessoa Juridica
-                            if (id_Cliente[i]->getTipoConta() == 2) {
+                            if (id_ClienteFisico[i]->getTipoConta() == 2) {
                                 
                             }
                             // Pessoa Fisica
                             else {
                                 // Verificar se o numero da conta a ser criada pode ser usado
-                                while (k < numContasCadastradas) {
+                                while (k < numContasPoupanca) {
                                     if (id_ContaPoupanca[k]->getNumConta() == numProxConta) {
                                         numProxConta++;     // Incrementa para ser diferente
                                         k = -1;              // Reseta a verificação
                                     }
                                     k++;
                                 }
-                                id_ContaPoupanca[numContasCadastradas] = new ContaPoupanca(numProxConta, *id_Cliente[i]);
-                                cout << id_ContaPoupanca[numContasCadastradas]->printConta();
-                                numContasCadastradas++;
-                                id_Cliente[i]->setContaAtiva(1);
+                                id_ContaPoupanca[numContasPoupanca] = new ContaPoupanca(numProxConta, *id_ClienteFisico[i]);
+                                cout << id_ContaPoupanca[numContasPoupanca]->printConta();
+                                numContasPoupanca++;
+                                id_ClienteFisico[i]->setContaAtiva(1);
                                 cout << "\nConta Criada Com Sucesso!\n";
                                 quebra = 1;
                             }
                         }
                     }
                     i++;
-                } while ((i < numClientesCadastrados) && !quebra);
+                } while ((i < numClientesFisicos) && !quebra);
 
                 if (quebra == 0)
                     cout << "Nenhum cliente encontrado!\nFavor cadastrar-se\n";
@@ -332,10 +527,10 @@ void menuConta(){
                                         cout << "Digite novamente!\n";
                                     else {
                                         id_ContaPoupanca[k]->setNumConta(novo_num);
-                                        k = numContasCadastradas;      // Condicao de parada
+                                        k = numContasPoupanca;      // Condicao de parada
                                     }
                                     k++;
-                                } while (k < numContasCadastradas);
+                                } while (k < numContasPoupanca);
                                 alterado = 1;
                             } while (!alterado);
                             cout << "\nConta alterada com sucesso!\n";
@@ -350,7 +545,7 @@ void menuConta(){
                 // Alteração aqui para as contas de cunho juridicas
                 }
                 i++;
-            } while ((i < numContasCadastradas) && !quebra);
+            } while ((i < numContasPoupanca) && !quebra);
 
             if (quebra == 0)
                 cout << "Nenhum cliente encontrado!";
@@ -367,19 +562,19 @@ void menuConta(){
                 if (aux == (id_ContaPoupanca[i]->getNumConta())) {
                     cpf_aux = id_ContaPoupanca[i]->getCPFPessoaFisica();
                     delete id_ContaPoupanca[i];
-                    numContasCadastradas--;
-                    for (int j=i; j<numClientesCadastrados; j++) {
+                    numContasPoupanca--;
+                    for (int j=i; j<numClientesFisicos; j++) {
                         id_ContaPoupanca[j] = id_ContaPoupanca[j+1];
                     }
-                    for (int j=0; j<numClientesCadastrados; j++) {
-                        if (cpf_aux == id_Cliente[j]->getCPF())
-                            id_Cliente[j]->setContaAtiva(0);
+                    for (int j=0; j<numClientesFisicos; j++) {
+                        if (cpf_aux == id_ClienteFisico[j]->getCPF())
+                            id_ClienteFisico[j]->setContaAtiva(0);
                     }
                     quebra = 1;
                     cout << "Conta excluida com sucesso!\n";
                 }
                 i++;
-            } while ((i < numContasCadastradas) && !quebra);
+            } while ((i < numContasPoupanca) && !quebra);
 
             if (quebra == 0) {
                 cout << "Cliente não encontrado!";
@@ -392,7 +587,7 @@ void menuConta(){
         }
         case 5:{
             // Imprime todas as contas cadastradas
-            for (int i=0; i<numContasCadastradas; i++)
+            for (int i=0; i<numContasPoupanca; i++)
                 cout << id_ContaPoupanca[i]->printConta();
             break;
         }
@@ -447,7 +642,7 @@ void menuBanco(){
             int numConta, lancamentosExibidos;
             lancamentosExibidos=0;
 
-            if (numContasCadastradas != 0){
+            if (numContasPoupanca != 0){
                 cout << "Insira o número da conta desejada: ";
                 cin >> numConta;
 
@@ -500,7 +695,7 @@ void menuLancamento() {
             break;
         }
         case 1: {
-            if (numContasCadastradas != 0) {
+            if (numContasPoupanca != 0) {
                 operacao = 1;
 
                 cout << "Insira o numero da conta: ";
@@ -543,7 +738,7 @@ void menuLancamento() {
             break;
         }
         case 2: {
-            if (numContasCadastradas != 0) {
+            if (numContasPoupanca != 0) {
                 operacao = 2;
 
                 cout << "Insira o numero da conta: ";
@@ -598,7 +793,7 @@ int lancamento(int numConta, int operacao, float valor){
             cont += 1;
 
         i += 1;
-    }while(i<numContasCadastradas);
+    }while(i<numContasPoupanca);
 
     //Subtrai 1 do i para voltar para a posição da conta desejada no vetor
     i -= 1;
@@ -626,21 +821,21 @@ int lancamento(int numConta, int operacao, float valor){
 }
 
 int getQuantidadeDeContas(){
-    return numContasCadastradas;
+    return numContasCorrente + numContasPoupanca;
 }
 
 int getQuantidadeDeClientes(){
-    return numClientesCadastrados;
+    return numClientesFisicos + numClientesJuridicos;
 }
 
 float getMontanteTotal(){
     int i;
     float montanteTotal=0;
 
-    if(numContasCadastradas == 0)
+    if(numContasPoupanca == 0)
         montanteTotal=0;
     else
-        for(i=0; i<numContasCadastradas; i++)
+        for(i=0; i<numContasPoupanca; i++)
             montanteTotal = id_ContaPoupanca[i]->getSaldoAtual() + montanteTotal;
 
     return montanteTotal;
