@@ -83,20 +83,6 @@ void PessoaFisica::setTipoConta() {
     this->tipo_conta = 1;
 }
 
-void PessoaFisica::EditaPessoaFisica(int option){
-    if (option == 1) {
-        setNome();
-    } else if (option == 2) {
-        setCPF();
-    } else if (option == 3) {
-        setEndereco();
-    } else if (option == 4) {
-        setTelefone();
-    } else if (option == 5) {
-        setEmail();
-    }
-}
-
 // Getters
 string PessoaFisica::getNome(){
 	return this->nome;
