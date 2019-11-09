@@ -36,8 +36,8 @@ string PessoaJuridica::printPessoaJuridica() {
                 "\nCom CNPJ: " + getCNPJ() +
                     "\nCPF do proprietario majoritario é" + getCPFProprietarioMajor() +
                         "\nTrabalha no ramo de atuacao de:" + getRamoAtuacao() +
-                            "\nFundada em:" + this->data_fundacao->getDia() + "/" + this->data_fundacao->getMes() + "/" + this->data_fundacao->getAno() + 
-                                "\nA ultima atualizacao do contrato social foi no dia:" + this->data_ultima_att->getDia() + "/" + this->data_ultima_att->getMes() + "/" + this->data_ultima_att->getAno() +
+                            "\nFundada em:" + to_string(this->data_fundacao->getDia()) + "/" + to_string(this->data_fundacao->getMes()) + "/" + to_string(this->data_fundacao->getAno()) + 
+                                "\nA ultima atualizacao do contrato social foi no dia:" + to_string(this->data_ultima_att->getDia()) + "/" + to_string(this->data_ultima_att->getMes()) + "/" + to_string(this->data_ultima_att->getAno()) +
                                     "\nRua " + this->endereco->getRua() + ", " + this->endereco->getNumero() + 
                                         "\nBairro " + this->endereco->getBairro() + " - " + "CEP: " + this->endereco->getCep() +
                                             "\nLocalizada em: " + this->endereco->getCidade() + "- " + this->endereco->getUf() +
@@ -59,16 +59,22 @@ void PessoaJuridica::setRazaoSocial() {
 void PessoaJuridica::setCNPJ() {
     int verif = 0;
     do {
-        cout << "Digite o cnpj: ";
+        cout << "Digite o CNPJ: ";
         getline(cin, this->cnpj);        // Pega a string do cnpj
-}
+        if(cnpj.size()==14){
+            verif = 1;
+        }else{
+            cout << "CNPJ inválido!, Verifique o número de dígitos\n";
+        }
+    }while(!verif);
+}   
 
 void PessoaJuridica::setCPFProprietarioMajor() {
     int verif = 0;
     do {
         cout << "Digite o CPF do proprietario majoritario: ";
-        getline(cin, this->cpf);        // Pega a string do cpf
-        if (cpf.size() == 11) {         // Verifica se há 11 digitos, senão retorna ao for
+        getline(cin, this->cpf_proprietario_major);        // Pega a string do cpf
+        if (cpf_proprietario_major.size() == 11) {         // Verifica se há 11 digitos, senão retorna ao for
             verif = 1;
         } else {
             cout << "CPF inválido! Verifique os dígitos\n";
@@ -91,6 +97,21 @@ void PessoaJuridica::setEmail() {
     getline(cin, this->email);      
 }
 
+void PessoaJuridica::setRamoAtuacao(){
+    cout << "Digite o ramo de atuação da empresa: ";
+    getline(cin, this->ramo_atuacao);
+}
+
+void PessoaJuridica::setDataFundacao(){
+    cout << "Insira a data de fundação da empresa:\n";
+    this->data_fundacao = new Data;
+}
+
+void PessoaJuridica::setDataUltimaAtt(){
+    cout << "Insira a data da ultima atualizacao do contrato social\n";
+    this->data_ultima_att = new Data;
+}
+
 void PessoaJuridica::setContaAtiva(int x) {
     this->conta_ativa = x;
 }
@@ -99,21 +120,6 @@ void PessoaJuridica::setTipoConta() {
     this->tipo_conta = 2;
 }
 
-void PessoaJuridica::EditaPessoaJuridica(int option){
-    if (option == 1) {
-        setRazaoSocial();
-    } else if (option == 2) {
-        setCNPJ();
-    } else if (option == 3) {
-        setCPFProprietarioMajor();
-    } else if (option == 4) {
-        setEndereco();
-    } else if (option == 5) {
-        setTelefone();
-    } else if (option == 6){
-        setEmail();
-    }
-}
 
 // Getters
 string PessoaJuridica::getRazaoSocial(){
