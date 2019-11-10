@@ -31,7 +31,7 @@ void ContaPoupanca::setNumConta(int y){
     this->numConta = y;
 }
 void ContaPoupanca::setCPFPessoaFisica(PessoaFisica x){
-    this->cpfPessoaFisica = x.getCPF();
+    this->cpf = x.getCPF();
 }
 
 // Getters
@@ -39,5 +39,5 @@ int ContaPoupanca::getNumConta(){
     return this->numConta;
 }
 string ContaPoupanca::getCPFPessoaFisica() {
-    return this->cpfPessoaFisica;
+    return this->cpf;
 }

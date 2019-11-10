@@ -13,8 +13,10 @@ class ContaCorrente : public Conta {
 public:
     
     // Construtor
-    // A ideia de passar os dois e para a escolha para cfp ou cnpj a ser usado na conta conta
-    ContaCorrente(int, PessoaFisica, PessoaJuridica, int);
+    // Sobrecarga de metódos nessa classe
+    // A passagem do parametro pela main irá determinar qual será o cadastro utilizado
+    ContaCorrente(int, PessoaFisica);
+    ContaCorrente(int, PessoaJuridica);
 
     // Destrutor
     ~ContaCorrente();
@@ -24,19 +26,17 @@ public:
 
     // Setters
     void setNumConta(int num);
-    void setTipoCadastro(int tipo);
-    void setCPFouCNPJ(PessoaFisica, PessoaJuridica);
+    void setCPF(PessoaFisica);
+    void setCNPJ(PessoaJuridica);
     void setLimiteCheque(float lim);
 
     // Getters
     int getNumConta();
-    int getTipoCadastro();
     string getCPFouCNPJ();
     float getLimiteCheque();
 
 private:
     int numConta;
-    int tipo_cadastro;   // Determina se será usado cpf ou cnpj
     string cpf;
     string cnpj;
     float limitecheque;

@@ -5,10 +5,18 @@
 using namespace std;
 
 // Construtor
-ContaCorrente::ContaCorrente(int n, PessoaFisica x, PessoaJuridica y, int z) { // Z define se será usado cpf ou cnpj
+// A variável z define se será usado cpf ou cnpj
+// Caso queira usar na conta o cpf
+ContaCorrente::ContaCorrente(int n, PessoaFisica x) {
     setNumConta(n);
-    setTipoCadastro(z);
-    setCPFouCNPJ(x, y);
+    setCPF(x);
+    setLimiteCheque(100);   // Definido R$ 100 como padrão
+}
+
+// Caso queira usar na conta o cnpj
+ContaCorrente::ContaCorrente(int n, PessoaJuridica x) {
+    setNumConta(n);
+    setCNPJ(x);
     setLimiteCheque(100);   // Definido R$ 100 como padrão
 }
 
@@ -34,16 +42,14 @@ void ContaCorrente::setNumConta(int num){
     this->numConta = num;
 }
 
-void ContaCorrente::setTipoCadastro(int z){
-    this->tipo_cadastro = z;
+void ContaCorrente::setCPF(PessoaFisica x){
+    this->cpf = x.getCPF();
 }
 
-void ContaCorrente::setCPFouCNPJ(PessoaFisica x, PessoaJuridica y){
-    if (tipo_cadastro == 1)
-        this->cpf = x.getCPF();
-    else
-        this->cnpj = y.getCNPJ();
+void ContaCorrente::setCNPJ(PessoaJuridica x){
+    this->cnpj = x.getCNPJ();
 }
+
 void ContaCorrente::setLimiteCheque(float lim){
     this->limitecheque = lim;
 }
@@ -53,12 +59,9 @@ int ContaCorrente::getNumConta(){
     return this->numConta;
 }
 
-int ContaCorrente::getTipoCadastro(){
-    return this->tipo_cadastro;
-}
-
 string ContaCorrente::getCPFouCNPJ() {
-    if (tipo_cadastro == 1)
+    // Para o cpf ser maior que o cnpj, cnpj não pode estar sendo ocupado aqui
+    if (this->cpf > this->cnpj)
         return this->cpf;
     else
         return this->cnpj;

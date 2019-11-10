@@ -10,7 +10,6 @@ Clara Gruber                        RA:
 #include <iostream>
 #include <string>
 #include <cstring>
-
 #include <sstream>
 // N° de contas nunca será superior ao de clientes
 #define N_CLIENTES_CONTAS 20
@@ -32,6 +31,8 @@ void menuCliente();
 void menuClienteJuridico();
 void menuClienteFisico();
 void menuConta();
+void menuContaPoupanca();
+void menuContaCorrente();
 void menuBanco();
 void menuLancamento();
 int lancamento(int numConta, int operacao, float valor);
@@ -170,7 +171,7 @@ void menuClienteJuridico(){
             // Cadastra-se um cliente em ordem
             id_ClienteJuridico[numClientesJuridicos] = new PessoaJuridica;
             numClientesJuridicos++;
-            // Cria o cliente e verifica se tal já existe por meio  do CNPJ. 
+            // Cria o cliente e verifica se tal já existe por meio do CNPJ. 
             // Se já existir (CNPJ já usado), então é deletado o objeto criado
             while ((i<(numClientesJuridicos - 1)) && !quebra ) {
                 if (id_ClienteJuridico[numClientesJuridicos-1]->getCNPJ() == id_ClienteJuridico[i]->getCNPJ()) {
@@ -443,11 +444,46 @@ void menuConta(){
     int option;
     cout << endl << "--- MENU CONTAS ---" << endl
     << "0 - Menu anterior" << endl
-    << "1 - Abrir uma nova conta" << endl
-    << "2 - Alterar dados de uma conta" << endl
-    << "3 - Excluir uma conta" << endl
-    << "4 - Realizar lancamento em conta" << endl
-    << "5 - Ver Contas Criadas" << endl
+    << "1 - Menu Conta Poupanca" << endl
+    << "2 - Menu Conta Corrente" << endl
+    << "3 - Sair" << endl;
+
+    cin >> option;
+    while(option<0 || option>3){
+        cout << "Selecione uma opção válida" << endl;
+        cin >> option;
+    }
+
+    switch(option){
+        case 0:{
+            menuPrincipal();
+            break;
+        }
+        case 1:{
+            menuContaPoupanca();
+            break;
+        }
+        case 2:{
+            menuContaCorrente();
+            break;
+        }
+        case 3:{
+            exit(1);
+        }
+        default:
+            break;
+    }
+}
+
+void menuContaPoupanca(){
+    int option;
+    cout << endl << "--- MENU CONTA POUPANCA ---" << endl
+    << "0 - Menu anterior" << endl
+    << "1 - Abrir uma nova conta poupanca" << endl
+    << "2 - Alterar dados de uma conta poupanca" << endl
+    << "3 - Excluir uma conta poupanca" << endl
+    << "4 - Realizar lancamento em conta poupanca" << endl
+    << "5 - Ver contas poupancas criadas" << endl
     << "6 - Sair" << endl;
 
     cin >> option;
@@ -477,27 +513,30 @@ void menuConta(){
                             cout << "Cliente já possui uma conta\n";
                             quebra = 1;
                         } else {
-                            // Pessoa Juridica
-                            if (id_ClienteFisico[i]->getTipoConta() == 2) {
-                                
-                            }
-                            // Pessoa Fisica
-                            else {
-                                // Verificar se o numero da conta a ser criada pode ser usado
-                                while (k < numContasPoupanca) {
-                                    if (id_ContaPoupanca[k]->getNumConta() == numProxConta) {
-                                        numProxConta++;     // Incrementa para ser diferente
-                                        k = -1;              // Reseta a verificação
-                                    }
-                                    k++;
+                            // Verificar se o numero da conta a ser criada pode ser usado
+                            // Verificando nas contas poupacas
+                            while (k < numContasPoupanca) {
+                                if (id_ContaPoupanca[k]->getNumConta() == numProxConta) {
+                                    numProxConta++;     // Incrementa para ser diferente
+                                    k = -1;              // Reseta a verificação
                                 }
-                                id_ContaPoupanca[numContasPoupanca] = new ContaPoupanca(*id_ClienteFisico[i], numProxConta);
-                                cout << id_ContaPoupanca[numContasPoupanca]->printConta();
-                                numContasPoupanca++;
-                                id_ClienteFisico[i]->setContaAtiva(1);
-                                cout << "\nConta Criada Com Sucesso!\n";
-                                quebra = 1;
+                                k++;
                             }
+                            k = 0;
+                            // Verificando nas contas correntes
+                            while (k < numContasCorrente) {
+                                if (id_ContaCorrente[k]->getNumConta() == numProxConta) {
+                                    numProxConta++;     // Incrementa para ser diferente
+                                    k = -1;              // Reseta a verificação
+                                }
+                                k++;
+                            }
+                            id_ContaPoupanca[numContasPoupanca] = new ContaPoupanca(*id_ClienteFisico[i], numProxConta);
+                            cout << id_ContaPoupanca[numContasPoupanca]->printConta();
+                            numContasPoupanca++;
+                            id_ClienteFisico[i]->setContaAtiva(1);
+                            cout << "\nConta Criada Com Sucesso!\n";
+                            quebra = 1;
                         }
                     }
                     i++;
@@ -507,51 +546,46 @@ void menuConta(){
                     cout << "Nenhum cliente encontrado!\nFavor cadastrar-se\n";
 
             } else {
-                cout << "\nNão ha clientes para criação de contas\n";
+                cout << "\nNão ha clientes para criação de contas poupancas\n";
             }
 
             break;
         }
         case 2:{
             // Procura a conta pelo seu número. Quando achava, solicita ao usuário a mudança a ser feito
-            int i=0, quebra=0, aux, novo_num=0, alterado=0, conta_tipo;
+            int i=0, quebra=0, aux, novo_num=0, alterado=0, usado;
             int altera_opcao;
             cout << "Digite o numero da conta: ";
             cin >> aux;
-            cout << "Tipo da conta: 1 - Fisica & 2 - Juridica\n";
-            cin >> conta_tipo;
             do {
-                if (conta_tipo == 1) {
-                    if (aux == (id_ContaPoupanca[i]->getNumConta())) {
-                        cout << "Qual alteração deseja realizar?\n1 - Alterar numero da conta\n2 - Data de Abertura\nOpcao: ";
-                        cin >> altera_opcao;
-                        if (altera_opcao == 1) {
+                if (aux == (id_ContaPoupanca[i]->getNumConta())) {
+                    cout << "Qual alteração deseja realizar em sua conta poupanca?\n1 - Alterar numero da conta\n2 - Data de Abertura\nOpcao: ";
+                    cin >> altera_opcao;
+                    if (altera_opcao == 1) {
+                        do {
+                            cout << "Digite o numero da conta: ";
+                            cin >> novo_num;
+                            int k=0;
+                            // Verifica se o numero ja pertence a outra conta
+                            usado = 0;
                             do {
-                                cout << "Digite o numero da conta: ";
-                                cin >> novo_num;
-                                int k=0;
-                                // Verifica se o numero ja pertence a outra conta
-                                do {
-                                    if (id_ContaPoupanca[k]->getNumConta() == novo_num)
-                                        cout << "Digite novamente!\n";
-                                    else {
-                                        id_ContaPoupanca[k]->setNumConta(novo_num);
-                                        k = numContasPoupanca;      // Condicao de parada
-                                    }
-                                    k++;
-                                } while (k < numContasPoupanca);
+                                if (id_ContaPoupanca[k]->getNumConta() == novo_num) {
+                                    cout << "Digite novamente!\n";
+                                    usado = 1;
+                                }
+                                k++;
+                            } while (k < numContasPoupanca && !usado);
+                            if (!usado) {
+                                id_ContaPoupanca[i]->setNumConta(novo_num);
                                 alterado = 1;
-                            } while (!alterado);
-                            cout << "\nConta alterada com sucesso!\n";
-                        } else if (altera_opcao == 2) {
-                            id_ContaPoupanca[i]->setDataAbertura();
-                            cout << "\nConta alterada com sucesso!\n";
-                        }
-                        quebra = 1;
+                            }
+                        } while (!alterado);
+                        cout << "\nConta alterada com sucesso!\n";
+                    } else if (altera_opcao == 2) {
+                        id_ContaPoupanca[i]->setDataAbertura();
+                        cout << "\nConta alterada com sucesso!\n";
                     }
-                }
-                else {
-                // Alteração aqui para as contas de cunho juridicas
+                    quebra = 1;
                 }
                 i++;
             } while ((i < numContasPoupanca) && !quebra);
@@ -598,6 +632,218 @@ void menuConta(){
             // Imprime todas as contas cadastradas
             for (int i=0; i<numContasPoupanca; i++)
                 cout << id_ContaPoupanca[i]->printConta();
+            break;
+        }
+        case 6:{
+            exit(1);
+        }
+        default:
+            break;
+    }
+}
+
+void menuContaCorrente(){
+    int option;
+    cout << endl << "--- MENU CONTA CORRENTE ---" << endl
+    << "0 - Menu anterior" << endl
+    << "1 - Abrir uma nova conta corrente" << endl
+    << "2 - Alterar dados de uma conta corrente" << endl
+    << "3 - Excluir uma conta corrente" << endl
+    << "4 - Realizar lancamento em conta corrente" << endl
+    << "5 - Ver contas poupancas criadas" << endl
+    << "6 - Sair" << endl;
+
+    cin >> option;
+    while(option<0 || option>6){
+        cout << "Selecione uma opção válida" << endl;
+        cin >> option;
+    }
+
+    switch(option){
+        case 0:{
+            menuPrincipal();
+            break;
+        }
+        case 1:{
+            // Verifica antes se há pelo menos 1 cliente para criação de conta
+            if (numClientesJuridicos != 0 || numClientesFisicos != 0) {
+                // Busca o cliente pelo seu cpf, para verificar se já há um cadastro
+                // assim, cria a contaa ou avisa se o cliente não foi encontrado
+                int quebra=0, i=0, k=0;
+                string aux;
+                cout << "Digite seu cpf/cnpj: ";
+                cin.ignore();
+                getline(cin, aux);
+                do {
+                    // Busca e tratamento caso para CLIENTES FISICOS
+                    if (aux == (id_ClienteFisico[i]->getCPF())) {
+                        if (id_ClienteFisico[i]->getContaAtiva() == 1) {
+                            cout << "Cliente já possui uma conta\n";
+                            quebra = 1;
+                        } else {
+                            // Verificar se o numero da conta a ser criada pode ser usado
+                            while (k < numContasPoupanca) {
+                                if (id_ContaPoupanca[k]->getNumConta() == numProxConta) {
+                                    numProxConta++;     // Incrementa para ser diferente
+                                    k = -1;             // Reseta a verificação
+                                }
+                                k++;
+                            }
+                            k = 0;
+                            // Verificando nas contas correntes
+                            while (k < numContasCorrente) {
+                                if (id_ContaCorrente[k]->getNumConta() == numProxConta) {
+                                    numProxConta++;     // Incrementa para ser diferente
+                                    k = -1;             // Reseta a verificação
+                                }
+                                k++;
+                            }
+                            id_ContaCorrente[numContasCorrente] = new ContaCorrente(numProxConta, *id_ClienteFisico[i]);
+                            cout << id_ContaCorrente[numContasCorrente]->printConta();
+                            numContasCorrente++;
+                            id_ClienteFisico[i]->setContaAtiva(1);
+                            cout << "\nConta Criada Com Sucesso!\n";
+                            quebra = 1;
+                        }
+                    }
+                    i++;
+                } while ((i < numClientesFisicos) && !quebra);
+
+                // Caso não tenha realizado nenhuma operação no laço acima, prepara para o próximo laço
+                if (i == numClientesFisicos || id_ClienteFisico[i-1]->getContaAtiva() == 1)
+                    quebra = 0;
+
+                // Zerado o contador do laço. 
+                i = 0;
+
+                // Busca e tratamento caso para CLIENTES JURIDICOS. Entra no laço se criado ou não localizado no caso do cliente fisico
+                while ( (i < numClientesJuridicos) && !quebra ) {
+                    if (aux == (id_ClienteJuridico[i]->getCNPJ())) {
+                        if (id_ClienteJuridico[i]->getContaAtiva() == 1) {
+                            cout << "Cliente já possui uma conta\n";
+                            quebra = 1;
+                        } else {
+                            // Verificar se o numero da conta a ser criada pode ser usado
+                            while (k < numContasPoupanca) {
+                                if (id_ContaPoupanca[k]->getNumConta() == numProxConta) {
+                                    numProxConta++;     // Incrementa para ser diferente
+                                    k = -1;              // Reseta a verificação
+                                }
+                                k++;
+                            }
+                            k = 0;
+                            // Verificando nas contas correntes
+                            while (k < numContasCorrente) {
+                                if (id_ContaCorrente[k]->getNumConta() == numProxConta) {
+                                    numProxConta++;     // Incrementa para ser diferente
+                                    k = -1;              // Reseta a verificação
+                                }
+                                k++;
+                            }
+                            id_ContaCorrente[numContasCorrente] = new ContaCorrente(numProxConta, *id_ClienteJuridico[i]);
+                            cout << id_ContaCorrente[numContasCorrente]->printConta();
+                            numContasCorrente++;
+                            id_ClienteJuridico[i]->setContaAtiva(1);
+                            cout << "\nConta Criada Com Sucesso!\n";
+                            quebra = 1;
+                        }
+                    }
+                    i++;
+                }
+
+                if (quebra == 0)
+                    cout << "Nenhum cliente encontrado!\nFavor cadastrar-se\n";
+
+            } else {
+                cout << "\nNão ha clientes para criação de contas correntes\n";
+            }
+
+            break;
+        }
+        case 2:{
+            // Procura a conta pelo seu número. Quando achava, solicita ao usuário a mudança a ser feito
+            int i=0, quebra=0, aux, novo_num=0, alterado=0, conta_tipo;
+            float novo_valor=0;
+            int altera_opcao;
+            cout << "Digite o numero da conta corrente: ";
+            cin >> aux;
+            do {
+                if (aux == (id_ContaCorrente[i]->getNumConta())) {
+                    cout << "Qual alteração deseja realizar em sua conta poupanca?\n1 - Alterar numero da conta\n2 - Data de Abertura\n3 - Aumentar limite de cheque especial\nOpcao: ";
+                    cin >> altera_opcao;
+                    if (altera_opcao == 1) {
+                        do {
+                            cout << "Digite o numero da conta: ";
+                            cin >> novo_num;
+                            int k=0;
+                            // Verifica se o numero ja pertence a outra conta
+                            do {
+                                if (id_ContaCorrente[k]->getNumConta() == novo_num)
+                                    cout << "Digite novamente!\n";
+                                else {
+                                    id_ContaCorrente[k]->setNumConta(novo_num);
+                                    k = numContasCorrente;      // Condicao de parada
+                                }
+                                k++;
+                            } while (k < numContasCorrente);
+                            alterado = 1;
+                        } while (!alterado);
+                        cout << "\nConta alterada com sucesso!\n";
+                    } else if (altera_opcao == 2) {
+                        id_ContaCorrente[i]->setDataAbertura();
+                        cout << "\nConta alterada com sucesso!\n";
+                    } else if (altera_opcao == 3) {
+                        cout << "Digite o novo valor para cheque especial: ";
+                        cin >> novo_valor;
+                        id_ContaCorrente[i]->setLimiteCheque(novo_valor);
+                    }
+                    quebra = 1;
+                }
+                i++;
+            } while ((i < numContasPoupanca) && !quebra);
+
+            if (quebra == 0)
+                cout << "Nenhum cliente encontrado!";
+            break;
+        }
+        case 3: {
+            // Deleta a conta segundo o número da conta
+            int aux, i=0, quebra=0;
+            string cpf_aux;
+            cout << "Digite o numero da conta: ";
+            cin >> aux;
+            do {
+                // Varre até obter a conta baseada no numero digitado
+                if (aux == (id_ContaCorrente[i]->getNumConta())) {
+                    cpf_aux = id_ContaCorrente[i]->getCPFouCNPJ();
+                    delete id_ContaCorrente[i];
+                    numContasCorrente--;
+                    for (int j=i; j<numClientesFisicos; j++) {
+                        id_ContaCorrente[j] = id_ContaCorrente[j+1];
+                    }
+                    for (int j=0; j<numClientesFisicos; j++) {
+                        if (cpf_aux == id_ClienteFisico[j]->getCPF())
+                            id_ClienteFisico[j]->setContaAtiva(0);
+                    }
+                    quebra = 1;
+                    cout << "Conta excluida com sucesso!\n";
+                }
+                i++;
+            } while ((i < numContasCorrente) && !quebra);
+
+            if (quebra == 0) {
+                cout << "Cliente não encontrado!";
+            }
+            break;
+        }
+        case 4:{
+            menuLancamento();
+            break;
+        }
+        case 5:{
+            // Imprime todas as contas cadastradas
+            for (int i=0; i<numContasCorrente; i++)
+                cout << id_ContaCorrente[i]->printConta();
             break;
         }
         case 6:{

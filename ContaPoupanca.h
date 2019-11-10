@@ -30,7 +30,7 @@ public:
 
 private:
     int numConta;
-    string cpfPessoaFisica;
+    string cpf;
 };
 
 #endif //TRAB2_CONTAPOUPANCA_H
