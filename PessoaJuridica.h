@@ -32,8 +32,8 @@ public:
     string getCNPJ();
     string getCPFProprietarioMajor();
     string getRamoAtuacao();
-    Data getDataFundacao();
-    Data getDataUltimaAtt();
+    Data* getDataFundacao();
+    Data* getDataUltimaAtt();
 
 private:
     string cnpj;

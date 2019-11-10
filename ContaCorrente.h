@@ -1,45 +1,45 @@
-#ifndef TRAB1_ContaCorrente_H
-#define TRAB1_ContaCorrente_H
+#ifndef TRAB2_CONTACORRENTE_H
+#define TRAB2_CONTACORRENTE_H
 
 #include <string>
 #include <sstream>
 using namespace std;
 
 #include "PessoaJuridica.h"
-#include "Data.h"
+#include "PessoaFisica.h"
+#include "Conta.h"
 
-class ContaPoupanca : public Conta {
+class ContaCorrente : public Conta {
 public:
     
     // Construtor
-    ContaPoupanca(int, PessoaFisica);
+    // A ideia de passar os dois e para a escolha para cfp ou cnpj a ser usado na conta conta
+    ContaCorrente(int, PessoaFisica, PessoaJuridica, int);
 
     // Destrutor
-    ~ContaPoupanca();
-
-    // Define PessoaFisica
-    void setContaPoupanca(int, PessoaFisica);
+    ~ContaCorrente();
 
     // Imprime info conta
     string printConta();
 
     // Setters
-    void setNumConta(int);
-    void setDataAbertura();
-    void setCPFPessoaFisica(PessoaFisica);
-    void setSaldoAtual(float value);
+    void setNumConta(int num);
+    void setTipoCadastro(int tipo);
+    void setCPFouCNPJ(PessoaFisica, PessoaJuridica);
+    void setLimiteCheque(float lim);
 
     // Getters
     int getNumConta();
-    Data getDataAbertura();
-    string getCPFPessoaFisica();
-    float getSaldoAtual();
+    int getTipoCadastro();
+    string getCPFouCNPJ();
+    float getLimiteCheque();
 
 private:
     int numConta;
-    Data *dataAbertura;
-    string cpfPessoaFisica;
-    float saldoAtual;
+    int tipo_cadastro;   // Determina se será usado cpf ou cnpj
+    string cpf;
+    string cnpj;
+    float limitecheque;
 };
 
-#endif //TRAB1_ContaPoupanca_H
+#endif //TRAB2_CONTACORRENTE_H

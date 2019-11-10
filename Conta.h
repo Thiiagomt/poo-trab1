@@ -1,5 +1,5 @@
-#ifndef TRAB1_ContaCorrente_H
-#define TRAB1_ContaCorrente_H
+#ifndef TRAB2_CONTA_H
+#define TRAB2_CONTA_H
 
 #include <string>
 #include <sstream>
@@ -10,26 +10,31 @@ using namespace std;
 class Conta {
 public:
 
+    //Função para transformar float em string com 2 casas decimais
+    std::string to_string_with_precision(const float valor, const int num_casas){
+        std::ostringstream out;
+        out.precision(num_casas);
+        out << std::fixed << valor;
+        return out.str();
+    }
+
     // Construtor
-    ContaPoupanca(int);
+    Conta();
 
     // Destrutor
-    ~ContaPoupanca();
+    ~Conta();
 
     // Setters
-    void setNumConta(int);
     void setDataAbertura();
     void setSaldoAtual(float x);
 
     // Getters
-    int getNumConta();
-    Data getDataAbertura();
+    Data* getDataAbertura();
     float getSaldoAtual();
 
 private:
-    int numConta;
     Data *dataAbertura;
     float saldoAtual;
 };
 
-#endif //TRAB1_ContaPoupanca_H
+#endif //TRAB2_CONTA_H

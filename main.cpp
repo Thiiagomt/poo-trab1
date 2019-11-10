@@ -18,6 +18,7 @@ Clara Gruber                        RA:
 #include "PessoaFisica.h"
 #include "PessoaJuridica.h"
 #include "ContaPoupanca.h"
+#include "ContaCorrente.h"
 #include "Lancamento.h"
 #include "Data.h"
 
@@ -38,14 +39,6 @@ int getQuantidadeDeContas();
 int getQuantidadeDeClientes();
 float getMontanteTotal();
 
-//Função para transformar float em string com 2 casas decimais
-std::string to_string_with_precision(const float valor, const int num_casas){
-    std::ostringstream out;
-    out.precision(num_casas);
-    out << std::fixed << valor;
-    return out.str();
-}
-
 int numContasPoupanca = 0;
 int numContasCorrente = 0;
 int numClientesFisicos = 0;
@@ -58,6 +51,7 @@ int numProxConta = 1;
 PessoaFisica * id_ClienteFisico[N_CLIENTES_CONTAS];
 PessoaJuridica * id_ClienteJuridico[N_CLIENTES_CONTAS];
 ContaPoupanca * id_ContaPoupanca[N_CLIENTES_CONTAS];
+ContaCorrente * id_ContaCorrente[N_CLIENTES_CONTAS];
 Lancamento * id_Lancamentos[N_CLIENTES_CONTAS];
 
 int main() {
@@ -226,7 +220,7 @@ void menuClienteJuridico(){
                     cin >> altera_opcao;
                     if (altera_opcao == 1) {
                         cin.ignore();
-                        id_ClienteJuridico[i]->setRazaoSocial();
+                        id_ClienteJuridico[i]->setNome();
                         cout << "Cadastro alterado com sucesso!\n";
                     } else if (altera_opcao == 2) {
                         if(id_ClienteJuridico[i]->getContaAtiva() == 0){
@@ -497,7 +491,7 @@ void menuConta(){
                                     }
                                     k++;
                                 }
-                                id_ContaPoupanca[numContasPoupanca] = new ContaPoupanca(numProxConta, *id_ClienteFisico[i]);
+                                id_ContaPoupanca[numContasPoupanca] = new ContaPoupanca(*id_ClienteFisico[i], numProxConta);
                                 cout << id_ContaPoupanca[numContasPoupanca]->printConta();
                                 numContasPoupanca++;
                                 id_ClienteFisico[i]->setContaAtiva(1);
@@ -650,7 +644,8 @@ void menuBanco(){
             break;
         }
         case 3:{
-            cout << "Montante total presente no banco: R$" + to_string_with_precision(getMontanteTotal(), 2) << endl;
+            // Tinha um to_string_with_precision aqui...retirado pois estava dando erro
+            cout << "Montante total presente no banco: R$" + to_string(getMontanteTotal()) << endl;
             cout << "Você será redirecionado para o menu de gerenciamento do banco" << endl;
             menuBanco();
             break;

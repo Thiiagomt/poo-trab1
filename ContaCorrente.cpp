@@ -1,62 +1,68 @@
 #include <iostream>
 
-#include "ContaPoupanca.h"
+#include "ContaCorrente.h"
 #include "Data.h"
 using namespace std;
 
-void ContaPoupanca::setContaPoupanca(int y, PessoaFisica x) {
-    setNumConta(y);
-    setDataAbertura();
-    setCPFPessoaFisica(x);
-    setSaldoAtual(0);
-}
-
 // Construtor
-ContaPoupanca::ContaPoupanca(int y, PessoaFisica x) {
-    setContaPoupanca(y, x);
+ContaCorrente::ContaCorrente(int n, PessoaFisica x, PessoaJuridica y, int z) { // Z define se será usado cpf ou cnpj
+    setNumConta(n);
+    setTipoCadastro(z);
+    setCPFouCNPJ(x, y);
+    setLimiteCheque(100);   // Definido R$ 100 como padrão
 }
 
 // Destrutor
-ContaPoupanca::~ContaPoupanca() = default;
+ContaCorrente::~ContaCorrente() = default;
 
 // Imprime info da conta
-string ContaPoupanca::printConta() {
+string ContaCorrente::printConta() {
     string saida;
 
-    saida = "O CPF do dono desta conta é: " + getCPFPessoaFisica() +
-        "\nO número da conta é: 000" + to_string(getNumConta()) +
-            "\nA data de abertura da conta é: " + to_string(this->dataAbertura->getDia()) + "/" + to_string(this->dataAbertura->getMes()) + "/" + to_string(this->dataAbertura->getAno()) +
-                "\nO saldo atual da conta é: R$" + to_string_with_precision(getSaldoAtual(), 2)
-                    + "\n";
+    saida = "O CPF/CNPJ do dono desta conta é: " + this->getCPFouCNPJ() +
+                "\nO número da conta é: 000" + to_string(this->getNumConta()) +
+                    "\nA data de abertura da conta é: " + to_string(this->getDataAbertura()->getDia()) + "/" + to_string(this->getDataAbertura()->getMes()) + "/" + to_string(this->getDataAbertura()->getAno()) +
+                        "\nO saldo atual da conta é: R$" + to_string_with_precision(this->getSaldoAtual(), 2) +
+                            "\nO limite de cheque especial é: R$" + to_string(this->getLimiteCheque())
+                            + "\n";
 
     return saida;
 }
 
 // Setters
-void ContaPoupanca::setNumConta(int y){
-    this->numConta = y;
+void ContaCorrente::setNumConta(int num){
+    this->numConta = num;
 }
 
-void ContaPoupanca::setDataAbertura(){
-    this->dataAbertura = new Data;
+void ContaCorrente::setTipoCadastro(int z){
+    this->tipo_cadastro = z;
 }
-void ContaPoupanca::setCPFPessoaFisica(PessoaFisica x){
-    this->cpfPessoaFisica = x.getCPF();
+
+void ContaCorrente::setCPFouCNPJ(PessoaFisica x, PessoaJuridica y){
+    if (tipo_cadastro == 1)
+        this->cpf = x.getCPF();
+    else
+        this->cnpj = y.getCNPJ();
 }
-void ContaPoupanca::setSaldoAtual(float x){
-    this->saldoAtual = x;
+void ContaCorrente::setLimiteCheque(float lim){
+    this->limitecheque = lim;
 }
 
 // Getters
-int ContaPoupanca::getNumConta(){
+int ContaCorrente::getNumConta(){
     return this->numConta;
 }
-Data ContaPoupanca::getDataAbertura(){
-    return *dataAbertura;
+
+int ContaCorrente::getTipoCadastro(){
+    return this->tipo_cadastro;
 }
-string ContaPoupanca::getCPFPessoaFisica() {
-    return this->cpfPessoaFisica;
+
+string ContaCorrente::getCPFouCNPJ() {
+    if (tipo_cadastro == 1)
+        return this->cpf;
+    else
+        return this->cnpj;
 }
-float ContaPoupanca::getSaldoAtual(){
-    return this->saldoAtual;
+float ContaCorrente::getLimiteCheque(){
+    return this->limitecheque;
 }

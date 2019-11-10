@@ -5,34 +5,26 @@
 using namespace std;
 
 // Construtor
-ContaPoupanca::ContaPoupanca(int x) {
-    setNumConta(x);
+Conta::Conta() {
     setDataAbertura();
     setSaldoAtual(0);  
 }
 
 // Destrutor
-ContaPoupanca::~ContaPoupanca() = default;
+Conta::~Conta() = default;
 
 // Setters
-void ContaPoupanca::setNumConta(int x){
-    this->numConta = x;
-}
-
-void ContaPoupanca::setDataAbertura(){
+void Conta::setDataAbertura(){
     this->dataAbertura = new Data;
 }
-void ContaPoupanca::setSaldoAtual(float x){
+void Conta::setSaldoAtual(float x){
     this->saldoAtual = x;
 }
 
 // Getters
-int ContaPoupanca::getNumConta(){
-    return this->numConta;
+Data* Conta::getDataAbertura(){
+    return dataAbertura;
 }
-Data ContaPoupanca::getDataAbertura(){
-    return *dataAbertura;
-}
-float ContaPoupanca::getSaldoAtual(){
+float Conta::getSaldoAtual(){
     return this->saldoAtual;
 }

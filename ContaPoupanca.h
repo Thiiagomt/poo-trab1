@@ -1,5 +1,5 @@
-#ifndef TRAB1_ContaPoupanca_H
-#define TRAB1_ContaPoupanca_H
+#ifndef TRAB2_CONTAPOUPANCA_H
+#define TRAB2_CONTAPOUPANCA_H
 
 #include <string>
 #include <sstream>
@@ -12,7 +12,7 @@ class ContaPoupanca : public Conta {
 public:
 
     // Construtor
-    ContaPoupanca(int, PessoaFisica);
+    ContaPoupanca(PessoaFisica, int);
 
     // Destrutor
     ~ContaPoupanca();
@@ -21,13 +21,16 @@ public:
     string printConta();
 
     // Setters
+    void setNumConta(int);
     void setCPFPessoaFisica(PessoaFisica);
 
     // Getters
+    int getNumConta();
     string getCPFPessoaFisica();
 
 private:
+    int numConta;
     string cpfPessoaFisica;
 };
 
-#endif //TRAB1_ContaPoupanca_H
+#endif //TRAB2_CONTAPOUPANCA_H
