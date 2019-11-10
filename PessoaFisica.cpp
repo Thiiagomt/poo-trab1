@@ -42,6 +42,29 @@ void PessoaFisica::setCPF() {
     } while (!verif);
 }
 
+void PessoaFisica::setEndereco() {
+    this->endereco = new Endereco();
+}
+
+void PessoaFisica::setTelefone(){
+    cout << "Digite seu telefone: ";
+    cin.ignore();
+    getline(cin, this->telefone);   // Pega a string do telefone
+}
+
+void PessoaFisica::setEmail() {
+    cout << "Digite seu email: ";
+    getline(cin, this->email);      // Pega a string do email
+}
+
+void PessoaFisica::setContaAtiva(int x) {
+    this->conta_ativa = x;
+}
+
+void PessoaFisica::setTipoConta() {
+    this->tipo_conta = 1;
+}
+
 // Getters
 string PessoaFisica::getCPF(){
     return this->cpf;

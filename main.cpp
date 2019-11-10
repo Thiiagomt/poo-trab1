@@ -28,6 +28,8 @@ using namespace std;
 // Funções
 void menuPrincipal();
 void menuCliente();
+void menuClienteJuridico();
+void menuClienteFisico();
 void menuConta();
 void menuBanco();
 void menuLancamento();
@@ -165,6 +167,11 @@ void menuClienteJuridico(){
             break;
         }
         case 1:{
+            if(numClientesFisicos == 0){
+                cout << "Não há pessoas físicas cadastradas, para ser o proprietario majoritario" << endl
+                << "Por favor, faça o cadastro de uma pessoa física primeiro" << endl;
+                break;
+            }
             int quebra=0, i=0, quebra2=0, j=0;
             // Cadastra-se um cliente em ordem
             id_ClienteJuridico[numClientesJuridicos] = new PessoaJuridica;
@@ -177,23 +184,30 @@ void menuClienteJuridico(){
                     cout << "\nCliente com CNPJ já existente!\n";
                     delete id_ClienteJuridico[numClientesJuridicos-1];
                     numClientesJuridicos--;
+                    break;
                 }
                 i++;
             }
             //Se o proprietário majoritário não estiver cadastrado em pessoa física, então é deletado o objeto criado
-            while ((j<(numClientesFisicos-1)) && !quebra2){
-                //if se achar o CPF do proprietario majoritario cadastrado em pessoas fisicas
-                if(id_ClienteJuridico[numClientesJuridicos-1]->getCPFProprietarioMajor() == id_ClienteFisico[j]->getCPF())
+            if(numClientesFisicos == 1)
+                if(id_ClienteJuridico[numClientesJuridicos-1]->getCPFProprietarioMajor() == id_ClienteFisico[0]->getCPF())
                     quebra2 = 1;
-                j++;
-            }
+            else
+                while(j<(numClientesFisicos-1 && !quebra2)){
+                    //if se achar o CPF do proprietario majoritario cadastrado em pessoas fisicas
+                    cout << "QUEBRA = " + to_string(quebra2) + " CPF fisico = " + id_ClienteFisico[j]->getCPF() + "\n";
+                    if(id_ClienteJuridico[numClientesJuridicos-1]->getCPFProprietarioMajor() == id_ClienteFisico[0]->getCPF())
+                        quebra2 = 1;
+                    j++;
+                }
             //verifica se o while anterior não achar o cpf do proprietario majoritario cadastrado em pessoas fisicas e deleta o objeto criado
             if(quebra2 == 0){
                 cout << "\nO proprietario majoritario não está cadastrado em pessoas físicas\n";
                 delete id_ClienteJuridico[numClientesJuridicos-1];
                 numClientesJuridicos--;
+                break;
             } 
-            
+
             cout << "\n\nPessoa Jurídica cadastrado com sucesso!\n" << endl;
             break;
         }
@@ -240,10 +254,10 @@ void menuClienteJuridico(){
                         id_ClienteJuridico[i]->setEmail();
                     } else if (altera_opcao == 7) {
                         cin.ignore();
-                        id_ClienteJuridico->setRamoAtuacao();
+                        id_ClienteJuridico[i]->setRamoAtuacao();
                     } else if (altera_opcao == 8) {
                         cin.ignore();
-                        id_ClienteJuridico->setDataUltimaAtt();
+                        id_ClienteJuridico[i]->setDataUltimaAtt();
                     }
                     quebra = 1;
                 } 
@@ -332,6 +346,7 @@ void menuClienteFisico(){
                     cout << "\nCliente com CPF já existente!\n";
                     delete id_ClienteFisico[numClientesFisicos-1];
                     numClientesFisicos--;
+                    break;
                 }
                 i++;
             }
@@ -628,6 +643,8 @@ void menuBanco(){
         }
         case 2:{
             cout << "Total de cliente cadastrados no banco: " + to_string(getQuantidadeDeClientes()) << endl;
+            if(getQuantidadeDeClientes() > 0)
+                cout << "Sendo " + to_string(numClientesFisicos) + " do tipo Pessoa Física e " + to_string(numClientesJuridicos) + " do tipo Pessoa Juridica\n";
             cout << "Você será redirecionado para o menu de gerenciamento do banco" << endl;
             menuBanco();
             break;
