@@ -1,15 +1,19 @@
 #include <iostream>
 
 #include "ContaPoupanca.h"
-
+#include "Data.h"
 using namespace std;
+
+void ContaPoupanca::setContaPoupanca(int y, PessoaFisica x) {
+    setNumConta(y);
+    setDataAbertura();
+    setCPFPessoaFisica(x);
+    setSaldoAtual(0);
+}
 
 // Construtor
 ContaPoupanca::ContaPoupanca(int y, PessoaFisica x) {
-    this->setNumConta(y);
-    this->setDataAbertura();
-    this->setCPFPessoaFisica(x);
-    this->setSaldoAtual(0);
+    setContaPoupanca(y, x);
 }
 
 // Destrutor
@@ -29,11 +33,30 @@ string ContaPoupanca::printConta() {
 }
 
 // Setters
+void ContaPoupanca::setNumConta(int y){
+    this->numConta = y;
+}
+
+void ContaPoupanca::setDataAbertura(){
+    this->dataAbertura = new Data;
+}
 void ContaPoupanca::setCPFPessoaFisica(PessoaFisica x){
     this->cpfPessoaFisica = x.getCPF();
 }
+void ContaPoupanca::setSaldoAtual(float x){
+    this->saldoAtual = x;
+}
 
 // Getters
+int ContaPoupanca::getNumConta(){
+    return this->numConta;
+}
+Data ContaPoupanca::getDataAbertura(){
+    return *dataAbertura;
+}
 string ContaPoupanca::getCPFPessoaFisica() {
     return this->cpfPessoaFisica;
+}
+float ContaPoupanca::getSaldoAtual(){
+    return this->saldoAtual;
 }
