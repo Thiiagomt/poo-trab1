@@ -18,7 +18,7 @@ public:
     void printData() const;
 
     // Valida Data e método toString
-    void validaData();
+    int validaData();
     string toString() const;
 
     // Setters
@@ -35,7 +35,6 @@ private:
     int dia;
     int mes;
     int ano;
-    int valido;
 };
 
 #endif //TRAB2_DATA_H

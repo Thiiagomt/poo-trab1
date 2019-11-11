@@ -4,12 +4,12 @@ using namespace std;
 
 // Construtor
 Data::Data() {
-    valido = 0;
+    int valido = 0;
     while (!valido) {
         setDia();
         setMes();
         setAno();
-        validaData();
+        valido = validaData();
     }
 }
 
@@ -59,23 +59,24 @@ int Data::getAno() const {
     return ano;
 }
 
-void Data::validaData() {
+int Data::validaData() {
     /*
      *  Ano Bissexto -> É divisível por 400 ou não é divisível por 100 e é divisível por 4
      */
-
-    while (!valido) {
-        if ( ((dia >= 1) && (dia <= 31)) && ((mes == 1) || (mes==3) || (mes==5) || (mes==7) || (mes==8) || (mes==10) || (mes==12)) ) {
-            valido = 1;
-        }
-        else if ( ((dia >= 1) && (dia <= 30)) && ((mes == 4) || (mes==6) || (mes==9) || (mes==11)) ) {
-            valido = 1;
-        }
-        else if ( ((dia >= 1) && (dia <= 28)) && (mes == 2) ) {
-            valido = 1;
-        }
-        else if ( (dia == 29) && (mes == 2) && ( (ano % 400 == 0) || ( (ano % 4 == 0) && (ano % 100 !=0) ) ) ) {
-            valido = 1;
-        }
+    if ( ((dia >= 1) && (dia <= 31)) && ((mes == 1) || (mes==3) || (mes==5) || (mes==7) || (mes==8) || (mes==10) || (mes==12)) ) {
+        return 1;
+    }
+    else if ( ((dia >= 1) && (dia <= 30)) && ((mes == 4) || (mes==6) || (mes==9) || (mes==11)) ) {
+        return 1;
+    }
+    else if ( ((dia >= 1) && (dia <= 28)) && (mes == 2) ) {
+        return 1;
+    }
+    else if ( (dia == 29) && (mes == 2) && ( (ano % 400 == 0) || ( (ano % 4 == 0) && (ano % 100 !=0) ) ) ) {
+        return 1;
+    }
+    else {
+        cout << "Data invalida! Digite novamente!\n";
+        return 0;
     }
 }
