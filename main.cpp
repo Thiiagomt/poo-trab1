@@ -350,7 +350,7 @@ void menuClienteFisico(){
                     numClientesFisicos--;
                 }
                 i++;
-            }
+            } 
             cout << "\n\nPessoa Fisica cadastrado com sucesso!" << endl;
             break;
         }
