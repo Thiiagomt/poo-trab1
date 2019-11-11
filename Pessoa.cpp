@@ -21,7 +21,7 @@ Pessoa::~Pessoa() = default;
 
 // Setters
 void Pessoa::setNome() {
-    cout << "Digite seu nome: ";
+    cout << "Digite seu Nome/Nome da Empresa: ";
     cin.ignore();                   // Retirar do buffer o '\n' proveniente da main
     getline(cin, this->nome);       // Pega a string do nome
 }
