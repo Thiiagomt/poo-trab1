@@ -43,7 +43,7 @@ void menuContaPoupanca();
 void menuContaCorrente();
 void menuBanco();
 void menuLancamento();
-int lancamento(int numConta, int operacao, float valor);
+int lancamento(int numConta, int operacao, float valor, float * saldoAnterior, float * saldoAtualizado);
 int getQuantidadeDeContas();
 int getQuantidadeDeClientes();
 float getMontanteTotal();
@@ -917,29 +917,78 @@ void menuBanco(){
             break;
         }
         case 4:{
-            int numConta, lancamentosExibidos;
-            lancamentosExibidos=0;
+            int option2;
+            cout << "1 - Exibir extrato de todo o período da conta" << endl
+            << "2 - Exibir extrato com período definido" << endl;
+            cin >> option2;
 
-            if (numContasPoupanca != 0 || numContasCorrente != 0){
-                cout << "Insira o número da conta desejada: ";
-                cin >> numConta;
+            switch(option2){
+                case 1:{
+                    int numConta, lancamentosExibidos;
+                    lancamentosExibidos=0;
 
-                for(int i=0; i<numLancamentosEfetuados; i++){
-                    if(id_Lancamentos[i]->getNumConta() == numConta) {
-                        cout << id_Lancamentos[i]->printLancamento() << endl;
-                        lancamentosExibidos++;
+                    if (numContasPoupanca != 0 || numContasCorrente != 0){
+                        cout << "Insira o número da conta desejada: ";
+                        cin >> numConta;
+
+                        for(int i=0; i<numLancamentosEfetuados; i++){
+                            if(id_Lancamentos[i]->getNumConta() == numConta) {
+                                cout << id_Lancamentos[i]->printLancamento() << endl;
+                                lancamentosExibidos++;
+                            }
+                        }
+
+                        if(lancamentosExibidos==0)
+                            cout << "Não há lançamentos para essa conta ainda!";
+
+                        cout << "\nVocê será redirecionado para o menu de gerenciamento do banco" << endl;
+                        menuBanco();
+                    } else{
+                        cout << "\nSem contas cadastradas!\n";
                     }
+                    break;
                 }
+                case 2:{
+                    int numConta, lancamentosExibidos;
+                    lancamentosExibidos=0;
+                    int diaInicio, mesInicio, anoInicio, diaFim, mesFim, anoFim;
 
-                if(lancamentosExibidos==0)
-                    cout << "Não há lançamentos para essa conta ainda!";
+                    if(numContasCorrente != 0 || numContasPoupanca != 0){
+                        cout << "Insira o número da conta desejada: ";
+                        cin >> numConta;
 
-                cout << "\nVocê será redirecionado para o menu de gerenciamento do banco" << endl;
-                menuBanco();
-            } else{
-                cout << "\nSem contas cadastradas!\n";
+                        cout << "Insira a data de início do periodo desejado: \nDia: ";
+                        cin >> diaInicio;
+                        cout << "Mes: ";
+                        cin >> mesInicio;
+                        cout << "Ano: ";
+                        cin >> anoInicio;
+
+                        cout << "Insira a data de termino do período: \nDia: ";
+                        cin >> diaFim;
+                        cout << "Mes: ";
+                        cin >> mesFim;
+                        cout << "Ano: ";
+                        cin >> anoFim;
+
+                        for(int i=0; i<numLancamentosEfetuados; i++)
+                            if(id_Lancamentos[i]->getNumConta() == numConta)
+                                if(((id_Lancamentos[i]->getDataLancamento().getDia() >= diaInicio && id_Lancamentos[i]->getDataLancamento().getMes() >= mesInicio)) && id_Lancamentos[i]->getDataLancamento().getAno() >= anoInicio)
+                                    if(((id_Lancamentos[i]->getDataLancamento().getDia() <= diaFim && id_Lancamentos[i]->getDataLancamento().getMes() <= mesFim)) && id_Lancamentos[i]->getDataLancamento().getAno() <= anoFim){
+                                        cout << id_Lancamentos[i]->printLancamento() << endl;
+                                        lancamentosExibidos++;
+                                    }
+
+                        if(lancamentosExibidos==0)
+                            cout << "Não há lançamentos para esse período!";
+                        cout << "\nVocê será redirecionado para o menu de gerenciamento do banco" << endl;
+                        menuBanco();
+                    } else{
+                        cout << "\nSem contas Cadastradas!\n";
+                    }
+                    break;
+                }
             }
-            break;
         }
         case 5:{
             exit(1);
@@ -953,7 +1002,7 @@ void menuLancamento() {
     int comando;
     int numConta;
     int operacao = 0;
-    float valorLancamento;
+    float valorLancamento, saldoAnterior=0, saldoAtualizado=0;
     int option;
     cout << endl << "--- LANÇAMENTOS ---" << endl
          << "0 - Menu anterior" << endl
@@ -982,14 +1031,14 @@ void menuLancamento() {
                 cout << "Insira o valor a ser debitado: ";
                 cin >> valorLancamento;
 
-                comando = lancamento(numConta, operacao, valorLancamento);
+                comando = lancamento(numConta, operacao, valorLancamento, &saldoAnterior, &saldoAtualizado);
             } else {
                 cout << "\nSem contas cadastradas!\n";
             }
             switch(comando){
                 case 0: {
                     Lancamento *lancamento = (Lancamento*) malloc(sizeof(Lancamento));
-                    lancamento->setLancamento(numConta, operacao, valorLancamento);
+                    lancamento->setLancamento(numConta, operacao, valorLancamento, saldoAnterior, saldoAtualizado);
                     id_Lancamentos[numLancamentosEfetuados] = lancamento;
                     numLancamentosEfetuados += 1;
 
@@ -1025,14 +1074,14 @@ void menuLancamento() {
                 cout << "Insira o valor a ser depositado: ";
                 cin >> valorLancamento;
 
-                comando = lancamento(numConta, operacao, valorLancamento);
+                comando = lancamento(numConta, operacao, valorLancamento, &saldoAnterior, &saldoAtualizado);
             } else {
                 cout << "\nSem contas cadastradas!\n";
             }
             switch(comando){
                 case 0: {
                     Lancamento *lancamento = (Lancamento*) malloc(sizeof(Lancamento));
-                    lancamento->setLancamento(numConta, operacao, valorLancamento);
+                    lancamento->setLancamento(numConta, operacao, valorLancamento, saldoAnterior, saldoAtualizado);
                     id_Lancamentos[numLancamentosEfetuados] = lancamento;
                     numLancamentosEfetuados += 1;
 
@@ -1060,7 +1109,7 @@ void menuLancamento() {
     }
 }
 
-int lancamento(int numConta, int operacao, float valor){
+int lancamento(int numConta, int operacao, float valor, float * saldoAnterior, float * saldoAtualizado){
     int i=0;
     float novoValor=0;
     int tipo_conta=0;
@@ -1094,13 +1143,17 @@ int lancamento(int numConta, int operacao, float valor){
             if((id_ContaPoupanca[i]->getSaldoAtual() - valor) < 0)
                 return 2;
             else {
+                *saldoAnterior = id_ContaPoupanca[i]->getSaldoAtual();
                 novoValor = id_ContaPoupanca[i]->getSaldoAtual() - valor;
+                *saldoAtualizado = novoValor;
                 id_ContaPoupanca[i]->setSaldoAtual(novoValor);
                 return 0;
             }
         }
         else{
+            *saldoAnterior = id_ContaPoupanca[i]->getSaldoAtual();
             novoValor = id_ContaPoupanca[i]->getSaldoAtual() + valor;
+            *saldoAtualizado = novoValor;
             id_ContaPoupanca[i]->setSaldoAtual(novoValor);
             return 0;
         }
@@ -1110,13 +1163,17 @@ int lancamento(int numConta, int operacao, float valor){
             if(((id_ContaCorrente[i]->getSaldoAtual() + id_ContaCorrente[i]->getLimiteCheque()) - valor) < 0)
                 return 2;
             else{
+                *saldoAnterior = id_ContaCorrente[i]->getSaldoAtual();
                 novoValor = id_ContaCorrente[i]->getSaldoAtual() - valor;
+                *saldoAtualizado = novoValor;
                 id_ContaCorrente[i]->setSaldoAtual(novoValor);
                 return 0;
             }
         }
         else{
+            *saldoAnterior = id_ContaCorrente[i]->getSaldoAtual();
             novoValor = id_ContaCorrente[i]->getSaldoAtual() + valor;
+            *saldoAtualizado = novoValor;
             id_ContaCorrente[i]->setSaldoAtual(novoValor);
             return 0;
         }
