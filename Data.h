@@ -9,6 +9,9 @@ using namespace std;
 class Data {
 public:
     // Construtor com parâmetros
+    Data(int, int, int);
+
+    // Construtor sem parâmetros
     Data();
 
     // Destrutor
@@ -23,8 +26,11 @@ public:
 
     // Setters
     void setDia();
+    void setDia(int);
     void setMes();
+    void setMes(int);
     void setAno();
+    void setAno(int);
 
     // Getters
     int getDia() const;

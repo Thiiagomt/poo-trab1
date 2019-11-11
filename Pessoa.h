@@ -17,8 +17,11 @@ public:
         return out.str();
     }
 
-    // Construtor
+    // Construtor sem parâmetros
     Pessoa();
+
+    // Construtor com parâmetros
+    Pessoa(string, string, string, string, string, string, string, string, string);
 
     // Destrutor
     ~Pessoa();
@@ -31,6 +34,10 @@ public:
     void setEndereco();
     void setTelefone();
     void setEmail();
+    void setNome(string);
+    void setEndereco(string, string, string, string, string, string);
+    void setTelefone(string);
+    void setEmail(string);
     void setContaAtiva(int);
     void setTipoConta();
 

@@ -2,7 +2,7 @@
 #include "Data.h"
 using namespace std;
 
-// Construtor
+// Construtor sem parâmetros
 Data::Data() {
     int valido = 0;
     while (!valido) {
@@ -11,6 +11,16 @@ Data::Data() {
         setAno();
         valido = validaData();
     }
+}
+
+// Construtor com parâmetros
+// Dia, Mes, Ano
+Data::Data(int a, int b, int c) {
+    setDia(a);
+    setMes(b);
+    setAno(c);
+    int nadaaver=0;
+    nadaaver=validaData();
 }
 
 // Destrutor
@@ -33,17 +43,26 @@ string Data::toString() const {
 // Setters
 void Data::setDia() {
     cout << "Dia: ";
-    cin >> dia;
+    cin >> this->dia;
 }
-
 void Data::setMes() {
     cout << "Mes: ";
-    cin >> mes;
+    cin >> this->mes;
 }
-
 void Data::setAno() {
     cout << "Ano: ";
-    cin >> ano;
+    cin >> this->ano;
+}
+
+//Setters com parâmetros
+void Data::setDia(int x) {
+    this->dia = x;
+}
+void Data::setMes(int y) {
+    this->mes = y;
+}
+void Data::setAno(int z) {
+    this->ano = z;
 }
 
 // Getters
@@ -77,6 +96,9 @@ int Data::validaData() {
     }
     else {
         cout << "Data invalida! Digite novamente!\n";
+        this->dia = 0;
+        this->mes = 0;
+        this->ano = 0;
         return 0;
     }
 }

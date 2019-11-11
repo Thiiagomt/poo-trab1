@@ -11,6 +11,9 @@ public:
     // Construtor sem parâmetros
     Endereco();
 
+    // Construtor com parâmetros
+    Endereco(string, string, string, string, string, string);
+
     // Destrutor
     ~Endereco();
 
@@ -22,11 +25,17 @@ public:
 
     // Setters
     void setRua();
+    void setRua(string);
     void setBairro();
+    void setBairro(string);
     void setCidade();
+    void setCidade(string);
     void setUf();
+    void setUf(string);
     void setCep();
+    void setCep(string);
     void setNumero();
+    void setNumero(string);
 
     // Getters
     string getRua() const;

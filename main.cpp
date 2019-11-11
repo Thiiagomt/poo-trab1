@@ -35,6 +35,11 @@ std::string to_string_with_precision(const float valor, const int num_casas){
 
 // Funções
 void menuPrincipal();
+void menuCenarios();
+void Cenario1();
+void Cenario2();
+void Cenario3();
+void Cenario4();
 void menuCliente();
 void menuClienteJuridico();
 void menuClienteFisico();
@@ -56,7 +61,7 @@ int numLancamentosEfetuados = 0;
 
 // Esse contador sempre sera incrementado, determinando o numero da conta (nunca será repetido)
 int numProxConta = 1;
-    
+
 PessoaFisica * id_ClienteFisico[N_CLIENTES_CONTAS];
 PessoaJuridica * id_ClienteJuridico[N_CLIENTES_CONTAS];
 ContaPoupanca * id_ContaPoupanca[N_CLIENTES_CONTAS];
@@ -110,6 +115,51 @@ void menuPrincipal(){
                 break;
         }
 
+    }
+}
+
+void menuCenarios(){
+    int option;
+    cout << endl << "--- CENARIOS ---" << endl
+    << "0 - Menu anterior" << endl
+    << "1 - Cenario 1" << endl
+    << "2 - Cenario 2" << endl
+    << "3 - Cenario 3" << endl
+    << "4 - Cenario 4" << endl
+    << "5 - Sair" << endl;
+
+    cin >> option;
+    while(option<0 || option>5){
+        cout << "Selecione uma opção válida" << endl;
+        cin >> option;
+    }
+
+    switch(option){
+        case 0:{
+            menuPrincipal();
+            break;
+        }
+        case 1:{
+            Cenario1();
+            break;
+        }
+        case 2:{
+            Cenario2();
+            break;
+        }
+        case 3:{
+            Cenario3();
+            break;
+        }
+        case 4:{
+            Cenario4();
+            break;
+        }
+        case 5:{
+            exit(1);
+        }
+        default:
+            break;
     }
 }
 
@@ -179,7 +229,7 @@ void menuClienteJuridico(){
             // Cadastra-se um cliente em ordem
             id_ClienteJuridico[numClientesJuridicos] = new PessoaJuridica;
             numClientesJuridicos++;
-            // Cria o cliente e verifica se tal já existe por meio do CNPJ. 
+            // Cria o cliente e verifica se tal já existe por meio do CNPJ.
             // Se já existir (CNPJ já usado), então é deletado o objeto criado
             while ((i<(numClientesJuridicos - 1)) && !quebra ) {
                 if (id_ClienteJuridico[numClientesJuridicos-1]->getCNPJ() == id_ClienteJuridico[i]->getCNPJ()) {
@@ -211,7 +261,7 @@ void menuClienteJuridico(){
                 delete id_ClienteJuridico[numClientesJuridicos-1];
                 numClientesJuridicos--;
                 break;
-            } 
+            }
 
             cout << "\n\nPessoa Jurídica cadastrado com sucesso!\n" << endl;
             break;
@@ -265,7 +315,7 @@ void menuClienteJuridico(){
                         id_ClienteJuridico[i]->setDataUltimaAtt();
                     }
                     quebra = 1;
-                } 
+                }
                 i++;
             } while ((i < numClientesJuridicos) && !quebra);
 
@@ -343,7 +393,7 @@ void menuClienteFisico(){
             // Cadastra-se um cliente em ordem
             id_ClienteFisico[numClientesFisicos] = new PessoaFisica;
             numClientesFisicos++;
-            // Cria o cliente e verifica se tal já existe por meio  do CPF. 
+            // Cria o cliente e verifica se tal já existe por meio  do CPF.
             // Se já existir (CPF já usado), então é deletado o objeto criado
             while ( (i<(numClientesFisicos - 1)) && !quebra ) {
                 if (id_ClienteFisico[numClientesFisicos-1]->getCPF() == id_ClienteFisico[i]->getCPF()) {
@@ -398,7 +448,7 @@ void menuClienteFisico(){
                         cout << "Cadastro alterado com sucesso!\n";
                     }
                     quebra = 1;
-                } 
+                }
                 i++;
             } while ((i < numClientesFisicos) && !quebra);
 
@@ -729,7 +779,7 @@ void menuContaCorrente(){
                 if (i == numClientesFisicos || id_ClienteFisico[i-1]->getContaAtiva() == 1)
                     quebra = 0;
 
-                // Zerado o contador do laço. 
+                // Zerado o contador do laço.
                 i = 0;
 
                 // Busca e tratamento caso para CLIENTES JURIDICOS. Entra no laço se criado ou não localizado no caso do cliente fisico
@@ -1065,7 +1115,7 @@ int lancamento(int numConta, int operacao, float valor){
     float novoValor=0;
     int tipo_conta=0;
 
-    //tipo_conta = 0 -> não existe esse numero de conta 
+    //tipo_conta = 0 -> não existe esse numero de conta
     //tipo_conta = 1 -> Conta poupanca
     //tipo_conta = 2 -> Conta corrente
     do{
