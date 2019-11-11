@@ -521,6 +521,7 @@ void menuContaPoupanca(){
                 cin.ignore();
                 getline(cin, aux);
                 do {
+                    // Dedica-se somente aos cliente fisicos (na especificação, apenas clientes fisicos podem possuir uma conta poupança)
                     if (aux == (id_ClienteFisico[i]->getCPF())) {
                         if (id_ClienteFisico[i]->getContaAtiva() == 1) {
                             cout << "Cliente já possui uma conta\n";
@@ -565,6 +566,7 @@ void menuContaPoupanca(){
                 cout << "\nNão ha clientes para criação de contas poupancas\n";
                 break;
             }
+            break;
         }
         case 2:{
             // Procura a conta pelo seu número. Quando achava, solicita ao usuário a mudança a ser feito
