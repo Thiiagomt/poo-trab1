@@ -41,9 +41,9 @@ string PessoaJuridica::printPessoaJuridica() {
 void PessoaJuridica::setCNPJ() {
     int verif = 0;
     do {
-        cout << "Digite seu cnpj: ";
+        cout << "Digite seu CNPJ: ";
         getline(cin, this->cnpj);        // Pega a string do cnpj
-        if (cnpj.size() == 13) {         // Verifica se há 13 digitos, senão retorna ao for
+        if (cnpj.size() == 14) {         // Verifica se há 13 digitos, senão retorna ao for
             verif = 1;
         } else {
             cout << "CNPJ inválido! Verifique os dígitos\n";
