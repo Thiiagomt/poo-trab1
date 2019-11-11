@@ -16,7 +16,7 @@ PessoaFisica::~PessoaFisica() = default;
 string PessoaFisica::printPessoaFisica() {
     string saida;
 
-    saida = "\n\nO dono(a) desta conta é: " + this->getNome() +
+    saida = "\nCliente: " + this->getNome() +
                 "\nPortador do CPF: " + this->getCPF() +
                     "\nRua " + this->getEndereco()->getRua() + ", " + this->getEndereco()->getNumero() + 
                         "\nBairro " + this->getEndereco()->getBairro() + " - " + "CEP: " + this->getEndereco()->getCep() +
