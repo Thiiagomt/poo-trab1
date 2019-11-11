@@ -39,18 +39,25 @@ public:
     void setOperacao(int);
     void setValorLancamento(float);
     void setDataLancamento();
+    void setSaldoAnterior();
+    void setSaldoAtualizado();
+
 
     // Getters
     int getNumConta();
     int getOperacao();
     float getValorLancamento();
     Data getDataLancamento();
+    float getSaldoAnterior();
+    float getSaldoAtualizado();
 
 private:
     int numConta;
     int operacao;
     float valorLancamento;
     Data *dataLancamento;
+    float saldoAnterior;
+    float saldoAtualizado;
 };
 
 

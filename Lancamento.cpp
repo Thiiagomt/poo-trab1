@@ -56,6 +56,12 @@ void Lancamento::setValorLancamento(float valorLancamento){
 void Lancamento::setDataLancamento(){
     this->dataLancamento = new Data;
 }
+void Lancamento::setSaldoAnterior(float saldoAnterior){
+    this->saldoAnterior = saldoAnterior;
+}
+void Lancamento::setSaldoAtualizado(float saldoAtualizado){
+    this->saldoAtualizado = saldoAtualizado;
+}
 
 
 // Getters
@@ -70,4 +76,10 @@ float Lancamento::getValorLancamento(){
 }
 Data Lancamento::getDataLancamento(){
     return *dataLancamento;
+}
+float Lancamento::getSaldoAnterior(){
+    return this->saldoAnterior;
+}
+float Lancamento::getSaldoAtualizado(){
+    return this->saldoAtualizado;
 }
