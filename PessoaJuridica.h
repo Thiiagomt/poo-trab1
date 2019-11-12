@@ -12,8 +12,11 @@ using namespace std;
 class PessoaJuridica : public Pessoa {
 public:
 
-    // Construtor
+    // Construtor sem parâmetros
     PessoaJuridica();
+
+    // Construtor com parâmetros
+    PessoaJuridica(string, string, string, string, string, string, string, string, string, string, string, string, int, int, int, int, int, int);
 
     // Destrutor
     ~PessoaJuridica();
@@ -23,10 +26,15 @@ public:
 
     // Setters
     void setCNPJ();
+    void setCNPJ(string);
     void setCPFProprietarioMajor();
+    void setCPFProprietarioMajor(string);
     void setRamoAtuacao();
+    void setRamoAtuacao(string);
     void setDataFundacao();
+    void setDataFundacao(int, int, int);
     void setDataUltimaAtt();
+    void setDataUltimaAtt(int, int, int);
 
     // Getters
     string getCNPJ();

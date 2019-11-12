@@ -18,14 +18,18 @@ public:
         return out.str();
     }
 
-    // Construtor
+    // Construtor sem parâmetros
     Conta();
+
+    // Construtor com parâmetros
+    Conta(int, int, int, float);
 
     // Destrutor
     ~Conta();
 
     // Setters
     void setDataAbertura();
+    void setDataAbertura(int a, int b, int c);
     void setSaldoAtual(float x);
 
     // Getters
