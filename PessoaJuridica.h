@@ -22,7 +22,7 @@ public:
     ~PessoaJuridica();
 
     // Imprime info PessoaFisica
-    string printPessoaJuridica();
+    string toString();
 
     // Setters
     void setCNPJ();

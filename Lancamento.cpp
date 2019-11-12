@@ -26,7 +26,7 @@ Lancamento::Lancamento() = default;
 Lancamento::~Lancamento() = default;
 
 // Imprime info do cliente
-string Lancamento::printLancamento() {
+string Lancamento::toString() {
     string operation;
     string saida;
 

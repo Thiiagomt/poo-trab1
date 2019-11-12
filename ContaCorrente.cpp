@@ -24,7 +24,7 @@ ContaCorrente::ContaCorrente(int n, PessoaJuridica x) {
 ContaCorrente::~ContaCorrente() = default;
 
 // Imprime info da conta
-string ContaCorrente::printConta() {
+string ContaCorrente::toString() {
     string saida;
 
     saida = "O CPF/CNPJ do dono desta conta é: " + this->getCPFouCNPJ() +

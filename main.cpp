@@ -302,7 +302,7 @@ void menuClienteJuridico(){
         case 4:{
             //Cadastro de todos os clientes
             for (int i=0; i<numClientesJuridicos; i++)
-                cout << id_ClienteJuridico[i]->printPessoaJuridica();
+                cout << id_ClienteJuridico[i]->toString();
             break;
         }
         case 5:{
@@ -434,7 +434,7 @@ void menuClienteFisico(){
         case 4:{
             //Cadastro de todos os clientes
             for (int i=0; i<numClientesFisicos; i++)
-                cout << id_ClienteFisico[i]->printPessoaFisica();
+                cout << id_ClienteFisico[i]->toString();
             break;
         }
         case 5:{
@@ -541,7 +541,7 @@ void menuContaPoupanca(){
                                 k++;
                             }
                             id_ContaPoupanca[numContasPoupanca] = new ContaPoupanca(*id_ClienteFisico[i], numProxConta);
-                            cout << id_ContaPoupanca[numContasPoupanca]->printConta();
+                            cout << id_ContaPoupanca[numContasPoupanca]->toString();
                             numContasPoupanca++;
                             id_ClienteFisico[i]->setContaAtiva(1);
                             cout << "\nConta Criada Com Sucesso!\n";
@@ -635,9 +635,12 @@ void menuContaPoupanca(){
             break;
         }
         case 4:{
-            // Imprime todas as contas cadastradas
-            for (int i=0; i<numContasPoupanca; i++)
-                cout << id_ContaPoupanca[i]->printConta();
+            if(numContasPoupanca == 0)
+                cout << "\nNão há Contas Poupanca criadas ainda!" << endl;
+            else
+                // Imprime todas as contas cadastradas
+                for (int i=0; i<numContasPoupanca; i++)
+                    cout << id_ContaPoupanca[i]->toString();
             break;
         }
         case 5:{
@@ -655,7 +658,7 @@ void menuContaCorrente(){
     << "1 - Abrir uma nova conta corrente" << endl
     << "2 - Alterar dados de uma conta corrente" << endl
     << "3 - Excluir uma conta corrente" << endl
-    << "4 - Ver contas poupancas criadas" << endl
+    << "4 - Ver contas corrente criadas" << endl
     << "5 - Sair" << endl;
 
     cin >> option;
@@ -704,7 +707,7 @@ void menuContaCorrente(){
                                 k++;
                             }
                             id_ContaCorrente[numContasCorrente] = new ContaCorrente(numProxConta, *id_ClienteFisico[i]);
-                            cout << id_ContaCorrente[numContasCorrente]->printConta();
+                            cout << id_ContaCorrente[numContasCorrente]->toString();
                             numContasCorrente++;
                             id_ClienteFisico[i]->setContaAtiva(1);
                             cout << "\nConta Criada Com Sucesso!\n";
@@ -746,7 +749,7 @@ void menuContaCorrente(){
                                 k++;
                             }
                             id_ContaCorrente[numContasCorrente] = new ContaCorrente(numProxConta, *id_ClienteJuridico[i]);
-                            cout << id_ContaCorrente[numContasCorrente]->printConta();
+                            cout << id_ContaCorrente[numContasCorrente]->toString();
                             numContasCorrente++;
                             id_ClienteJuridico[i]->setContaAtiva(1);
                             cout << "\nConta Criada Com Sucesso!\n";
@@ -844,9 +847,12 @@ void menuContaCorrente(){
             break;
         }
         case 4:{
-            // Imprime todas as contas cadastradas
-            for (int i=0; i<numContasCorrente; i++)
-                cout << id_ContaCorrente[i]->printConta();
+            if(numContasCorrente == 0)
+                cout << "\nNão há Contas Corrente criadas ainda!" << endl;
+            else
+                // Imprime todas as contas cadastradas
+                for (int i=0; i<numContasCorrente; i++)
+                    cout << id_ContaCorrente[i]->toString();
             break;
         }
         case 5:{
@@ -881,7 +887,7 @@ void menuBanco(){
         case 1:{
             cout << "Total de contas cadastradas no banco: " + to_string(getQuantidadeDeContas()) << endl;
             if(getQuantidadeDeContas() > 0)
-                cout << "Sendo " + to_string(numContasCorrente) + " do tipo Conta Corrente e " + to_string(numContasPoupanca) + " do tipo Conta Poupancan\n";
+                cout << "Sendo " + to_string(numContasCorrente) + " do tipo Conta Corrente e " + to_string(numContasPoupanca) + " do tipo Conta Poupanca\n";
             cout << "Você será redirecionado para o menu de gerenciamento do banco" << endl;
             menuBanco();
             break;
@@ -919,7 +925,7 @@ void menuBanco(){
 
                         for(int i=0; i<numLancamentosEfetuados; i++){
                             if(id_Lancamentos[i]->getNumConta() == numConta) {
-                                cout << id_Lancamentos[i]->printLancamento() << endl;
+                                cout << id_Lancamentos[i]->toString() << endl;
                                 lancamentosExibidos++;
                             }
                         }
@@ -965,7 +971,7 @@ void menuBanco(){
                             if(id_Lancamentos[i]->getNumConta() == numConta)
                                 if(((id_Lancamentos[i]->getDataLancamento().getDia() >= diaInicio && id_Lancamentos[i]->getDataLancamento().getMes() >= mesInicio)) && id_Lancamentos[i]->getDataLancamento().getAno() >= anoInicio)
                                     if(((id_Lancamentos[i]->getDataLancamento().getDia() <= diaFim && id_Lancamentos[i]->getDataLancamento().getMes() <= mesFim)) && id_Lancamentos[i]->getDataLancamento().getAno() <= anoFim){
-                                        cout << id_Lancamentos[i]->printLancamento() << endl;
+                                        cout << id_Lancamentos[i]->toString() << endl;
                                         lancamentosExibidos++;
                                     }
 

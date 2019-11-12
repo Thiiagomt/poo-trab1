@@ -19,7 +19,7 @@ public:
     ~PessoaFisica();
 
     // Imprime info PessoaFisica
-    string printPessoaFisica();
+    string toString();
 
     // Setters
     void setCPF();

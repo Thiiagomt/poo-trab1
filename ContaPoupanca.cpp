@@ -14,7 +14,7 @@ ContaPoupanca::ContaPoupanca(PessoaFisica x, int y) {
 ContaPoupanca::~ContaPoupanca() = default;
 
 // Imprime info da conta
-string ContaPoupanca::printConta() {
+string ContaPoupanca::toString() {
     string saida;
 
     saida = "O CPF do dono desta conta é: " + getCPFPessoaFisica() +

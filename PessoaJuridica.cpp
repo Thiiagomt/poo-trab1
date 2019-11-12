@@ -27,7 +27,7 @@ PessoaJuridica::PessoaJuridica(string a, string b, string c, string d, string e,
 PessoaJuridica::~PessoaJuridica() = default;
 
 // Imprime info do PessoaJuridica
-string PessoaJuridica::printPessoaJuridica() {
+string PessoaJuridica::toString() {
     string saida;
 
     saida = "\n\nA empresa dona desta conta é: " + this->getNome() +

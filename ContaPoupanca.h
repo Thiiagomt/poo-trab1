@@ -18,7 +18,7 @@ public:
     ~ContaPoupanca();
 
     // Imprime info conta
-    string printConta();
+    string toString();
 
     // Setters
     void setNumConta(int);

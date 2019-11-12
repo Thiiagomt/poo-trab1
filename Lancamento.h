@@ -32,7 +32,7 @@ public:
     void setLancamento(int numConta, int operacao, float valorLancamento, float saldoAnterior, float saldoAtualizado);
 
     // Imprime info conta
-    string printLancamento();
+    string toString();
 
     // Setters
     void setNumConta(int);

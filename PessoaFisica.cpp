@@ -18,7 +18,7 @@ PessoaFisica::PessoaFisica(string a, string b, string c, string d, string e, str
 PessoaFisica::~PessoaFisica() = default;
 
 // Imprime info do PessoaFisica
-string PessoaFisica::printPessoaFisica() {
+string PessoaFisica::toString() {
     string saida;
 
     saida = "\nCliente: " + this->getNome() +
