@@ -118,10 +118,11 @@ void menuCliente(){
     << "0 - Menu anterior" << endl
     << "1 - Menu Pessoa Jurídica" << endl
     << "2 - Menu Pessoa Física" << endl
-    << "3 - Sair" << endl;
+    << "3 - Visualiar todos os cliente cadastrados" << endl
+    << "4 - Sair" << endl;
 
     cin >> option;
-    while(option<0 || option>3){
+    while(option<0 || option>4){
         cout << "Selecione uma opção válida" << endl;
         cin >> option;
     }
@@ -140,6 +141,21 @@ void menuCliente(){
             break;
         }
         case 3:{
+            if(numClientesFisicos != 0){
+                cout << "--- PESSOAS FÍSICA --- " << endl;
+                for (int i=0; i<numClientesFisicos; i++)
+                    cout << id_ClienteFisico[i]->toString();
+            }
+            
+            if(numClientesJuridicos != 0){
+                cout << "\n\n---PESSOAS JURÍDICA --- " << endl;
+                for(int i=0; i<numClientesJuridicos; i++)
+                    cout << id_ClienteJuridico[i]->toString();
+            }
+    
+            break;
+        }
+        case 4:{
             exit(1);
         }
         default:
@@ -154,11 +170,10 @@ void menuClienteJuridico(){
     << "1 - Efetuar um novo cadastro" << endl
     << "2 - Alterar um cadastro existente" << endl
     << "3 - Excluir um cadastro" << endl
-    << "4 - Ver Clientes Pessoa Jurídica" << endl
-    << "5 - Sair" << endl;
+    << "4 - Sair" << endl;
 
     cin >> option;
-    while(option<0 || option>5){
+    while(option<0 || option>4){
         cout << "Selecione uma opção válida" << endl;
         cin >> option;
     }
@@ -300,12 +315,6 @@ void menuClienteJuridico(){
             break;
         }
         case 4:{
-            //Cadastro de todos os clientes
-            for (int i=0; i<numClientesJuridicos; i++)
-                cout << id_ClienteJuridico[i]->toString();
-            break;
-        }
-        case 5:{
             exit(1);
         }
         default:
@@ -320,11 +329,10 @@ void menuClienteFisico(){
     << "1 - Efetuar um novo cadastro" << endl
     << "2 - Alterar um cadastro existente" << endl
     << "3 - Excluir um cadastro" << endl
-    << "4 - Ver Clientes Pessoa Física" << endl
-    << "5 - Sair" << endl;
+    << "4 - Sair" << endl;
 
     cin >> option;
-    while(option<0 || option>5){
+    while(option<0 || option>4){
         cout << "Selecione uma opção válida" << endl;
         cin >> option;
     }
@@ -432,12 +440,6 @@ void menuClienteFisico(){
             break;
         }
         case 4:{
-            //Cadastro de todos os clientes
-            for (int i=0; i<numClientesFisicos; i++)
-                cout << id_ClienteFisico[i]->toString();
-            break;
-        }
-        case 5:{
             exit(1);
         }
         default:
@@ -452,10 +454,11 @@ void menuConta(){
     << "1 - Menu Conta Poupanca" << endl
     << "2 - Menu Conta Corrente" << endl
     << "3 - Realizar lancamento em conta" << endl
-    << "4 - Sair" << endl;
+    << "4 - Visualizar todas as contas cadastradas" << endl
+    << "5 - Sair" << endl;
 
     cin >> option;
-    while(option<0 || option>4){
+    while(option<0 || option>5){
         cout << "Selecione uma opção válida" << endl;
         cin >> option;
     }
@@ -477,6 +480,21 @@ void menuConta(){
             menuLancamento();
         }
         case 4:{
+            if(numContasCorrente != 0){
+                cout << "--- CONTAS CORRENTE --- " << endl;
+                for (int i=0; i<numContasCorrente; i++)
+                    cout << id_ContaCorrente[i]->toString();
+            }
+            
+            if(numContasPoupanca != 0){
+                cout << "\n\n--- CONTAS POUPANCA --- " << endl;
+                for(int i=0; i<numContasPoupanca; i++)
+                    cout << id_ContaPoupanca[i]->toString();
+            }
+    
+            break;
+        }
+        case 5:{
             exit(1);
         }
         default:
@@ -491,11 +509,10 @@ void menuContaPoupanca(){
     << "1 - Abrir uma nova conta poupanca" << endl
     << "2 - Alterar dados de uma conta poupanca" << endl
     << "3 - Excluir uma conta poupanca" << endl
-    << "4 - Ver contas poupancas criadas" << endl
-    << "5 - Sair" << endl;
+    << "4 - Sair" << endl;
 
     cin >> option;
-    while(option<0 || option>5){
+    while(option<0 || option>4){
         cout << "Selecione uma opção válida" << endl;
         cin >> option;
     }
@@ -635,15 +652,6 @@ void menuContaPoupanca(){
             break;
         }
         case 4:{
-            if(numContasPoupanca == 0)
-                cout << "\nNão há Contas Poupanca criadas ainda!" << endl;
-            else
-                // Imprime todas as contas cadastradas
-                for (int i=0; i<numContasPoupanca; i++)
-                    cout << id_ContaPoupanca[i]->toString();
-            break;
-        }
-        case 5:{
             exit(1);
         }
         default:
@@ -658,11 +666,10 @@ void menuContaCorrente(){
     << "1 - Abrir uma nova conta corrente" << endl
     << "2 - Alterar dados de uma conta corrente" << endl
     << "3 - Excluir uma conta corrente" << endl
-    << "4 - Ver contas corrente criadas" << endl
-    << "5 - Sair" << endl;
+    << "4 - Sair" << endl;
 
     cin >> option;
-    while(option<0 || option>5){
+    while(option<0 || option>4){
         cout << "Selecione uma opção válida" << endl;
         cin >> option;
     }
@@ -847,15 +854,6 @@ void menuContaCorrente(){
             break;
         }
         case 4:{
-            if(numContasCorrente == 0)
-                cout << "\nNão há Contas Corrente criadas ainda!" << endl;
-            else
-                // Imprime todas as contas cadastradas
-                for (int i=0; i<numContasCorrente; i++)
-                    cout << id_ContaCorrente[i]->toString();
-            break;
-        }
-        case 5:{
             exit(1);
         }
         default:
