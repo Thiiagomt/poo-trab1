@@ -41,7 +41,7 @@ string PessoaJuridica::toString() {
                                             "\nLocalizada em: " + this->getEndereco()->getCidade() + "- " + this->getEndereco()->getUf() +
                                                 "\nTelefone: " + getTelefone() +
                                                     "\nE-mail: " + getEmail() +
-                                                        "\n\n";
+                                                        "\n";
 
     return saida;
 }
