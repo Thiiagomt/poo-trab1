@@ -51,7 +51,15 @@ void PessoaFisica::setCPF(string x) {
     this->cpf = x;
 }
 
+void PessoaFisica::setContaPoupancaAtiva(int y){
+    this->conta_poupanca_ativa= y;
+}
+
 // Getters
 string PessoaFisica::getCPF(){
     return this->cpf;
+}
+
+int PessoaFisica::getContaPoupancaAtiva(){
+    return this->conta_poupanca_ativa;
 }

@@ -35,24 +35,21 @@ public:
     void setEndereco(string, string, string, string, string, string);
     void setTelefone(string);
     void setEmail(string);
-    void setContaAtiva(int);
-    void setTipoConta();
+    void setContaCorrenteAtiva(int);
 
     // Getters
     string getNome();
     Endereco* getEndereco();
     string getTelefone();
     string getEmail();
-    int getContaAtiva();
-    int getTipoConta();
+    int getContaCorrenteAtiva();
 
 private:
     string nome;
     Endereco *endereco;
     string telefone;
     string email;
-    int conta_ativa;
-    int tipo_conta;         // 1 - Fisica & 2 - Juridica
+    int conta_corrente_ativa;
 };
 
 #endif //TRAB2_PESSOA_H

@@ -12,8 +12,7 @@ Pessoa::Pessoa() {
     setEndereco();
     setTelefone();
     setEmail();
-    setContaAtiva(0);
-    setTipoConta();
+    setContaCorrenteAtiva(0);
 }
 
 // Construtor com parametros (uso para cenários)
@@ -23,8 +22,7 @@ Pessoa::Pessoa(string a, string b, string c, string d, string e, string f, strin
     setTelefone(b);
     setEmail(c);
     setEndereco(d, e, f, g, h, i);
-    setContaAtiva(0);
-    setTipoConta();
+    setContaCorrenteAtiva(0);
 }
 
 // Destrutor
@@ -48,11 +46,8 @@ void Pessoa::setEmail() {
     cout << "Digite seu email: ";
     getline(cin, this->email);      // Pega a string do email
 }
-void Pessoa::setContaAtiva(int x) {
-    this->conta_ativa = x;
-}
-void Pessoa::setTipoConta() {
-    this->tipo_conta = 1;
+void Pessoa::setContaCorrenteAtiva(int x) {
+    this->conta_corrente_ativa = x;
 }
 
 // Setters com parametros.  Usados no construtor com parametros. As entradas sao passadas pos parametros
@@ -83,10 +78,6 @@ string Pessoa::getEmail(){
     return this->email;
 }
 
-int Pessoa::getContaAtiva(){
-    return this->conta_ativa;
-}
-
-int Pessoa::getTipoConta(){
-    return this->tipo_conta;
+int Pessoa::getContaCorrenteAtiva(){
+    return this->conta_corrente_ativa;
 }

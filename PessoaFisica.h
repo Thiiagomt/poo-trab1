@@ -24,12 +24,15 @@ public:
     // Setters
     void setCPF();
     void setCPF(string);
+    void setContaPoupancaAtiva(int);
 
     // Getters
     string getCPF();
+    int getContaPoupancaAtiva();
 
 private:
     string cpf;
+    int conta_poupanca_ativa;
 
 };
 
