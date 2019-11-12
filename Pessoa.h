@@ -26,9 +26,6 @@ public:
     // Destrutor
     ~Pessoa();
 
-    // Imprime info Pessoa
-    string printPessoa();
-
     // Setters
     void setNome();
     void setEndereco();
