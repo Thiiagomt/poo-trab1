@@ -17,7 +17,7 @@ ContaPoupanca::~ContaPoupanca() = default;
 string ContaPoupanca::toString() {
     string saida;
 
-    saida = "O CPF do dono desta conta é: " + getCPFPessoaFisica() +
+    saida = "\n\nO CPF do dono desta conta é: " + getCPFPessoaFisica() +
         "\nO número da conta é: 000" + to_string(getNumConta()) +
             "\nA data de abertura da conta é: " + to_string(this->getDataAbertura()->getDia()) + "/" + to_string(this->getDataAbertura()->getMes()) + "/" + to_string(this->getDataAbertura()->getAno()) +
                 "\nO saldo atual da conta é: R$" + to_string_with_precision(getSaldoAtual(), 2)
