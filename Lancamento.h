@@ -20,7 +20,7 @@ public:
     }
 
     // Construtor
-    Lancamento(int numConta, int operacao, float valorLancamento);
+    Lancamento(int numConta, int operacao, float valorLancamento, float saldoAnterior, float saldoAtualizado);
 
     // Construtor default
     Lancamento();
@@ -29,7 +29,7 @@ public:
     ~Lancamento();
 
     // Define Cliente
-    void setLancamento(int numConta, int operacao, float valorLancamento);
+    void setLancamento(int numConta, int operacao, float valorLancamento, float saldoAnterior, float saldoAtualizado);
 
     // Imprime info conta
     string printLancamento();
@@ -39,18 +39,25 @@ public:
     void setOperacao(int);
     void setValorLancamento(float);
     void setDataLancamento();
+    void setSaldoAnterior(float);
+    void setSaldoAtualizado(float);
+
 
     // Getters
     int getNumConta();
     int getOperacao();
     float getValorLancamento();
     Data getDataLancamento();
+    float getSaldoAnterior();
+    float getSaldoAtualizado();
 
 private:
     int numConta;
     int operacao;
     float valorLancamento;
     Data *dataLancamento;
+    float saldoAnterior;
+    float saldoAtualizado;
 };
 
 

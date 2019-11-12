@@ -1,6 +1,5 @@
 /*
 Trabalho 1 de Programação Orientada a Objetos - Sistema de Gerenciamento de Banco
-
 Felipe Tavoni                       RA:758707
 Guilherme Lorençato G Lamonato      RA:758665
 Nathaelly Boni                      RA:758963
@@ -35,11 +34,6 @@ std::string to_string_with_precision(const float valor, const int num_casas){
 
 // Funções
 void menuPrincipal();
-void menuCenarios();
-void Cenario1();
-void Cenario2();
-void Cenario3();
-void Cenario4();
 void menuCliente();
 void menuClienteJuridico();
 void menuClienteFisico();
@@ -48,7 +42,7 @@ void menuContaPoupanca();
 void menuContaCorrente();
 void menuBanco();
 void menuLancamento();
-int lancamento(int numConta, int operacao, float valor);
+int lancamento(int numConta, int operacao, float valor, float * saldoAnterior, float * saldoAtualizado);
 int getQuantidadeDeContas();
 int getQuantidadeDeClientes();
 float getMontanteTotal();
@@ -115,51 +109,6 @@ void menuPrincipal(){
                 break;
         }
 
-    }
-}
-
-void menuCenarios(){
-    int option;
-    cout << endl << "--- CENARIOS ---" << endl
-    << "0 - Menu anterior" << endl
-    << "1 - Cenario 1" << endl
-    << "2 - Cenario 2" << endl
-    << "3 - Cenario 3" << endl
-    << "4 - Cenario 4" << endl
-    << "5 - Sair" << endl;
-
-    cin >> option;
-    while(option<0 || option>5){
-        cout << "Selecione uma opção válida" << endl;
-        cin >> option;
-    }
-
-    switch(option){
-        case 0:{
-            menuPrincipal();
-            break;
-        }
-        case 1:{
-            Cenario1();
-            break;
-        }
-        case 2:{
-            Cenario2();
-            break;
-        }
-        case 3:{
-            Cenario3();
-            break;
-        }
-        case 4:{
-            Cenario4();
-            break;
-        }
-        case 5:{
-            exit(1);
-        }
-        default:
-            break;
     }
 }
 
@@ -237,7 +186,6 @@ void menuClienteJuridico(){
                     cout << "\nCliente com CNPJ já existente!\n";
                     delete id_ClienteJuridico[numClientesJuridicos-1];
                     numClientesJuridicos--;
-                    break;
                 }
                 i++;
             }
@@ -249,7 +197,6 @@ void menuClienteJuridico(){
             else{
                 while(j<(numClientesFisicos-1 && !quebra2)){
                     //if se achar o CPF do proprietario majoritario cadastrado em pessoas fisicas
-                    cout << "QUEBRA = " + to_string(quebra2) + " CPF fisico = " + id_ClienteFisico[j]->getCPF() + "\n";
                     if(id_ClienteJuridico[numClientesJuridicos-1]->getCPFProprietarioMajor() == id_ClienteFisico[0]->getCPF())
                         quebra2 = 1;
                     j++;
@@ -260,7 +207,6 @@ void menuClienteJuridico(){
                 cout << "\nO proprietario majoritario não está cadastrado em pessoas físicas\n";
                 delete id_ClienteJuridico[numClientesJuridicos-1];
                 numClientesJuridicos--;
-                break;
             }
 
             cout << "\n\nPessoa Jurídica cadastrado com sucesso!\n" << endl;
@@ -401,11 +347,10 @@ void menuClienteFisico(){
                     cout << "\nCliente com CPF já existente!\n";
                     delete id_ClienteFisico[numClientesFisicos-1];
                     numClientesFisicos--;
-                    break;
                 }
                 i++;
             }
-            cout << "\n\nPessoaFisica cadastrado com sucesso!" << endl;
+            cout << "\n\nPessoa Fisica cadastrado com sucesso!" << endl;
             break;
         }
         case 2:{
@@ -576,7 +521,6 @@ void menuContaPoupanca(){
                         if (id_ClienteFisico[i]->getContaAtiva() == 1) {
                             cout << "Cliente já possui uma conta\n";
                             quebra = 1;
-                            break;
                         } else {
                             // Verificar se o numero da conta a ser criada pode ser usado
                             // Verificando nas contas poupacas
@@ -602,7 +546,6 @@ void menuContaPoupanca(){
                             id_ClienteFisico[i]->setContaAtiva(1);
                             cout << "\nConta Criada Com Sucesso!\n";
                             quebra = 1;
-                            break;
                         }
                     }
                     i++;
@@ -610,11 +553,9 @@ void menuContaPoupanca(){
 
                 if (quebra == 0){
                     cout << "Nenhum cliente encontrado!\nFavor cadastrar-se\n";
-                    break;
                 }
             } else {
                 cout << "\nNão ha clientes para criação de contas poupancas\n";
-                break;
             }
             break;
         }
@@ -652,7 +593,6 @@ void menuContaPoupanca(){
                     } else if (altera_opcao == 2) {
                         id_ContaPoupanca[i]->setDataAbertura();
                         cout << "\nConta alterada com sucesso!\n";
-                        break;
                     }
                     quebra = 1;
                 }
@@ -661,8 +601,8 @@ void menuContaPoupanca(){
 
             if (quebra == 0){
                 cout << "Nenhum cliente encontrado!";
-                break;
             }
+            break;
         }
         case 3: {
             // Deleta a conta segundo o número da conta
@@ -685,15 +625,14 @@ void menuContaPoupanca(){
                     }
                     quebra = 1;
                     cout << "Conta excluida com sucesso!\n";
-                    break;
                 }
                 i++;
             } while ((i < numContasPoupanca) && !quebra);
 
             if (quebra == 0) {
                 cout << "Cliente não encontrado!";
-                break;
             }
+            break;
         }
         case 4:{
             // Imprime todas as contas cadastradas
@@ -855,17 +794,14 @@ void menuContaCorrente(){
                             alterado = 1;
                         } while (!alterado);
                         cout << "\nConta alterada com sucesso!\n";
-                        break;
                     } else if (altera_opcao == 2) {
                         id_ContaCorrente[i]->setDataAbertura();
                         cout << "\nConta alterada com sucesso!\n";
-                        break;
                     } else if (altera_opcao == 3) {
                         cout << "Digite o novo valor para cheque especial: ";
                         cin >> novo_valor;
                         id_ContaCorrente[i]->setLimiteCheque(novo_valor);
                         cout << "\nConta alterada sucesso!\n";
-                        break;
                     }
                     quebra = 1;
                 }
@@ -874,8 +810,8 @@ void menuContaCorrente(){
 
             if (quebra == 0){
                 cout << "Nenhum cliente encontrado!";
-                break;
             }
+            break;
         }
         case 3: {
             // Deleta a conta segundo o número da conta
@@ -898,15 +834,14 @@ void menuContaCorrente(){
                     }
                     quebra = 1;
                     cout << "Conta excluida com sucesso!\n";
-                    break;
                 }
                 i++;
             } while ((i < numContasCorrente) && !quebra);
 
             if (quebra == 0) {
                 cout << "Cliente não encontrado!";
-                break;
             }
+            break;
         }
         case 4:{
             // Imprime todas as contas cadastradas
@@ -967,29 +902,84 @@ void menuBanco(){
             break;
         }
         case 4:{
-            int numConta, lancamentosExibidos;
-            lancamentosExibidos=0;
+            int option2;
+            cout << "1 - Exibir extrato de todo o período da conta" << endl
+            << "2 - Exibir extrato com período definido" << endl;
+            cin >> option2;
 
-            if (numContasPoupanca != 0 || numContasCorrente != 0){
-                cout << "Insira o número da conta desejada: ";
-                cin >> numConta;
+            switch(option2){
+                //case 1 - Exibe todos os lancamentos relacionados aquela conta
+                case 1:{
+                    int numConta, lancamentosExibidos;
+                    lancamentosExibidos=0;
 
-                for(int i=0; i<numLancamentosEfetuados; i++){
-                    if(id_Lancamentos[i]->getNumConta() == numConta) {
-                        cout << id_Lancamentos[i]->printLancamento() << endl;
-                        lancamentosExibidos++;
+                    if (numContasPoupanca != 0 || numContasCorrente != 0){
+                        cout << "Insira o número da conta desejada: ";
+                        cin >> numConta;
+
+                        for(int i=0; i<numLancamentosEfetuados; i++){
+                            if(id_Lancamentos[i]->getNumConta() == numConta) {
+                                cout << id_Lancamentos[i]->printLancamento() << endl;
+                                lancamentosExibidos++;
+                            }
+                        }
+
+                        if(lancamentosExibidos==0)
+                            cout << "Não há lançamentos para essa conta ainda!";
+
+                        cout << "\nVocê será redirecionado para o menu de gerenciamento do banco" << endl;
+                        menuBanco();
+                    } else{
+                        cout << "\nSem contas cadastradas!\n";
                     }
+                    break;
                 }
+                //case 2 - Exibe os lancamentos na conta para um periodo de tempo fechado
+                case 2:{
+                    int numConta, lancamentosExibidos;
+                    lancamentosExibidos=0;
 
-                if(lancamentosExibidos==0)
-                    cout << "Não há lançamentos para essa conta ainda!";
+                    //periodo que definido
+                    int diaInicio, mesInicio, anoInicio, diaFim, mesFim, anoFim;
 
-                cout << "\nVocê será redirecionado para o menu de gerenciamento do banco" << endl;
-                menuBanco();
-            } else{
-                cout << "\nSem contas cadastradas!\n";
+                    if(numContasCorrente != 0 || numContasPoupanca != 0){
+                        cout << "Insira o número da conta desejada: ";
+                        cin >> numConta;
+
+                        cout << "Insira a data de início do periodo desejado: \nDia: ";
+                        cin >> diaInicio;
+                        cout << "Mes: ";
+                        cin >> mesInicio;
+                        cout << "Ano: ";
+                        cin >> anoInicio;
+
+                        cout << "Insira a data de termino do período: \nDia: ";
+                        cin >> diaFim;
+                        cout << "Mes: ";
+                        cin >> mesFim;
+                        cout << "Ano: ";
+                        cin >> anoFim;
+
+                        //Varre o vetor de lancamentos buscando o numero da conta e após isso verifica se o lancamento foi feito nos dias dentro do periodo
+                        for(int i=0; i<numLancamentosEfetuados; i++)
+                            if(id_Lancamentos[i]->getNumConta() == numConta)
+                                if(((id_Lancamentos[i]->getDataLancamento().getDia() >= diaInicio && id_Lancamentos[i]->getDataLancamento().getMes() >= mesInicio)) && id_Lancamentos[i]->getDataLancamento().getAno() >= anoInicio)
+                                    if(((id_Lancamentos[i]->getDataLancamento().getDia() <= diaFim && id_Lancamentos[i]->getDataLancamento().getMes() <= mesFim)) && id_Lancamentos[i]->getDataLancamento().getAno() <= anoFim){
+                                        cout << id_Lancamentos[i]->printLancamento() << endl;
+                                        lancamentosExibidos++;
+                                    }
+
+                        if(lancamentosExibidos==0)
+                            cout << "Não há lançamentos para esse período!";
+                        cout << "\nVocê será redirecionado para o menu de gerenciamento do banco" << endl;
+                        menuBanco();
+                    }
+                    else{
+                        cout << "\nSem contas Cadastradas!\n";
+                    }
+                    break;
+                }
             }
-            break;
         }
         case 5:{
             exit(1);
@@ -1003,7 +993,7 @@ void menuLancamento() {
     int comando;
     int numConta;
     int operacao = 0;
-    float valorLancamento;
+    float valorLancamento, saldoAnterior=0, saldoAtualizado=0;
     int option;
     cout << endl << "--- LANÇAMENTOS ---" << endl
          << "0 - Menu anterior" << endl
@@ -1032,14 +1022,14 @@ void menuLancamento() {
                 cout << "Insira o valor a ser debitado: ";
                 cin >> valorLancamento;
 
-                comando = lancamento(numConta, operacao, valorLancamento);
+                comando = lancamento(numConta, operacao, valorLancamento, &saldoAnterior, &saldoAtualizado);
             } else {
                 cout << "\nSem contas cadastradas!\n";
             }
             switch(comando){
                 case 0: {
                     Lancamento *lancamento = (Lancamento*) malloc(sizeof(Lancamento));
-                    lancamento->setLancamento(numConta, operacao, valorLancamento);
+                    lancamento->setLancamento(numConta, operacao, valorLancamento, saldoAnterior, saldoAtualizado);
                     id_Lancamentos[numLancamentosEfetuados] = lancamento;
                     numLancamentosEfetuados += 1;
 
@@ -1075,14 +1065,14 @@ void menuLancamento() {
                 cout << "Insira o valor a ser depositado: ";
                 cin >> valorLancamento;
 
-                comando = lancamento(numConta, operacao, valorLancamento);
+                comando = lancamento(numConta, operacao, valorLancamento, &saldoAnterior, &saldoAtualizado);
             } else {
                 cout << "\nSem contas cadastradas!\n";
             }
             switch(comando){
                 case 0: {
                     Lancamento *lancamento = (Lancamento*) malloc(sizeof(Lancamento));
-                    lancamento->setLancamento(numConta, operacao, valorLancamento);
+                    lancamento->setLancamento(numConta, operacao, valorLancamento, saldoAnterior, saldoAtualizado);
                     id_Lancamentos[numLancamentosEfetuados] = lancamento;
                     numLancamentosEfetuados += 1;
 
@@ -1110,7 +1100,7 @@ void menuLancamento() {
     }
 }
 
-int lancamento(int numConta, int operacao, float valor){
+int lancamento(int numConta, int operacao, float valor, float * saldoAnterior, float * saldoAtualizado){
     int i=0;
     float novoValor=0;
     int tipo_conta=0;
@@ -1144,13 +1134,17 @@ int lancamento(int numConta, int operacao, float valor){
             if((id_ContaPoupanca[i]->getSaldoAtual() - valor) < 0)
                 return 2;
             else {
+                *saldoAnterior = id_ContaPoupanca[i]->getSaldoAtual();
                 novoValor = id_ContaPoupanca[i]->getSaldoAtual() - valor;
+                *saldoAtualizado = novoValor;
                 id_ContaPoupanca[i]->setSaldoAtual(novoValor);
                 return 0;
             }
         }
         else{
+            *saldoAnterior = id_ContaPoupanca[i]->getSaldoAtual();
             novoValor = id_ContaPoupanca[i]->getSaldoAtual() + valor;
+            *saldoAtualizado = novoValor;
             id_ContaPoupanca[i]->setSaldoAtual(novoValor);
             return 0;
         }
@@ -1160,13 +1154,17 @@ int lancamento(int numConta, int operacao, float valor){
             if(((id_ContaCorrente[i]->getSaldoAtual() + id_ContaCorrente[i]->getLimiteCheque()) - valor) < 0)
                 return 2;
             else{
+                *saldoAnterior = id_ContaCorrente[i]->getSaldoAtual();
                 novoValor = id_ContaCorrente[i]->getSaldoAtual() - valor;
+                *saldoAtualizado = novoValor;
                 id_ContaCorrente[i]->setSaldoAtual(novoValor);
                 return 0;
             }
         }
         else{
+            *saldoAnterior = id_ContaCorrente[i]->getSaldoAtual();
             novoValor = id_ContaCorrente[i]->getSaldoAtual() + valor;
+            *saldoAtualizado = novoValor;
             id_ContaCorrente[i]->setSaldoAtual(novoValor);
             return 0;
         }

@@ -5,16 +5,18 @@
 
 using namespace std;
 
-void Lancamento::setLancamento(int numConta, int operacao, float valorLancamento){
+void Lancamento::setLancamento(int numConta, int operacao, float valorLancamento, float saldoAnterior, float saldoAtualizado){
     setNumConta(numConta);
     setOperacao(operacao);
     setValorLancamento(valorLancamento);
+    setSaldoAnterior(saldoAnterior);
+    setSaldoAtualizado(saldoAtualizado);
     setDataLancamento();
 }
 
 // Construtor
-Lancamento::Lancamento(int numConta, int operacao, float valorLancamento) {
-    setLancamento(numConta, operacao, valorLancamento);
+Lancamento::Lancamento(int numConta, int operacao, float valorLancamento, float saldoAnterior, float saldoAtualizado) {
+    setLancamento(numConta, operacao, valorLancamento, saldoAnterior, saldoAtualizado);
 }
 
 // Construtor default
@@ -33,11 +35,12 @@ string Lancamento::printLancamento() {
     else
         operation = "Credito";
 
-    saida = "O número da conta onde o lançamento foi feito é: " + to_string(getNumConta()) +
-        "\nOperacao de: " + operation +
-            "\nCom o valor de: R$" + to_string_with_precision(getValorLancamento(), 2) +
-                "\nA data do lancamento na conta foi: " + to_string(this->dataLancamento->getDia()) + "/" + to_string(this->dataLancamento->getMes()) + "/" + to_string(this->dataLancamento->getAno())
-                    + "\n";
+    saida = "Operacao de: " + operation +
+                "\nCom o valor de: R$" + to_string_with_precision(getValorLancamento(), 2) +
+                    "\nA data do lancamento na conta foi: " + to_string(this->dataLancamento->getDia()) + "/" + to_string(this->dataLancamento->getMes()) + "/" + to_string(this->dataLancamento->getAno()) +
+                        "\nO saldo anterior era de: " + to_string_with_precision(getSaldoAnterior(), 2) + 
+                            "\nO saldo atual é: " + to_string_with_precision(getSaldoAtualizado(), 2) +
+                                "\n";
 
     return saida;
 }
@@ -56,6 +59,12 @@ void Lancamento::setValorLancamento(float valorLancamento){
 void Lancamento::setDataLancamento(){
     this->dataLancamento = new Data;
 }
+void Lancamento::setSaldoAnterior(float saldoAnterior){
+    this->saldoAnterior = saldoAnterior;
+}
+void Lancamento::setSaldoAtualizado(float saldoAtualizado){
+    this->saldoAtualizado = saldoAtualizado;
+}
 
 
 // Getters
@@ -70,4 +79,10 @@ float Lancamento::getValorLancamento(){
 }
 Data Lancamento::getDataLancamento(){
     return *dataLancamento;
+}
+float Lancamento::getSaldoAnterior(){
+    return this->saldoAnterior;
+}
+float Lancamento::getSaldoAtualizado(){
+    return this->saldoAtualizado;
 }
