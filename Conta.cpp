@@ -20,6 +20,7 @@ Conta::~Conta() = default;
 
 // Setters sem parâmetros
 void Conta::setDataAbertura(){
+	cout << "\nInsira a data de abertura da conta: " << endl;
     this->dataAbertura = new Data;
 }
 void Conta::setSaldoAtual(float x){
