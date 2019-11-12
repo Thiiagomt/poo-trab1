@@ -18,6 +18,11 @@ public:
     ContaCorrente(int, PessoaFisica);
     ContaCorrente(int, PessoaJuridica);
 
+    // Construtores com a passsaegm de parâmetros voltadas para o cenário, de forma a inicializar os atributos do objeto
+    // Dia, Mes, Ano, Saldo inicial, Numero da conta, o cliente, Limite de cheque especial
+    ContaCorrente(int, int, int, float, int, PessoaFisica, float);
+    ContaCorrente(int, int, int, float, int, PessoaJuridica, float);
+
     // Destrutor
     ~ContaCorrente();
 
@@ -28,7 +33,8 @@ public:
     void setNumConta(int num);
     void setCPF(PessoaFisica);
     void setCNPJ(PessoaJuridica);
-    void setLimiteCheque(float lim);
+    void setLimiteCheque();
+    void setLimiteCheque(float x);
 
     // Getters
     int getNumConta();

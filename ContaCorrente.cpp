@@ -10,14 +10,30 @@ using namespace std;
 ContaCorrente::ContaCorrente(int n, PessoaFisica x) {
     setNumConta(n);
     setCPF(x);
-    setLimiteCheque(100);   // Definido R$ 100 como padrão
+    setLimiteCheque();
 }
 
 // Caso queira usar na conta o cnpj
 ContaCorrente::ContaCorrente(int n, PessoaJuridica x) {
     setNumConta(n);
     setCNPJ(x);
-    setLimiteCheque(100);   // Definido R$ 100 como padrão
+    setLimiteCheque(); 
+}
+
+// Construtores com a passsaegm de parâmetros voltadas para o cenário, de forma a inicializar os atributos do objeto
+ContaCorrente::ContaCorrente(int a, int b, int c, float d, int n, PessoaFisica x, float e) {
+    Conta(a, b, c, d);
+    setNumConta(n);
+    setCPF(x);
+    setLimiteCheque(e);
+}
+
+// Caso queira usar na conta o cnpj
+ContaCorrente::ContaCorrente(int a, int b, int c, float d, int n, PessoaJuridica x, float e) {
+    Conta(a, b, c, d);
+    setNumConta(n);
+    setCNPJ(x);
+    setLimiteCheque(e);
 }
 
 // Destrutor
@@ -50,8 +66,13 @@ void ContaCorrente::setCNPJ(PessoaJuridica x){
     this->cnpj = x.getCNPJ();
 }
 
-void ContaCorrente::setLimiteCheque(float lim){
+void ContaCorrente::setLimiteCheque(){
+    cout << "Digite o valor para seu limite de cheque: ";
     this->limitecheque = lim;
+}
+
+void ContaCorrente::setLimiteCheque(float x){
+    this->limitecheque = x;
 }
 
 // Getters

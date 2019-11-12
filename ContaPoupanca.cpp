@@ -10,6 +10,14 @@ ContaPoupanca::ContaPoupanca(PessoaFisica x, int y) {
     this->setCPFPessoaFisica(x);
 }
 
+// Construtor voltado para os cenários
+// Cliente Fisico, Numero da conta, Dia, Mes, Ano, Saldo inicial
+ContaPoupanca::ContaPoupanca(PessoaFisica x, int y, int a, int b, int c, int d) {
+    Conta(a, b, c, d);
+    this->setNumConta(y);
+    this->setCPFPessoaFisica(x);
+}
+
 // Destrutor
 ContaPoupanca::~ContaPoupanca() = default;
 

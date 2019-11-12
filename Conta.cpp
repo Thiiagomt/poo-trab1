@@ -7,12 +7,14 @@ using namespace std;
 // Construtor
 Conta::Conta() {
     setDataAbertura();
-    setSaldoAtual(0);
+    setSaldoAtual();
 }
 
+// Construtor com parâmetros
+// Dia, Mes, Ano, Saldo inicial
 Conta::Conta(int a, int b, int c, float d) {
     setDataAbertura(a, b, c);
-    setSaldoAtual(0);
+    setSaldoAtual(d);
 }
 
 // Destrutor
@@ -22,6 +24,10 @@ Conta::~Conta() = default;
 void Conta::setDataAbertura(){
 	cout << "\nInsira a data de abertura da conta: " << endl;
     this->dataAbertura = new Data;
+}
+void Conta::setSaldoAtual(){
+    cout << "Digite o valor do saldo inicial: ";
+    cin >> this->saldoAtual;
 }
 void Conta::setSaldoAtual(float x){
     this->saldoAtual = x;

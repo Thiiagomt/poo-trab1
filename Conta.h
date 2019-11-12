@@ -30,6 +30,7 @@ public:
     // Setters
     void setDataAbertura();
     void setDataAbertura(int a, int b, int c);
+    void setSaldoAtual();
     void setSaldoAtual(float x);
 
     // Getters
