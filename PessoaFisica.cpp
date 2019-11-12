@@ -28,7 +28,7 @@ string PessoaFisica::toString() {
                             "\nReside em: " + this->getEndereco()->getCidade() + "- " + this->getEndereco()->getUf() +
                                 "\nTelefone: " + this->getTelefone() +
                                     "\nE-mail: " + this->getEmail() +
-                                        "\n\n";
+                                        "\n";
 
     return saida;
 }
