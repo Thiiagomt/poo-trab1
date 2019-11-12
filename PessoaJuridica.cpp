@@ -82,12 +82,12 @@ void PessoaJuridica::setRamoAtuacao(){
 }
 
 void PessoaJuridica::setDataFundacao(){
-    cout << "Insira a data de fundação da empresa:\n";
+    cout << "\nInsira a data de fundação da empresa:\n";
     this->data_fundacao = new Data;
 }
 
 void PessoaJuridica::setDataUltimaAtt(){
-    cout << "Insira a data da ultima atualizacao do contrato social\n";
+    cout << "\nInsira a data da ultima atualizacao do contrato social\n";
     this->data_ultima_att = new Data;
 }
 
