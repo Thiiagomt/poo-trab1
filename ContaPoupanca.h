@@ -16,7 +16,7 @@ public:
 
     // Construtor com parâmetros (voltada para os cenários)
     // Cliente Fisico, Numero da conta, Dia, Mes, Ano, Saldo inicial
-    ContaPoupanca(PessoaFisica, int, int, int, int, int);
+    ContaPoupanca(PessoaFisica, int, int, int, int, float);
 
     // Destrutor
     ~ContaPoupanca();

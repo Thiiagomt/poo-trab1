@@ -68,7 +68,7 @@ void ContaCorrente::setCNPJ(PessoaJuridica x){
 
 void ContaCorrente::setLimiteCheque(){
     cout << "Digite o valor para seu limite de cheque: ";
-    this->limitecheque = lim;
+    cin >> this->limitecheque;
 }
 
 void ContaCorrente::setLimiteCheque(float x){

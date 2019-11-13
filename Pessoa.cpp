@@ -6,15 +6,6 @@ using namespace std;
 
 #include "Pessoa.h"
 
-// Construtor sem parametro (uso prático do código)
-Pessoa::Pessoa() {
-    setNome();
-    setEndereco();
-    setTelefone();
-    setEmail();
-    setContaCorrenteAtiva(0);
-}
-
 // Construtor com parametros (uso para cenários)
 // Nome, Telefone, Email, Rua, Bairro, Cidade, Uf, Cep, Numero
 Pessoa::Pessoa(string a, string b, string c, string d, string e, string f, string g, string h, string i) {
@@ -22,6 +13,15 @@ Pessoa::Pessoa(string a, string b, string c, string d, string e, string f, strin
     setTelefone(b);
     setEmail(c);
     setEndereco(d, e, f, g, h, i);
+    setContaCorrenteAtiva(0);
+}
+
+// Construtor sem parametro (uso prático do código)
+Pessoa::Pessoa() {
+    setNome();
+    setEndereco();
+    setTelefone();
+    setEmail();
     setContaCorrenteAtiva(0);
 }
 
