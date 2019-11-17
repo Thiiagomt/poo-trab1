@@ -14,8 +14,7 @@ PessoaJuridica::PessoaJuridica() {
 }
 
 // Nome, Telefone, Email, Rua, Bairro, Cidade, Uf, Cep, Numero, Cnpj, Cpf do majoritarios, Ramo atucao, Data Fundacao, Data Ultima att
-PessoaJuridica::PessoaJuridica(string a, string b, string c, string d, string e, string f, string g, string h, string i, string j, string k, string l, int m, int n, int o, int p, int q, int r) {
-    Pessoa(a, b, c, d, e, f, g, h, i);
+PessoaJuridica::PessoaJuridica(string a, string b, string c, string d, string e, string f, string g, string h, string i, string j, string k, string l, int m, int n, int o, int p, int q, int r) : Pessoa(a, b, c, d, e, f, g, h, i) {
     this->setCNPJ(j);
     this->setCPFProprietarioMajor(k);
     this->setRamoAtuacao(l);

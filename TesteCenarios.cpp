@@ -1,9 +1,3 @@
-void menuCenario();
-void Cenario1();
-void Cenario2();
-void Cenario3();
-void Cenario4();
-
 void menuCenario() {
     cout << "-- MENU CLIENTES --\n";
     cout << "1 - Cenario 1\n";

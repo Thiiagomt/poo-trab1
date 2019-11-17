@@ -21,15 +21,14 @@ ContaCorrente::ContaCorrente(int n, PessoaJuridica x) {
 }
 
 // Construtores com a passsaegm de parâmetros voltadas para o cenário, de forma a inicializar os atributos do objeto
-ContaCorrente::ContaCorrente(int a, int b, int c, float d, int n, PessoaFisica x, float e) {
-    Conta(a, b, c, d);
+ContaCorrente::ContaCorrente(int a, int b, int c, float d, int n, PessoaFisica x, float e) : Conta(a, b, c, d) {
     setNumConta(n);
     setCPF(x);
     setLimiteCheque(e);
 }
 
 // Caso queira usar na conta o cnpj
-ContaCorrente::ContaCorrente(int a, int b, int c, float d, int n, PessoaJuridica x, float e) {
+ContaCorrente::ContaCorrente(int a, int b, int c, float d, int n, PessoaJuridica x, float e) : Conta(a, b, c, d) {
     Conta(a, b, c, d);
     setNumConta(n);
     setCNPJ(x);
