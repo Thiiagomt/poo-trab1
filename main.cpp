@@ -86,7 +86,7 @@ void menuPrincipal(){
              << "1 - MENU CLIENTES" << endl
              << "2 - MENU CONTAS" << endl
              << "3 - GERENCIAMENTO DO BANCO" << endl
-             << "4 - CENARIO 2" << endl;
+             << "4 - CENARIO 4" << endl;
 
         cin >> option;
         if(option<0 || option>3)
@@ -112,7 +112,7 @@ void menuPrincipal(){
                 break;
             }
             case 4: {
-                Cenario2();
+                Cenario4();
                 break;
             }
             default:
@@ -201,7 +201,6 @@ void Cenario1() {
 }
 
 void Cenario2() {
-    /*
     // Criar um cliente Pessoa Física pf1 (com todos os dados)
     cout << "Criando Cliente Fisico 1...\n";
     id_ClienteFisico[numClientesFisicos] = new PessoaFisica("Fabiano Lamborghini", "33002211", "fabiano@dc.ufscar.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12345678910");
@@ -218,18 +217,167 @@ void Cenario2() {
     numContasPoupanca++;
 
     // Lançar débito de 100.0 em c1
-    id_Lancamentos[numLancamentosEfetuados] = new Lancamento(id_ContaCorrente[numContasCorrente-1]->getNumConta(), 1, 100.0, id_ContaCorrente[numContasCorrente-1]->getSaldoAnterior(), id_ContaCorrente[numContasCorrente-1]->getSaldoAtualizado());
-
+    
     // Lançar crédito de 50.0 em c1
-    id_Lancamentos[numLancamentosEfetuados] = new Lancamento(id_ContaCorrente[numContasCorrente-1]->getNumConta(), 2, 50.0, id_ContaCorrente[numContasCorrente-1]->getSaldoAnterior(), id_ContaCorrente[numContasCorrente-1]->getSaldoAtualizado());
-    */
+
+    // Lançar crédito de 30.00 em p1
+
+    // Exibir extrato de c1 considerando todo o período
+
+    // Exibir extrato de p1 considerando todo o período
+
+    // Criar um Cliente Pessoa Jurídica pj1 (com todos os dados, data atual)
+    cout << "Criando Cliente Juridico 1...\n";
+    id_ClienteJuridico[numClientesJuridicos] = new PessoaJuridica("Empresa1", "00000000", "Empresa1@empresas.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12312312312312", id_ClienteFisico[numClientesFisicos-1]->getCPF(), "Programacao Orientada a Objetos", 12, 12, 2012, 12, 12, 2012);
+    numClientesJuridicos++;
+
+    // Criar Conta Corrente c3 para pj1 com saldo inicial 1,000,000.00
+    cout << "Criando Conta Corrente Do Cliente Juridico 1...\n";
+    id_ContaCorrente[numContasCorrente] = new ContaCorrente(12, 12, 2012, 1000000.0, numProxConta, *id_ClienteJuridico[numClientesJuridicos-1], 0.0);
+    numContasCorrente++;
+
+    // Criar um Cliente Pessoa Jurídica pj2 (com todos os dados, data atual)
+    cout << "Criando Cliente Juridico 2...\n";
+    id_ClienteJuridico[numClientesJuridicos] = new PessoaJuridica("Empresa2", "11111111", "Empresa2@empresas.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "23423423423423", id_ClienteFisico[numClientesFisicos-1]->getCPF(), "Sistemas Operacionais", 12, 12, 2012, 12, 12, 2012);
+    numClientesJuridicos++;
+
+    // Criar Conta Corrente c4 para pj2 com saldo inicial 500,000.00
+    cout << "Criando Conta Corrente Do Cliente Juridico 1...\n";
+    id_ContaCorrente[numContasCorrente] = new ContaCorrente(12, 12, 2012, 500000.0, numProxConta, *id_ClienteJuridico[numClientesJuridicos-1], 0.0);
+    numContasCorrente++;
+
+    // Lançar débito de 100,000.00 em c3
+        // Output: saldo atual de c3 = 900,000.00
+
+    // Lançar débito de 200,000.00 em c3
+        // Output: saldo atual de c3 = 700,000.00
+
+    // Lançar débito de 30,000.00 em c4
+        // Output: saldo atual de c4 = 470,000.00
+
+    // Exibir extrato de c3 considerando todo o período
+        // Output: 2 lançamentos exibidos
+            // Saldo final = 700,000.00
+
+    // Exibir extrato de c4 considerando todo o período
+        // Output: 1 lançamento exibido
+            // Saldo final = 470,000.00
+
+    // Exibir montante total do banco
+        // Output: total = 1,170.280.00
+    
 }
 
 void Cenario3() {
+    // OBJETIVO: testar emissão de extratos em períodos específicos
+
+    // Criar um Cliente Pessoa Jurídica pj1 (com todos os dados, data atual)
+
+    // Criar Conta Corrente c1 para pj1 com saldo inicial 1,000,000.00
+
+
+    // Lançar débito de 100,000.00 em 15/11/2019 em c1
+        // Output: saldo atual de c1 = 900,000.00
+    // Lançar débito de 200,000.00 em 16/11/2019 em c1
+        // Output: saldo atual de c1 = 700,000.00
+    // Lançar crédito de 400,000.00 em 17/11/2019 em c1
+        // Output: saldo atual de c1 = 1,100,000.00
+
+    // Exibir extrato de c1 considerando todo o período
+        // Output: 3 lançamentos exibidos
+            // Saldo inicial de c1 = 1,000,000.00
+            // Saldo final de c1 = 1,100,000.00
+
+    // Exibir extrato de c1 de 15/11/2019 a 16/11/2019
+        // Output: 2 lançamentos exibidos
+            // Saldo inicial de c1 = 1,000,000.00
+            // Saldo final de c1 = 700,000.00
+
+    // Exibir extrato de c1 de 16/11/2019 a 17/11/2019
+        // Output: 2 lançamentos exibidos
+            // Saldo inicial de c1 = 900,000.00
+            // Saldo final de c1 = 1,100,000.00
 
 }
 
 void Cenario4() {
+    // OBJETIVO: testar situações de restrição
+
+    // Cadastramento de cliente Pessoa Jurídica para proprietário não cadastrado
+    // Os dados do sistema são tratados a partir de entradas fornecidas via teclado...foi entao utilizada uma estratégia diferente para este cenário, no qual
+    // é criado um corpo de clientes e a partir de uma valor fixo (A string disposta no 'if') que simula a entrada do teclado, e verifica os cpfs dos clientes 
+    // cadastrados, efetuando ou não o cadastramento (aqui não se deve efetuar o cadastro!)
+    cout << "Criando Um Cliente Fisico Qualquer (1)...\n";
+    id_ClienteFisico[numClientesFisicos] = new PessoaFisica("Teste01", "33002211", "Teste01@gmail.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12345678901");
+    numClientesFisicos++;
+    cout << "Criando Um Cliente Fisico Qualquer (2)...\n";
+    id_ClienteFisico[numClientesFisicos] = new PessoaFisica("Teste02", "33002211", "Teste02@gmail.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12345678902");
+    numClientesFisicos++;
+    cout << "Criando Um Cliente Fisico Qualquer (3)...\n";
+    id_ClienteFisico[numClientesFisicos] = new PessoaFisica("Teste03", "33002211", "Teste03@gmail.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12345678903");
+    numClientesFisicos++;
+    cout << "Criando Um Cliente Fisico Qualquer (4)...\n";
+    id_ClienteFisico[numClientesFisicos] = new PessoaFisica("Teste04", "33002211", "Teste04@gmail.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12345678905");
+    numClientesFisicos++;
+    cout << "Criando Um Cliente Fisico Qualquer (5)...\n";
+    id_ClienteFisico[numClientesFisicos] = new PessoaFisica("Teste05", "33002211", "Teste05@gmail.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12345678906");
+    numClientesFisicos++;
+    // CPF não localizado entre os cadastros criados...a conta não deve ser criada (não deve adetrar o 'if'...)
+    int achado=0;
+    // Laço para encontrar os cadastros...simulando a ideia da main
+    for (int i=0; i<numClientesFisicos; i++) {
+        if ("12345678904" == id_ClienteFisico[numClientesFisicos-1]->getCPF())
+            achado = 1;
+    }
+    if (achado) {
+        cout << "Cliente Juridico Cadastrado e Vinculado Com A Pessoa Fisica...\n";  // CPF (12345678910) não cadastrado.
+        id_ClienteJuridico[numClientesJuridicos] = new PessoaJuridica("Empresa1", "00000000", "Empresa1@empresas.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12312312312312", "12345678904", "Programacao Orientada a Objetos", 12, 12, 2012, 12, 12, 2012);
+        numClientesJuridicos++;
+    }
+    else
+        cout << "CPF Não Corresponde A Nenhum Cliente Fisico!\n"; 
+
+    // Criação de conta para cliente não cadastrado
+    // Utilizando-se da mesma estratégia que o caso anterior, assim como os cadastros, teremos...
+    // O CPF "12345678904" não esta cadastrado
+    // Laço para encontrar os cadastros...simulando a ideia da main
+    achado = 0;
+    cout << "Tentativa De Criar Conta Poupanca Sem Cliente..\n";
+    cout << "Tentativa De Criar Conta Corrente Sem Cliente...\n";
+    
+    for (int i=0; i<numClientesFisicos; i++) {
+        if ("12345678904" == id_ClienteFisico[numClientesFisicos-1]->getCPF())
+            achado = 1;
+    }
+    if (achado) {
+        id_ContaPoupanca[numContasPoupanca] = new ContaPoupanca(*id_ClienteFisico[numClientesFisicos-1], numProxConta, 12, 12, 12, 200);
+        cout << "Conta Poupanca Criada Com Sucesso!\n";
+        id_ContaCorrente[numContasCorrente] = new ContaCorrente(12, 12, 2012, 100.0, numProxConta, *id_ClienteFisico[numClientesFisicos-1], 0.0);
+        cout << "Conta Corrente Criada Com Sucesso!\n";
+    }
+    else
+        cout << "CPF Não Corresponde A Nenhum Cliente Fisico! Falha Na Criacao Das Contas!\n"; 
+
+    // Lançamento que geraria saldo negativo em Conta Poupança
+    // ---
+
+    // Remoção de conta com lançamentos
+    // ---
+
+    // Remoção de cliente com contas associadas
+    cout << "Tentativa De Deletar Cliente Fisico com Conta Corrente Vinculada...\n";
+    cout << "Criando Um Novo Cliente Fisico...\n";
+    id_ClienteFisico[numClientesFisicos] = new PessoaFisica("Fabiano Lamborghini", "33002211", "fabiano@dc.ufscar.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12345678910");
+    numClientesFisicos++;
+    cout << "Criando Uma Conta Poupanca Para O Cliente Fisico Acima...\n";
+    id_ContaPoupanca[numContasPoupanca] = new ContaPoupanca(*id_ClienteFisico[numClientesFisicos-1], numProxConta, 12, 12, 12, 200);
+    numContasPoupanca++;
+    if (id_ClienteFisico[numClientesFisicos-1]->getContaPoupancaAtiva() == 0) {
+        delete id_ClienteFisico[numClientesFisicos-1];
+        cout << "Cliente Deletado Com Sucesso!\n";
+    }
+    else
+        cout << "Erro Ao Excluir...Cliente Com Conta Poupanca Ativa...\n";
     
 }
 

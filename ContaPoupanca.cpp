@@ -5,16 +5,18 @@
 using namespace std;
 
 // Construtor
-ContaPoupanca::ContaPoupanca(PessoaFisica x, int y) {
+ContaPoupanca::ContaPoupanca(PessoaFisica &x, int y) {
     this->setNumConta(y);
     this->setCPFPessoaFisica(x);
+    x.setContaPoupancaAtiva(1);
 }
 
 // Construtor voltado para os cenários
 // Cliente Fisico, Numero da conta, Dia, Mes, Ano, Saldo inicial
-ContaPoupanca::ContaPoupanca(PessoaFisica x, int y, int a, int b, int c, float d) : Conta(a, b, c, d) {
+ContaPoupanca::ContaPoupanca(PessoaFisica &x, int y, int a, int b, int c, float d) : Conta(a, b, c, d) {
     this->setNumConta(y);
     this->setCPFPessoaFisica(x);
+    x.setContaPoupancaAtiva(1);
 }
 
 // Destrutor

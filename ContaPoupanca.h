@@ -12,11 +12,11 @@ class ContaPoupanca : public Conta {
 public:
 
     // Construtor
-    ContaPoupanca(PessoaFisica, int);
+    ContaPoupanca(PessoaFisica &, int);
 
     // Construtor com parâmetros (voltada para os cenários)
     // Cliente Fisico, Numero da conta, Dia, Mes, Ano, Saldo inicial
-    ContaPoupanca(PessoaFisica, int, int, int, int, float);
+    ContaPoupanca(PessoaFisica &, int, int, int, int, float);
 
     // Destrutor
     ~ContaPoupanca();
