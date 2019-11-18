@@ -139,6 +139,11 @@ void menuPrincipal(){
 }
 
 void Cenario1() {
+
+	cout << "-----------------------------------------------------------------" << endl
+	<< "-----------------------INICIANDO CENÁRIO 1-----------------------" << endl
+	<< "-----------------------------------------------------------------\n\n";
+
     // Criar um cliente Pessoa Física pf1 (com todos os dados)
     cout << "Criando Cliente Fisico 1...\n";
     id_ClienteFisico[numClientesFisicos] = new PessoaFisica("Fabiano Lamborghini", "33002211", "fabiano@dc.ufscar.com", "Universidade", "Federal", "Sao Carlos", "SP", "12345678", "123", "11111111111");
@@ -261,9 +266,15 @@ void Cenario1() {
     cout << to_string_with_precision(getMontanteTotal(), 2) << endl << endl;
     // output: total = 1,500,350.00
 
+    exit(0);
 }
 
 void Cenario2() {
+
+
+	cout << "\n-----------------------------------------------------------------" << endl
+	<< "-----------------------INICIANDO CENÁRIO 2-----------------------" << endl
+	<< "-----------------------------------------------------------------\n\n";
     // Criar um cliente Pessoa Física pf1 (com todos os dados)
     cout << "\nCriando Cliente Fisico 1...\n";
     id_ClienteFisico[numClientesFisicos] = new PessoaFisica("Fabiano Lamborghini", "33002211", "fabiano@dc.ufscar.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12345678910");
@@ -378,11 +389,18 @@ void Cenario2() {
     cout << "\n-- MONTANTE TOTAL DO BANCO --\n";
     cout << to_string_with_precision(getMontanteTotal(), 2) << endl << endl;
     // Output: total = 1,170.280.00
+
+    exit(0);
 }
 
 void Cenario3() {
+
+	cout << "\n-----------------------------------------------------------------" << endl
+	<< "-----------------------INICIANDO CENÁRIO 3-----------------------" << endl
+	<< "-----------------------------------------------------------------\n\n";
+
 	// Criar um cliente Pessoa Física pf1 (com todos os dados)
-	cout << "\n!!! HÁ A NECESSIDADE DE CADASTRAS UMA PESSOA FÍSICA PRIMEIRO, POIS A CONTA JURÍDICA É VINCULADA A UMA CONTA FÍSICA PELO PROPRIETÁRIO MAJORITÁRIO !!!";
+	cout << "\n!!! HÁ A NECESSIDADE DE CADASTRAR UMA PESSOA FÍSICA PRIMEIRO, POIS A CONTA JURÍDICA É VINCULADA A UMA CONTA FÍSICA PELO PROPRIETÁRIO MAJORITÁRIO !!!";
     cout << "\nCriando Cliente Fisico...\n";
     id_ClienteFisico[numClientesFisicos] = new PessoaFisica("Fabiano Lamborghini", "33002211", "fabiano@dc.ufscar.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12345678910");
     numClientesFisicos++;
@@ -448,9 +466,16 @@ void Cenario3() {
     // Output: 2 lançamentos exibidos
     // Saldo inicial de c1 = 900,000.00
     // Saldo final de c1 = 1,100,000.00
+
+    exit(0);
 }
 
 void Cenario4() {
+
+	cout << "\n-----------------------------------------------------------------" << endl
+	<< "-----------------------INICIANDO CENÁRIO 4-----------------------" << endl
+	<< "-----------------------------------------------------------------\n\n";	
+
     // OBJETIVO: testar situações de restrição
 
     // Cadastramento de cliente Pessoa Jurídica para proprietário não cadastrado
@@ -528,6 +553,8 @@ void Cenario4() {
     }
     else
         cout << "Erro Ao Excluir...Cliente Com Conta Poupanca Ativa...\n";
+
+    exit(0);
     
 }
 
