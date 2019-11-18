@@ -4,7 +4,7 @@ Felipe Tavoni                       RA:758707
 Guilherme Lorençato G Lamonato      RA:758665
 Nathaelly Boni                      RA:758963
 Thiago de Moraes Teixeira           RA:760667
-Clara Gruber                        RA:
+Clara Gruber                        RA:769817
 */
 #include <iostream>
 #include <string>
@@ -48,6 +48,7 @@ void menuContaCorrente();
 void menuBanco();
 void menuLancamento();
 int lancamento(int numConta, int operacao, float valor, float * saldoAnterior, float * saldoAtualizado);
+void printLancamento(int numConta, int diaInicio,int mesInicio, int anoInicio, int diaFim,int mesFim, int anoFim);
 int getQuantidadeDeContas();
 int getQuantidadeDeClientes();
 float getMontanteTotal();
@@ -86,11 +87,14 @@ void menuPrincipal(){
              << "1 - MENU CLIENTES" << endl
              << "2 - MENU CONTAS" << endl
              << "3 - GERENCIAMENTO DO BANCO" << endl
-             << "4 - CENARIO 4" << endl;
+             << "4 - CENARIO 1" << endl
+             << "5 - CENARIO 2" << endl
+             << "6 - CENARIO 3" << endl
+             << "7 - CENARIO 4" << endl;
 
         cin >> option;
-        if(option<0 || option>3)
-            while(option<1 || option>4){
+        if(option<0 || option>7)
+            while(option<1 || option>7){
                 cout << "Selecione uma opção válida" << endl;
                 cin >> option;
             }
@@ -112,8 +116,20 @@ void menuPrincipal(){
                 break;
             }
             case 4: {
-                Cenario4();
+                Cenario1();
                 break;
+            }
+            case 5: {
+            	Cenario2();
+            	break;
+            }
+            case 6: {
+            	Cenario3();
+            	break;
+            }
+            case 7: {
+            	Cenario4();
+            	break;
             }
             default:
                 break;
@@ -125,179 +141,313 @@ void menuPrincipal(){
 void Cenario1() {
     // Criar um cliente Pessoa Física pf1 (com todos os dados)
     cout << "Criando Cliente Fisico 1...\n";
-    id_ClienteFisico[numClientesFisicos] = new PessoaFisica("Fabiano Lamborghini", "33002211", "fabiano@dc.ufscar.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12345678910");
+    id_ClienteFisico[numClientesFisicos] = new PessoaFisica("Fabiano Lamborghini", "33002211", "fabiano@dc.ufscar.com", "Universidade", "Federal", "Sao Carlos", "SP", "12345678", "123", "11111111111");
     numClientesFisicos++;
 
     // Criar conta corrente c1 para pf1 com saldo inicial 100.00
-    cout << "Criando Conta Corrente Do Cliente Fisico 1...\n";
+    cout << "Criando Conta Corrente(C1) Do Cliente Fisico 1 com saldo inicial de 100.00 ...\n";
     id_ContaCorrente[numContasCorrente] = new ContaCorrente(12, 12, 2012, 100.0, numProxConta, *id_ClienteFisico[numClientesFisicos-1], 0.0);
     numContasCorrente++;
+    numProxConta++;
 
     // Criar conta poupanca p1 para pf1 com saldo inicial 200.00
-    cout << "Criando Conta Poupanca Do Cliente Fisico 1..\n";
+    cout << "Criando Conta Poupanca(P1) Do Cliente Fisico 1 com saldo inicial de 200.00 ..\n";
     id_ContaPoupanca[numContasPoupanca] = new ContaPoupanca(*id_ClienteFisico[numClientesFisicos-1], numProxConta, 12, 12, 12, 200);
     numContasPoupanca++;
+    numProxConta++;
 
     // Criar um cliente Pessoa Física pf2 (com todos os dados)
-    cout << "Criando Cliente Fisico 2...\n";
-    id_ClienteFisico[numClientesFisicos] = new PessoaFisica("Joelson Ferreira", "981011692", "JoelsonFerr@hotmail.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12345678901");
+    cout << "\nCriando Cliente Fisico 2...\n";
+    id_ClienteFisico[numClientesFisicos] = new PessoaFisica("Joelson Ferreira", "981011692", "JoelsonFerr@hotmail.com", "Universidade", "Federal", "Sao Carlos", "SP", "12345678", "123", "22222222222");
     numClientesFisicos++;
 
     // Criar conta corrente c2 para pf2 com saldo inicial 0.00
-    cout << "Criando Conta Corrente Do Cliente Fisico 2...\n";
+    cout << "Criando Conta Corrente(C2) Do Cliente Fisico 2 com saldo inicial de 0.00 ...\n";
     id_ContaCorrente[numContasCorrente] = new ContaCorrente(12, 12, 2012, 0.0, numProxConta, *id_ClienteFisico[numClientesFisicos-1], 0.0);
     numContasCorrente++;
+    numProxConta++;
 
     // Criar conta poupanca p2 para pf2 com saldo inicial 50.00
-    cout << "Criando Conta Poupanca Do Cliente Fisico 2...\n";
+    cout << "Criando Conta Poupanca(P2) Do Cliente Fisico 2 com saldo inicial de 50.00 ...\n";
     id_ContaPoupanca[numContasPoupanca] = new ContaPoupanca(*id_ClienteFisico[numClientesFisicos-1], 1, 12, 12, 2012, 50.0);
     numContasPoupanca++;
+    numProxConta++;
 
     // Listar todos os clientes (ambos os tipos)
-    cout << "Cliente Fisico 1:" << id_ClienteFisico[numClientesFisicos-2]->toString() << "\n";
-    cout << "Cliente Fisico 2:" << id_ClienteFisico[numClientesFisicos-1]->toString() << "\n";
+    cout << "\n\n---> LISTANDO TODOS OS CLIENTES DE AMBOS OS TIPOS <---";
+    
+    if(numClientesFisicos != 0){ 
+	    cout << "\n\n--- PESSOAS FÍSICA --- ";
+	    for (int i=0; i<numClientesFisicos; i++)
+	        cout << id_ClienteFisico[i]->toString();
+	}
+              
+    if(numClientesJuridicos != 0){
+	    cout << "\n\n---PESSOAS JURÍDICA --- ";
+	    for(int i=0; i<numClientesJuridicos; i++)
+	        cout << id_ClienteJuridico[i]->toString();
+	}
 
     // Listar todas as contas (ambos os tipos)
-    cout << "Conta Corrente Cliente Fisico 1:\n" << id_ContaCorrente[numContasCorrente-2]->toString() << "\n";
-    cout << "Conta Corrente Cliente Fisico 2:\n" << id_ContaCorrente[numContasCorrente-1]->toString() << "\n";
-    cout << "Conta Poupanca Cliente Fisico 1:\n" << id_ContaPoupanca[numContasPoupanca-2]->toString() << "\n";
-    cout << "Conta Poupanca Cliente Fisico 2:\n" << id_ContaPoupanca[numContasPoupanca-1]->toString() << "\n";
+    cout << "\n\n---> LISTANDO TODAS AS CONTAS DE AMBOS OS TIPOS <---";
 
+    if(numContasCorrente != 0){
+	    cout << "\n\n--- CONTAS CORRENTE --- ";
+	    for(int i=0; i<numContasCorrente; i++)
+	    	cout << id_ContaCorrente[i]->toString();
+	}
+
+	if(numContasPoupanca != 0){
+	    cout << "\n\n--- CONTAS POUPANCA --- ";
+	    for(int i=0; i<numContasPoupanca; i++)
+	    	cout << id_ContaPoupanca[i]->toString();
+	}
+
+	cout << "\n\n";
     // Criar um Cliente Pessoa Jurídica pj1 (com todos os dados)
     cout << "Criando Cliente Juridico 1...\n";
-    id_ClienteJuridico[numClientesJuridicos] = new PessoaJuridica("Empresa1", "00000000", "Empresa1@empresas.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12312312312312", id_ClienteFisico[numClientesFisicos-2]->getCPF(), "Programacao Orientada a Objetos", 12, 12, 2012, 12, 12, 2012);
+    id_ClienteJuridico[numClientesJuridicos] = new PessoaJuridica("Empresa1", "00000000", "Empresa1@empresas.com", "Universidade", "Federal", "Sao Carlos", "SP", "12345678", "123", "12312312312312", id_ClienteFisico[numClientesFisicos-2]->getCPF(), "Programacao Orientada a Objetos", 12, 12, 2012, 12, 12, 2012);
     numClientesJuridicos++;
 
     // Criar Conta Corrente c3 para pj1 com saldo inicial 1,000,000.00
-    cout << "Criando Conta Corrente Do Cliente Juridico 1...\n";
+    cout << "Criando Conta Corrente(C3) Do Cliente Juridico 1 com saldo inicial ed 1,000,000.00 ...\n";
     id_ContaCorrente[numContasCorrente] = new ContaCorrente(12, 12, 2012, 1000000.0, numProxConta, *id_ClienteJuridico[numClientesJuridicos-1], 0.0);
     numContasCorrente++;
+    numProxConta++;
 
     // Criar um Cliente Pessoa Jurídica pj2 (com todos os dados)
     cout << "Criando Cliente Juridico 2...\n";
-    id_ClienteJuridico[numClientesJuridicos] = new PessoaJuridica("Empresa2", "11111111", "Empresa2@empresas.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "23423423423423", id_ClienteFisico[numClientesFisicos-1]->getCPF(), "Sistemas Operacionais", 12, 12, 2012, 12, 12, 2012);
+    id_ClienteJuridico[numClientesJuridicos] = new PessoaJuridica("Empresa2", "00000000", "Empresa2@empresas.com", "Universidade", "Federal", "Sao Carlos", "SP", "12345678", "123", "23423423423423", id_ClienteFisico[numClientesFisicos-1]->getCPF(), "Sistemas Operacionais", 12, 12, 2012, 12, 12, 2012);
     numClientesJuridicos++;
 
     // Criar Conta Corrente c4 para pj2 com saldo inicial 500,000.00
-    cout << "Criando Conta Corrente Do Cliente Juridico 2...\n";
+    cout << "Criando Conta Corrente(C4) Do Cliente Juridico 2 com saldo inicial de 500,000.00 ...\n";
     id_ContaCorrente[numContasCorrente] = new ContaCorrente(12, 12, 2012, 500000.0, numProxConta, *id_ClienteJuridico[numClientesJuridicos-1], 0.0);
     numContasCorrente++;
+    numProxConta++;
 
     // Listar todos os clientes (ambos os tipos)
-    cout << "Cliente Fisico 1:\n" << id_ClienteFisico[numClientesFisicos-1]->toString() << "\n";
-    cout << "Cliente Fisico 2:\n" << id_ClienteFisico[numClientesFisicos-2]->toString() << "\n";
-    cout << "Cliente Juridico 1:\n" << id_ClienteJuridico[numClientesJuridicos-1]->toString() << "\n";
-    cout << "Cliente Juridico 2:\n" << id_ClienteJuridico[numClientesJuridicos-2]->toString() << "\n";
+    cout << "\n\n---> LISTANDO TODOS OS CLIENTES DE AMBOS OS TIPOS <---";
 
+    if(numClientesFisicos != 0){ 
+	    cout << "\n\n--- PESSOAS FÍSICA --- ";
+	    for (int i=0; i<numClientesFisicos; i++)
+	        cout << id_ClienteFisico[i]->toString();
+	}
+              
+    if(numClientesJuridicos != 0){
+	    cout << "\n\n---PESSOAS JURÍDICA --- ";
+	    for(int i=0; i<numClientesJuridicos; i++)
+	        cout << id_ClienteJuridico[i]->toString();
+	}
+    
     // Listar todas as contas (ambos os tipos)
-    cout << "Conta Corrente Cliente Fisico 1:\n" << id_ContaCorrente[numContasCorrente-4]->toString() << "\n";
-    cout << "Conta Corrente Cliente Fisico 2:\n" << id_ContaCorrente[numContasCorrente-3]->toString() << "\n";
-    cout << "Conta Poupanca Cliente Fisico 1:\n" << id_ContaPoupanca[numContasPoupanca-1]->toString() << "\n";
-    cout << "Conta Poupanca Cliente Fisico 2:\n" << id_ContaPoupanca[numContasPoupanca-2]->toString() << "\n";
-    cout << "Conta Corrente Cliente Juridico 1:\n" << id_ContaCorrente[numContasCorrente-2]->toString() << "\n";
-    cout << "Conta Corrente Cliente Juridico 2:\n" << id_ContaCorrente[numContasCorrente-1]->toString() << "\n";
+    cout << "\n\n---> LISTANDO TODAS AS CONTAS DE AMBOS OS TIPOS <---";
 
+    if(numContasCorrente != 0){
+	    cout << "\n\n--- CONTAS CORRENTE --- ";
+	    for(int i=0; i<numContasCorrente; i++)
+	    	cout << id_ContaCorrente[i]->toString();
+	}
+
+	if(numContasPoupanca != 0){
+	    cout << "\n\n--- CONTAS POUPANCA --- ";
+	    for(int i=0; i<numContasPoupanca; i++)
+	    	cout << id_ContaPoupanca[i]->toString();
+	}
+
+	// Exibir montante total do banco
+    cout << "\n-- MONTANTE TOTAL DO BANCO --\n";
+    cout << to_string_with_precision(getMontanteTotal(), 2) << endl << endl;
+    // output: total = 1,500,350.00
 
 }
 
 void Cenario2() {
     // Criar um cliente Pessoa Física pf1 (com todos os dados)
-    cout << "Criando Cliente Fisico 1...\n";
+    cout << "\nCriando Cliente Fisico 1...\n";
     id_ClienteFisico[numClientesFisicos] = new PessoaFisica("Fabiano Lamborghini", "33002211", "fabiano@dc.ufscar.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12345678910");
     numClientesFisicos++;
 
     // Criar conta corrente c1 para pf1 com saldo inicial 100.00
-    cout << "Criando Conta Corrente Do Cliente Fisico 1...\n";
+    cout << "Criando Conta Corrente(C1) Do Cliente Fisico 1 com saldo inicial de 100.00...\n";
     id_ContaCorrente[numContasCorrente] = new ContaCorrente(12, 12, 2012, 100.0, numProxConta, *id_ClienteFisico[numClientesFisicos-1], 0.0);
     numContasCorrente++;
+    numProxConta++;
 
     // Criar conta poupanca p1 para pf1 com saldo inicial 200.00
-    cout << "Criando Conta Poupanca Do Cliente Fisico 1..\n";
+    cout << "Criando Conta Poupanca(P1) Do Cliente Fisico 1 com saldo inicial de 200.00...\n";
     id_ContaPoupanca[numContasPoupanca] = new ContaPoupanca(*id_ClienteFisico[numClientesFisicos-1], numProxConta, 12, 12, 12, 200);
     numContasPoupanca++;
+    numProxConta++;
 
     // Lançar débito de 100.0 em c1
-    
+    cout << "\nEfetuando primeiro lançamento em C1 - débito de 100.0...\n";
+    float saldoAnterior=0, saldoAtualizado=0;
+    lancamento(1, 1, 100.0, &saldoAnterior, &saldoAtualizado);
+    id_Lancamentos[numLancamentosEfetuados] = new Lancamento(1, 1, 100, saldoAnterior, saldoAtualizado, 12, 12, 2019);
+    numLancamentosEfetuados++;
+    cout << "Saldo atual de C1 = " + to_string_with_precision(saldoAtualizado, 2) + "\n";
+
     // Lançar crédito de 50.0 em c1
+    cout << "\nEfetuando segundo lançamento em C1 - crédito de 50.0...\n";
+    saldoAnterior=0, saldoAtualizado=0;
+    lancamento(1, 2, 50.0, &saldoAnterior, &saldoAtualizado);
+    id_Lancamentos[numLancamentosEfetuados] = new Lancamento(1, 2, 50, saldoAnterior, saldoAtualizado, 15, 12, 2019);
+    numLancamentosEfetuados++;
+    cout << "Saldo atual de C1 = " + to_string_with_precision(saldoAtualizado, 2) + "\n";
 
     // Lançar crédito de 30.00 em p1
+    cout << "\nEfetuando primeiro lançamento em P1 - crédito de 30.0...\n";
+    saldoAnterior=0, saldoAtualizado=0;
+    lancamento(2, 2, 30.0, &saldoAnterior, &saldoAtualizado);
+    id_Lancamentos[numLancamentosEfetuados] = new Lancamento(2, 2, 30, saldoAnterior, saldoAtualizado, 13, 12, 2019);
+    numLancamentosEfetuados++;
+    cout << "Saldo atual de P1 = " + to_string_with_precision(saldoAtualizado, 2) + "\n";
 
     // Exibir extrato de c1 considerando todo o período
+    cout << "\n-- LANÇAMENTOS PARA A CONTA CORRENTE C1 --";
+    printLancamento(1, 0, 0, 0, 0, 0, 0);
 
     // Exibir extrato de p1 considerando todo o período
+    cout << "\n-- LANÇAMENTOS PARA A CONTA POUPANCA P1 --";
+    printLancamento(2, 0, 0, 0, 0, 0, 0);
 
     // Criar um Cliente Pessoa Jurídica pj1 (com todos os dados, data atual)
-    cout << "Criando Cliente Juridico 1...\n";
+    cout << "\nCriando Cliente Juridico 1...\n";
     id_ClienteJuridico[numClientesJuridicos] = new PessoaJuridica("Empresa1", "00000000", "Empresa1@empresas.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12312312312312", id_ClienteFisico[numClientesFisicos-1]->getCPF(), "Programacao Orientada a Objetos", 12, 12, 2012, 12, 12, 2012);
     numClientesJuridicos++;
 
     // Criar Conta Corrente c3 para pj1 com saldo inicial 1,000,000.00
-    cout << "Criando Conta Corrente Do Cliente Juridico 1...\n";
+    cout << "Criando Conta Corrente(C3) Do Cliente Juridico 1 com saldo inicial de 1,000,000.00...\n";
     id_ContaCorrente[numContasCorrente] = new ContaCorrente(12, 12, 2012, 1000000.0, numProxConta, *id_ClienteJuridico[numClientesJuridicos-1], 0.0);
     numContasCorrente++;
+    numProxConta++;
 
     // Criar um Cliente Pessoa Jurídica pj2 (com todos os dados, data atual)
-    cout << "Criando Cliente Juridico 2...\n";
+    cout << "\nCriando Cliente Juridico 2...\n";
     id_ClienteJuridico[numClientesJuridicos] = new PessoaJuridica("Empresa2", "11111111", "Empresa2@empresas.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "23423423423423", id_ClienteFisico[numClientesFisicos-1]->getCPF(), "Sistemas Operacionais", 12, 12, 2012, 12, 12, 2012);
     numClientesJuridicos++;
 
     // Criar Conta Corrente c4 para pj2 com saldo inicial 500,000.00
-    cout << "Criando Conta Corrente Do Cliente Juridico 1...\n";
+    cout << "Criando Conta Corrente(C4) Do Cliente Juridico 2 com saldo inicial de 500,000.00...\n";
     id_ContaCorrente[numContasCorrente] = new ContaCorrente(12, 12, 2012, 500000.0, numProxConta, *id_ClienteJuridico[numClientesJuridicos-1], 0.0);
     numContasCorrente++;
+    numProxConta++;
 
     // Lançar débito de 100,000.00 em c3
-        // Output: saldo atual de c3 = 900,000.00
+    cout << "\nEfetuando primeiro lançamento em C3 - débito de 100,000.00...\n";
+    saldoAnterior=0, saldoAtualizado=0;
+    lancamento(3, 1, 100000.0, &saldoAnterior, &saldoAtualizado);
+    id_Lancamentos[numLancamentosEfetuados] = new Lancamento(3, 1, 100000, saldoAnterior, saldoAtualizado, 12, 12, 2019);
+    numLancamentosEfetuados++;
+    // Output: saldo atual de c3 = 900,000.00
+    cout << "Saldo atual de C3 = " + to_string_with_precision(saldoAtualizado, 2) + "\n";    
 
     // Lançar débito de 200,000.00 em c3
-        // Output: saldo atual de c3 = 700,000.00
+    cout << "\nEfetuando segundo lançamento em C3 - débito de 200,000.00...\n";
+    saldoAnterior=0, saldoAtualizado=0;
+    lancamento(3, 1, 200000.0, &saldoAnterior, &saldoAtualizado);
+    id_Lancamentos[numLancamentosEfetuados] = new Lancamento(3, 1, 200000, saldoAnterior, saldoAtualizado, 12, 12, 2019);
+    numLancamentosEfetuados++;
+    // Output: saldo atual de c3 = 700,000.00
+    cout << "Saldo atual de C3 = " + to_string_with_precision(saldoAtualizado, 2) + "\n";
 
     // Lançar débito de 30,000.00 em c4
-        // Output: saldo atual de c4 = 470,000.00
+    cout << "\nEfetuando primeiro lançamento em C4 - débito de 30,000.00...\n";
+    saldoAnterior=0, saldoAtualizado=0;
+    lancamento(4, 1, 30000.0, &saldoAnterior, &saldoAtualizado);
+    id_Lancamentos[numLancamentosEfetuados] = new Lancamento(4, 1, 30000, saldoAnterior, saldoAtualizado, 12, 12, 2019);
+    numLancamentosEfetuados++;
+    // Output: saldo atual de c4 = 470,000.00
+    cout << "Saldo atual de C4 = " + to_string_with_precision(saldoAtualizado, 2) + "\n";
 
     // Exibir extrato de c3 considerando todo o período
-        // Output: 2 lançamentos exibidos
-            // Saldo final = 700,000.00
+    cout << "\n-- LANÇAMENTOS PARA A CONTA CORRENTE C3 --";
+    printLancamento(3, 0, 0, 0, 0, 0, 0);
+    // Output: 2 lançamentos exibidos
+    // Saldo final = 700,000.00
 
     // Exibir extrato de c4 considerando todo o período
-        // Output: 1 lançamento exibido
-            // Saldo final = 470,000.00
+    cout << "\n-- LANÇAMENTOS PARA A CONTA CORRENTE C4 --";
+    printLancamento(4, 0, 0, 0, 0, 0, 0);
+    // Output: 1 lançamento exibido
+    // Saldo final = 470,000.00
 
     // Exibir montante total do banco
-        // Output: total = 1,170.280.00
-    
+    cout << "\n-- MONTANTE TOTAL DO BANCO --\n";
+    cout << to_string_with_precision(getMontanteTotal(), 2) << endl << endl;
+    // Output: total = 1,170.280.00
 }
 
 void Cenario3() {
+	// Criar um cliente Pessoa Física pf1 (com todos os dados)
+	cout << "\n!!! HÁ A NECESSIDADE DE CADASTRAS UMA PESSOA FÍSICA PRIMEIRO, POIS A CONTA JURÍDICA É VINCULADA A UMA CONTA FÍSICA PELO PROPRIETÁRIO MAJORITÁRIO !!!";
+    cout << "\nCriando Cliente Fisico...\n";
+    id_ClienteFisico[numClientesFisicos] = new PessoaFisica("Fabiano Lamborghini", "33002211", "fabiano@dc.ufscar.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12345678910");
+    numClientesFisicos++;
+    
+
     // OBJETIVO: testar emissão de extratos em períodos específicos
 
     // Criar um Cliente Pessoa Jurídica pj1 (com todos os dados, data atual)
+    cout << "\nCriando Cliente Juridico 1...\n";
+    id_ClienteJuridico[numClientesJuridicos] = new PessoaJuridica("Empresa1", "00000000", "Empresa1@empresas.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12312312312312", id_ClienteFisico[numClientesFisicos-1]->getCPF(), "Programacao Orientada a Objetos", 12, 12, 2012, 12, 12, 2012);
+    numClientesJuridicos++;    
 
-    // Criar Conta Corrente c1 para pj1 com saldo inicial 1,000,000.00
-
+    // Criar Conta Corrente c3 para pj1 com saldo inicial 1,000,000.00
+    cout << "Criando Conta Corrente(C1) Do Cliente Juridico 1 com saldo inicial de 1,000,000.00...\n";
+    id_ContaCorrente[numContasCorrente] = new ContaCorrente(12, 12, 2012, 1000000.0, numProxConta, *id_ClienteJuridico[numClientesJuridicos-1], 0.0);
+    numContasCorrente++;
+    numProxConta++;
 
     // Lançar débito de 100,000.00 em 15/11/2019 em c1
-        // Output: saldo atual de c1 = 900,000.00
+    cout << "\nEfetuando primeiro lançamento em C1 em 15/11/2019 - débito de 100,000.00...\n";
+    float saldoAnterior=0, saldoAtualizado=0;
+    lancamento(1, 1, 100000.0, &saldoAnterior, &saldoAtualizado);
+    id_Lancamentos[numLancamentosEfetuados] = new Lancamento(1, 1, 100000, saldoAnterior, saldoAtualizado, 15, 11, 2019);
+    numLancamentosEfetuados++;    
+    // Output: saldo atual de c1 = 900,000.00
+    cout << "Saldo atual de C1 = " + to_string_with_precision(saldoAtualizado, 2) + "\n";    
+
     // Lançar débito de 200,000.00 em 16/11/2019 em c1
-        // Output: saldo atual de c1 = 700,000.00
+    cout << "\nEfetuando segundo lançamento em C1 em 16/11/2019 - débito de 200,000.00...\n";
+    saldoAnterior=0, saldoAtualizado=0;
+    lancamento(1, 1, 200000.0, &saldoAnterior, &saldoAtualizado);
+    id_Lancamentos[numLancamentosEfetuados] = new Lancamento(1, 1, 200000, saldoAnterior, saldoAtualizado, 16, 11, 2019);
+    numLancamentosEfetuados++;
+    // Output: saldo atual de c1 = 700,000.00
+    cout << "Saldo atual de C1 = " + to_string_with_precision(saldoAtualizado, 2) + "\n";
+
     // Lançar crédito de 400,000.00 em 17/11/2019 em c1
-        // Output: saldo atual de c1 = 1,100,000.00
+    cout << "\nEfetuando terceiro lançamento em C1 em 17/11/2019 - crédito de 400,000.00...\n";
+    saldoAnterior=0, saldoAtualizado=0;
+    lancamento(1, 2, 400000.0, &saldoAnterior, &saldoAtualizado);
+    id_Lancamentos[numLancamentosEfetuados] = new Lancamento(1, 2, 400000, saldoAnterior, saldoAtualizado, 17, 11, 2019);
+    numLancamentosEfetuados++;    
+    // Output: saldo atual de c1 = 1,100,000.00
+    cout << "Saldo atual de C1 = " + to_string_with_precision(saldoAtualizado, 2) + "\n";
 
     // Exibir extrato de c1 considerando todo o período
-        // Output: 3 lançamentos exibidos
-            // Saldo inicial de c1 = 1,000,000.00
-            // Saldo final de c1 = 1,100,000.00
+    cout << "\n-- LANÇAMENTOS DE TODO O PERÍODO PARA C1 --";
+    printLancamento(1, 0, 0, 0, 0, 0, 0);
+    // Output: 3 lançamentos exibidos
+    // Saldo inicial de c1 = 1,000,000.00
+    // Saldo final de c1 = 1,100,000.00
 
     // Exibir extrato de c1 de 15/11/2019 a 16/11/2019
-        // Output: 2 lançamentos exibidos
-            // Saldo inicial de c1 = 1,000,000.00
-            // Saldo final de c1 = 700,000.00
+    cout << "\n-- LANÇAMENTOS PARA C1 DE 15/11/2019 A 16/11/2019 --";
+    printLancamento(1, 15, 11, 2019, 16, 11, 2019);
+    // Output: 2 lançamentos exibidos
+    // Saldo inicial de c1 = 1,000,000.00
+    // Saldo final de c1 = 700,000.00
 
     // Exibir extrato de c1 de 16/11/2019 a 17/11/2019
-        // Output: 2 lançamentos exibidos
-            // Saldo inicial de c1 = 900,000.00
-            // Saldo final de c1 = 1,100,000.00
-
+    cout << "\n-- LANÇAMENTOS PARA C1 DE 16/11/2019 A 17/11/2019 --";
+    printLancamento(1, 16, 11, 2019, 17, 11, 2019);
+    // Output: 2 lançamentos exibidos
+    // Saldo inicial de c1 = 900,000.00
+    // Saldo final de c1 = 1,100,000.00
 }
 
 void Cenario4() {
@@ -1183,25 +1333,17 @@ void menuBanco(){
             switch(option2){
                 //case 1 - Exibe todos os lancamentos relacionados aquela conta
                 case 1:{
-                    int numConta, lancamentosExibidos;
-                    lancamentosExibidos=0;
+                    int numConta;
 
                     if (numContasPoupanca != 0 || numContasCorrente != 0){
                         cout << "Insira o número da conta desejada: ";
                         cin >> numConta;
 
-                        for(int i=0; i<numLancamentosEfetuados; i++){
-                            if(id_Lancamentos[i]->getNumConta() == numConta) {
-                                cout << id_Lancamentos[i]->toString() << endl;
-                                lancamentosExibidos++;
-                            }
-                        }
-
-                        if(lancamentosExibidos==0)
-                            cout << "Não há lançamentos para essa conta ainda!";
+                        printLancamento(numConta, 0, 0, 0, 0, 0, 0);
 
                         cout << "\nVocê será redirecionado para o menu de gerenciamento do banco" << endl;
-                        menuBanco();
+        				menuBanco();
+
                     } else{
                         cout << "\nSem contas cadastradas!\n";
                     }
@@ -1209,10 +1351,9 @@ void menuBanco(){
                 }
                 //case 2 - Exibe os lancamentos na conta para um periodo de tempo fechado
                 case 2:{
-                    int numConta, lancamentosExibidos;
-                    lancamentosExibidos=0;
+                    int numConta;
 
-                    //periodo que definido
+                    //periodo definido
                     int diaInicio, mesInicio, anoInicio, diaFim, mesFim, anoFim;
 
                     if(numContasCorrente != 0 || numContasPoupanca != 0){
@@ -1233,19 +1374,11 @@ void menuBanco(){
                         cout << "Ano: ";
                         cin >> anoFim;
 
-                        //Varre o vetor de lancamentos buscando o numero da conta e após isso verifica se o lancamento foi feito nos dias dentro do periodo
-                        for(int i=0; i<numLancamentosEfetuados; i++)
-                            if(id_Lancamentos[i]->getNumConta() == numConta)
-                                if(((id_Lancamentos[i]->getDataLancamento().getDia() >= diaInicio && id_Lancamentos[i]->getDataLancamento().getMes() >= mesInicio)) && id_Lancamentos[i]->getDataLancamento().getAno() >= anoInicio)
-                                    if(((id_Lancamentos[i]->getDataLancamento().getDia() <= diaFim && id_Lancamentos[i]->getDataLancamento().getMes() <= mesFim)) && id_Lancamentos[i]->getDataLancamento().getAno() <= anoFim){
-                                        cout << id_Lancamentos[i]->toString() << endl;
-                                        lancamentosExibidos++;
-                                    }
-
-                        if(lancamentosExibidos==0)
-                            cout << "Não há lançamentos para esse período!";
-                        cout << "\nVocê será redirecionado para o menu de gerenciamento do banco" << endl;
-                        menuBanco();
+                        printLancamento(numConta, diaInicio, mesInicio, anoInicio, diaFim, mesFim, anoFim);
+        				
+        				cout << "\nVocê será redirecionado para o menu de gerenciamento do banco" << endl;
+        				menuBanco();
+ 
                     }
                     else{
                         cout << "\nSem contas Cadastradas!\n";
@@ -1374,7 +1507,7 @@ void menuLancamento() {
 }
 
 int lancamento(int numConta, int operacao, float valor, float * saldoAnterior, float * saldoAtualizado){
-    int i=0;
+    int i=0, quebra=0;
     float novoValor=0;
     int tipo_conta=0;
 
@@ -1383,15 +1516,19 @@ int lancamento(int numConta, int operacao, float valor, float * saldoAnterior, f
     //tipo_conta = 2 -> Conta corrente
     do{
         if(i < numContasPoupanca)
-            if(numConta == id_ContaPoupanca[i]->getNumConta())
+            if(numConta == id_ContaPoupanca[i]->getNumConta()){
                 tipo_conta += 1;
+                quebra=1;
+            }
 
         if(i < numContasCorrente)
-            if(numConta == id_ContaCorrente[i]->getNumConta())
+            if(numConta == id_ContaCorrente[i]->getNumConta()){
                 tipo_conta += 2;
+                quebra=1;
+            }
 
         i += 1;
-    }while(i<getQuantidadeDeContas());
+    }while(i<getQuantidadeDeContas() && !quebra);
 
     //Subtrai 1 do i para voltar para a posição da conta desejada no vetor
     i -= 1;
@@ -1443,6 +1580,36 @@ int lancamento(int numConta, int operacao, float valor, float * saldoAnterior, f
         }
     }
 }
+
+void printLancamento(int numConta, int diaInicio,int mesInicio, int anoInicio, int diaFim,int mesFim, int anoFim){
+	int lancamentosExibidos;
+
+	//Se diaInicio=0 é para mostrar todos os lançamentos vinculados a essa conta
+	if(diaInicio == 0){
+		for(int i=0; i<numLancamentosEfetuados; i++)
+	        if(id_Lancamentos[i]->getNumConta() == numConta) {
+	            cout << id_Lancamentos[i]->toString();
+	            lancamentosExibidos++;
+	        }
+
+        if(lancamentosExibidos==0)
+	        cout << "Não há lançamentos para essa conta ainda!";
+	}
+	//Se não, pega o periodo especificado para os lançamentos
+	else{
+		for(int i=0; i<numLancamentosEfetuados; i++)
+            if(id_Lancamentos[i]->getNumConta() == numConta)
+                if(((id_Lancamentos[i]->getDataLancamento().getDia() >= diaInicio && id_Lancamentos[i]->getDataLancamento().getMes() >= mesInicio)) && id_Lancamentos[i]->getDataLancamento().getAno() >= anoInicio)
+                    if(((id_Lancamentos[i]->getDataLancamento().getDia() <= diaFim && id_Lancamentos[i]->getDataLancamento().getMes() <= mesFim)) && id_Lancamentos[i]->getDataLancamento().getAno() <= anoFim){
+                        cout << id_Lancamentos[i]->toString() << endl;
+                        lancamentosExibidos++;
+                    }
+
+        if(lancamentosExibidos==0)
+            cout << "Não há lançamentos para esse período!";
+	}
+}
+
 
 int getQuantidadeDeContas(){
     return numContasCorrente + numContasPoupanca;
