@@ -31,13 +31,13 @@ string PessoaJuridica::toString() {
 
     saida = "\n\nA empresa dona desta conta é: " + this->getNome() +
                 "\nCom CNPJ: " + this->getCNPJ() +
-                    "\nCPF do proprietario majoritario é" + this->getCPFProprietarioMajor() +
-                        "\nTrabalha no ramo de atuacao de:" + this->getRamoAtuacao() +
-                            "\nFundada em:" + to_string(this->getDataFundacao()->getDia()) + "/" + to_string(this->getDataFundacao()->getMes()) + "/" + to_string(this->getDataFundacao()->getAno()) +
-                                "\nA ultima atualizacao do contrato social foi no dia:" + to_string(this->getDataUltimaAtt()->getDia()) + "/" + to_string(this->getDataUltimaAtt()->getMes()) + "/" + to_string(this->getDataUltimaAtt()->getAno()) +
+                    "\nCPF do proprietario majoritario é " + this->getCPFProprietarioMajor() +
+                        "\nTrabalha no ramo de atuacao de: " + this->getRamoAtuacao() +
+                            "\nFundada em: " + to_string(this->getDataFundacao()->getDia()) + "/" + to_string(this->getDataFundacao()->getMes()) + "/" + to_string(this->getDataFundacao()->getAno()) +
+                                "\nA ultima atualizacao do contrato social foi no dia: " + to_string(this->getDataUltimaAtt()->getDia()) + "/" + to_string(this->getDataUltimaAtt()->getMes()) + "/" + to_string(this->getDataUltimaAtt()->getAno()) +
                                     "\nRua " + this->getEndereco()->getRua() + ", " + this->getEndereco()->getNumero() +
                                         "\nBairro " + this->getEndereco()->getBairro() + " - " + "CEP: " + this->getEndereco()->getCep() +
-                                            "\nLocalizada em: " + this->getEndereco()->getCidade() + "- " + this->getEndereco()->getUf() +
+                                            "\nLocalizada em: " + this->getEndereco()->getCidade() + " - " + this->getEndereco()->getUf() +
                                                 "\nTelefone: " + getTelefone() +
                                                     "\nE-mail: " + getEmail() +
                                                         "\n";
