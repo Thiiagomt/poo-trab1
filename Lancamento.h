@@ -20,7 +20,8 @@ public:
     }
 
     // Construtor
-    Lancamento(int numConta, int operacao, float valorLancamento, float saldoAnterior, float saldoAtualizado);
+    Lancamento(int, int, float, float, float);
+    Lancamento(int, int, float, float, float, int, int, int);
 
     // Construtor default
     Lancamento();
@@ -39,6 +40,7 @@ public:
     void setOperacao(int);
     void setValorLancamento(float);
     void setDataLancamento();
+    void setDataLancamento(int, int, int);
     void setSaldoAnterior(float);
     void setSaldoAtualizado(float);
 
