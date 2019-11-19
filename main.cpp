@@ -146,7 +146,7 @@ void Cenario1() {
 
     // Criar um cliente Pessoa Física pf1 (com todos os dados)
     cout << "Criando Cliente Fisico 1...\n";
-    id_ClienteFisico[numClientesFisicos] = new PessoaFisica("Fabiano Lamborghini", "33002211", "fabiano@dc.ufscar.com", "Universidade", "Federal", "Sao Carlos", "SP", "12345678", "123", "11111111111");
+    id_ClienteFisico[numClientesFisicos] = new PessoaFisica("Pessoa X", "33002211", "PessoaX@ufscar.com", "Universidade", "Federal", "Sao Carlos", "SP", "12345678", "123", "11111111111");
     numClientesFisicos++;
 
     // Criar conta corrente c1 para pf1 com saldo inicial 100.00
@@ -163,7 +163,7 @@ void Cenario1() {
 
     // Criar um cliente Pessoa Física pf2 (com todos os dados)
     cout << "\nCriando Cliente Fisico 2...\n";
-    id_ClienteFisico[numClientesFisicos] = new PessoaFisica("Joelson Ferreira", "981011692", "JoelsonFerr@hotmail.com", "Universidade", "Federal", "Sao Carlos", "SP", "12345678", "123", "22222222222");
+    id_ClienteFisico[numClientesFisicos] = new PessoaFisica("Pessoa Y", "981011692", "PessoaY@ufscar.com", "Universidade", "Federal", "Sao Carlos", "SP", "12345678", "123", "22222222222");
     numClientesFisicos++;
 
     // Criar conta corrente c2 para pf2 com saldo inicial 0.00
@@ -177,7 +177,6 @@ void Cenario1() {
     id_ContaPoupanca[numContasPoupanca] = new ContaPoupanca(*id_ClienteFisico[numClientesFisicos-1], 1, 12, 12, 2012, 50.0);
     numContasPoupanca++;
     numProxConta++;
-
     // Listar todos os clientes (ambos os tipos)
     cout << "\n\n---> LISTANDO TODOS OS CLIENTES DE AMBOS OS TIPOS <---";
     
@@ -277,7 +276,7 @@ void Cenario2() {
 	<< "-----------------------------------------------------------------\n\n";
     // Criar um cliente Pessoa Física pf1 (com todos os dados)
     cout << "\nCriando Cliente Fisico 1...\n";
-    id_ClienteFisico[numClientesFisicos] = new PessoaFisica("Fabiano Lamborghini", "33002211", "fabiano@dc.ufscar.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12345678910");
+    id_ClienteFisico[numClientesFisicos] = new PessoaFisica("Pessoa X", "33002211", "PessoaX@ufscar.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12345678910");
     numClientesFisicos++;
 
     // Criar conta corrente c1 para pf1 com saldo inicial 100.00
@@ -402,7 +401,7 @@ void Cenario3() {
 	// Criar um cliente Pessoa Física pf1 (com todos os dados)
 	cout << "\n!!! HÁ A NECESSIDADE DE CADASTRAR UMA PESSOA FÍSICA PRIMEIRO, POIS A CONTA JURÍDICA É VINCULADA A UMA CONTA FÍSICA PELO PROPRIETÁRIO MAJORITÁRIO !!!";
     cout << "\nCriando Cliente Fisico...\n";
-    id_ClienteFisico[numClientesFisicos] = new PessoaFisica("Fabiano Lamborghini", "33002211", "fabiano@dc.ufscar.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12345678910");
+    id_ClienteFisico[numClientesFisicos] = new PessoaFisica("Pessoa X", "33002211", "PessoaX@ufscar.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12345678910");
     numClientesFisicos++;
     
 
@@ -584,7 +583,7 @@ void Cenario4() {
     // Remoção de cliente com contas associadas
     cout << "\nTentativa De Deletar Cliente Fisico com Conta Corrente Vinculada...\n";
     cout << "Criando Um Novo Cliente Fisico...\n";
-    id_ClienteFisico[numClientesFisicos] = new PessoaFisica("Fabiano Lamborghini", "33002211", "fabiano@dc.ufscar.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12345678910");
+    id_ClienteFisico[numClientesFisicos] = new PessoaFisica("Pessoa X", "33002211", "PessoaX@ufscar.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12345678910");
     numClientesFisicos++;
     cout << "Criando Uma Conta Poupanca Para o Cliente Fisico Acima...\n";
     id_ContaPoupanca[numContasPoupanca] = new ContaPoupanca(*id_ClienteFisico[numClientesFisicos-1], numProxConta, 12, 12, 12, 200);
