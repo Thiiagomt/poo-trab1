@@ -19,8 +19,6 @@ Data::Data(int a, int b, int c) {
     setDia(a);
     setMes(b);
     setAno(c);
-    int nadaaver=0;
-    nadaaver=validaData();
 }
 
 // Destrutor
