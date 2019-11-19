@@ -501,7 +501,7 @@ void Cenario4() {
     int achado=0;
     // Laço para encontrar os cadastros...simulando a ideia da main
     for (int i=0; i<numClientesFisicos; i++) {
-        if ("12345678904" == id_ClienteFisico[numClientesFisicos-1]->getCPF())
+        if ("12345678904" == id_ClienteFisico[i]->getCPF())
             achado = 1;
     }
     if (achado) {
@@ -510,74 +510,100 @@ void Cenario4() {
         numClientesJuridicos++;
     }
     else
-        cout << "CPF Não Corresponde A Nenhum Cliente Fisico!\n"; 
+        cout << "\nCPF Não Corresponde A Nenhum Cliente Fisico!\n"; 
 
     // Criação de conta para cliente não cadastrado
     // Utilizando-se da mesma estratégia que o caso anterior, assim como os cadastros, teremos...
     // O CPF "12345678904" não esta cadastrado
     // Laço para encontrar os cadastros...simulando a ideia da main
     achado = 0;
-    cout << "Tentativa De Criar Conta Poupanca Sem Cliente..\n";
+    cout << "\nTentativa De Criar Conta Poupanca Sem Cliente..\n";
     cout << "Tentativa De Criar Conta Corrente Sem Cliente...\n";
     
     for (int i=0; i<numClientesFisicos; i++) {
-        if ("12345678904" == id_ClienteFisico[numClientesFisicos-1]->getCPF())
+        if ("12345678904" == id_ClienteFisico[i]->getCPF())
             achado = 1;
     }
     if (achado) {
         id_ContaPoupanca[numContasPoupanca] = new ContaPoupanca(*id_ClienteFisico[numClientesFisicos-1], numProxConta, 12, 12, 12, 200);
+        numContasPoupanca++;
+        numProxConta++;
         cout << "Conta Poupanca Criada Com Sucesso!\n";
         id_ContaCorrente[numContasCorrente] = new ContaCorrente(12, 12, 2012, 100.0, numProxConta, *id_ClienteFisico[numClientesFisicos-1], 0.0);
+        numContasCorrente++;
+        numProxConta++;
         cout << "Conta Corrente Criada Com Sucesso!\n";
     }
     else
         cout << "CPF Não Corresponde A Nenhum Cliente Fisico! Falha Na Criacao Das Contas!\n"; 
 
     // Lançamento que geraria saldo negativo em Conta Poupança
-    cout << "Criando Conta Poupanca Para Testar Lancamentos...\n";
+    cout << "\nCriando Conta Poupanca Para Testar Lancamentos...\n";
     id_ContaPoupanca[numContasPoupanca] = new ContaPoupanca(*id_ClienteFisico[numClientesFisicos-1], numProxConta, 12, 12, 12, 200);
     numContasPoupanca++;
-    cout << "Conta Poupanca Criada Com Sucesso!\n";
-    cout << "\nEfetuando primeiro lançamento em C1 em 15/11/2019 - débito de 100,000.00 em uma conta com 100.00 ...\n";
-    float saldoAnterior=0, saldoAtualizado=0;
-    lancamento(1, 1, 100000.0, &saldoAnterior, &saldoAtualizado);
+    numProxConta++;
+    cout << "Conta Poupanca(C1) Criada Com Sucesso Com Saldo De 200.00!\n";
+    
+    int int_lancamento;
+    float saldoAnterior, saldoAtualizado;
+    
+    cout << "\nEfetuando primeiro lançamento em C1 em 15/11/2019 - débito de 100,000.00 ...";    
+    saldoAnterior=0, saldoAtualizado=0;
+    int_lancamento = lancamento(1, 1, 100000.0, &saldoAnterior, &saldoAtualizado);
+    if(int_lancamento == 2)
+        cout << endl << "ERRO! A conta não tem saldo suficiente para o débito" << endl;
+    cout << "Saldo atual de C1 = " + to_string_with_precision(id_ContaPoupanca[numContasPoupanca-1]->getSaldoAtual(), 2) + "\n";     
+
+    cout << "\nEfetuando segundo lançamento em C1 em 16/11/2019 - débito de 50.00 ...";
+    saldoAnterior=0, saldoAtualizado=0;
+    int_lancamento = lancamento(1, 1, 50.0, &saldoAnterior, &saldoAtualizado);
+    if(int_lancamento == 0){
+        cout << endl << "Lançamento Realizado Com Sucesso!!" << endl;
+        id_Lancamentos[numLancamentosEfetuados] = new Lancamento(1, 1, 50.0, saldoAnterior, saldoAtualizado, 16, 11, 2019);
+        numLancamentosEfetuados++;
+    }
+    cout << "Saldo atual de C1 = " + to_string_with_precision(id_ContaPoupanca[numContasPoupanca-1]->getSaldoAtual(), 2) + "\n";     
+    
+    /*
     id_Lancamentos[numLancamentosEfetuados] = new Lancamento(1, 1, 100000, saldoAnterior, saldoAtualizado, 15, 11, 2019);
     numLancamentosEfetuados++;    
     // Output: saldo atual de c1 = 900,000.00
     cout << "Saldo atual de C1 = " + to_string_with_precision(saldoAtualizado, 2) + "\n" + "Debitado, Mas Nao Negativado\n"; 
+    */
 
     // Remoção de conta com lançamentos
     // Como a verificação é feita na main, simulamos aqui uma função similar que testa a verificacao de lancamentos 
     // vinculados a conta, deletando-a ou não
-    cout << "Tentativa De Deletar Conta Com Base No Lancamento Na Conta Usada Acima\n";
+    cout << "\nTentativa De Deletar Conta Com Base No Lancamento Na Conta Usada Acima\n";
     int verifica_lancamentos=0, l=0;
     while (!verifica_lancamentos && l<numLancamentosEfetuados) {
         if (id_Lancamentos[l]->getNumConta() == id_ContaPoupanca[numContasPoupanca-1]->getNumConta()) {
-            cout << "Essa Conta Possui Lancamentos Vinculadas A Ela!\n";
+            cout << "Essa Conta Não Pode Ser Excluida Pois Possui Lancamentos Vinculadas A Ela!\n";
             verifica_lancamentos = 1;
         }
         else {
-            delete id_Lancamentos[l];
+            delete id_ContaPoupanca[numContasPoupanca-1];
             cout << "Conta Deletada Com Sucesso!\n";
         }
         l++;
     }
-
+/*
     if (verifica_lancamentos == 1) {
         cout << "Essa Conta Possui Lancamentos Vinculadas A Ela!\n";
     } else {
         delete id_Lancamentos[l];
         cout << "Conta Deletada Com Sucesso!\n";
     }
-
+*/
     // Remoção de cliente com contas associadas
-    cout << "Tentativa De Deletar Cliente Fisico com Conta Corrente Vinculada...\n";
+    cout << "\nTentativa De Deletar Cliente Fisico com Conta Corrente Vinculada...\n";
     cout << "Criando Um Novo Cliente Fisico...\n";
     id_ClienteFisico[numClientesFisicos] = new PessoaFisica("Fabiano Lamborghini", "33002211", "fabiano@dc.ufscar.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12345678910");
     numClientesFisicos++;
-    cout << "Criando Uma Conta Poupanca Para O Cliente Fisico Acima...\n";
+    cout << "Criando Uma Conta Poupanca Para o Cliente Fisico Acima...\n";
     id_ContaPoupanca[numContasPoupanca] = new ContaPoupanca(*id_ClienteFisico[numClientesFisicos-1], numProxConta, 12, 12, 12, 200);
     numContasPoupanca++;
+    numProxConta++;
     if (id_ClienteFisico[numClientesFisicos-1]->getContaPoupancaAtiva() == 0) {
         delete id_ClienteFisico[numClientesFisicos-1];
         cout << "Cliente Deletado Com Sucesso!\n";
