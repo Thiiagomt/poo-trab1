@@ -1352,7 +1352,7 @@ void menuContaCorrente(){
             // Caso não ache o cliente fisico vinculado, procura em clientes juridicos
             i = 0;
             k = 0;
-            if (quebra == 0) {
+            if (quebra == 0 && !verifica_lancamentos) {
                 do {
                 // Varre até obter a conta baseada no numero digitado
                 if (aux == (id_ContaCorrente[i]->getNumConta())) {

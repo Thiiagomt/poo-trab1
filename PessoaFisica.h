@@ -18,8 +18,8 @@ public:
     // Destrutoe
     ~PessoaFisica();
 
-    // Imprime info PessoaFisica
-    string toString();
+    // toString
+    virtual string toString() const;
 
     // Setters
     void setCPF();
@@ -27,8 +27,8 @@ public:
     void setContaPoupancaAtiva(int);
 
     // Getters
-    string getCPF();
-    int getContaPoupancaAtiva();
+    string getCPF() const;
+    int getContaPoupancaAtiva() const;
 
 private:
     string cpf;

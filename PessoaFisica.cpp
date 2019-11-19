@@ -19,19 +19,12 @@ PessoaFisica::PessoaFisica(string a, string b, string c, string d, string e, str
 PessoaFisica::~PessoaFisica() = default;
 
 // Imprime info do PessoaFisica
-string PessoaFisica::toString() {
-    string saida;
+string PessoaFisica::toString() const {
+    ostringstream sPessoaFisica;
 
-    saida = "\nCliente: " + this->getNome() +
-                "\nPortador do CPF: " + this->getCPF() +
-                    "\nRua " + this->getEndereco()->getRua() + ", " + this->getEndereco()->getNumero() +
-                        "\nBairro " + this->getEndereco()->getBairro() + " - " + "CEP: " + this->getEndereco()->getCep() +
-                            "\nReside em: " + this->getEndereco()->getCidade() + "- " + this->getEndereco()->getUf() +
-                                "\nTelefone: " + this->getTelefone() +
-                                    "\nE-mail: " + this->getEmail() +
-                                        "\n";
+    sPessoaFisica << "\nPortador do CPF: " << this->getCPF() << Pessoa::toString();
 
-    return saida;
+    return sPessoaFisica.str();
 }
 
 // Setters
@@ -57,10 +50,10 @@ void PessoaFisica::setContaPoupancaAtiva(int y){
 }
 
 // Getters
-string PessoaFisica::getCPF(){
+string PessoaFisica::getCPF() const {
     return this->cpf;
 }
 
-int PessoaFisica::getContaPoupancaAtiva(){
+int PessoaFisica::getContaPoupancaAtiva() const {
     return this->conta_poupanca_ativa;
 }

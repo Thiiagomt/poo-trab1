@@ -20,6 +20,14 @@ Conta::Conta(int a, int b, int c, float d) {
 // Destrutor
 Conta::~Conta() = default;
 
+// toString
+string Conta::toString() const {
+    ostringstream sConta;
+    sConta << "\nA data de abertura da conta é: " << this->getDataAbertura()->getDia() << "/" << this->getDataAbertura()->getMes() << "/" << this->getDataAbertura()->getAno() <<
+                        "\nO saldo atual da conta é: R$" << to_string_with_precision(this->getSaldoAtual(), 2);
+    return sConta.str();
+}
+
 // Setters sem parâmetros
 void Conta::setDataAbertura(){
 	cout << "\nInsira a data de abertura da conta: " << endl;
@@ -39,9 +47,9 @@ void Conta::setDataAbertura(int x, int y, int z){
 }
 
 // Getters
-Data* Conta::getDataAbertura(){
+Data* Conta::getDataAbertura() const {
     return dataAbertura;
 }
-float Conta::getSaldoAtual(){
+float Conta::getSaldoAtual() const {
     return this->saldoAtual;
 }

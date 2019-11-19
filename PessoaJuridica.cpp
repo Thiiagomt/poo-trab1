@@ -25,26 +25,19 @@ PessoaJuridica::PessoaJuridica(string a, string b, string c, string d, string e,
 // Destrutor
 PessoaJuridica::~PessoaJuridica() = default;
 
-// Imprime info do PessoaJuridica
-string PessoaJuridica::toString() {
-    string saida;
+// toString
+string PessoaJuridica::toString() const {
+    ostringstream sPessoaJuridica;
 
-    saida = "\n\nA empresa dona desta conta é: " + this->getNome() +
-                "\nCom CNPJ: " + this->getCNPJ() +
-                    "\nCPF do proprietario majoritario é " + this->getCPFProprietarioMajor() +
-                        "\nTrabalha no ramo de atuacao de: " + this->getRamoAtuacao() +
-                            "\nFundada em: " + to_string(this->getDataFundacao()->getDia()) + "/" + to_string(this->getDataFundacao()->getMes()) + "/" + to_string(this->getDataFundacao()->getAno()) +
-                                "\nA ultima atualizacao do contrato social foi no dia: " + to_string(this->getDataUltimaAtt()->getDia()) + "/" + to_string(this->getDataUltimaAtt()->getMes()) + "/" + to_string(this->getDataUltimaAtt()->getAno()) +
-                                    "\nRua " + this->getEndereco()->getRua() + ", " + this->getEndereco()->getNumero() +
-                                        "\nBairro " + this->getEndereco()->getBairro() + " - " + "CEP: " + this->getEndereco()->getCep() +
-                                            "\nLocalizada em: " + this->getEndereco()->getCidade() + " - " + this->getEndereco()->getUf() +
-                                                "\nTelefone: " + getTelefone() +
-                                                    "\nE-mail: " + getEmail() +
-                                                        "\n";
+    sPessoaJuridica <<  "\nPortador do CNPJ: " << this->getCNPJ() <<
+                        "\nCPF do proprietario majoritario é " << this->getCPFProprietarioMajor() <<
+                            "\nTrabalha no ramo de atuacao de: " << this->getRamoAtuacao() <<
+                                "\nFundada em: " << to_string(this->getDataFundacao()->getDia()) << "/" << to_string(this->getDataFundacao()->getMes()) << "/" << to_string(this->getDataFundacao()->getAno()) <<
+                                    "\nA ultima atualizacao do contrato social foi no dia: " << to_string(this->getDataUltimaAtt()->getDia()) << "/" << to_string(this->getDataUltimaAtt()->getMes()) << "/" << to_string(this->getDataUltimaAtt()->getAno()) <<
+                                        Pessoa::toString();
 
-    return saida;
+    return sPessoaJuridica.str();
 }
-
 
 // Setters sem parâmetros
 void PessoaJuridica::setCNPJ() {
@@ -112,22 +105,22 @@ void PessoaJuridica::setDataUltimaAtt(int x, int y, int z){
 }
 
 // Getters
-string PessoaJuridica::getCNPJ(){
+string PessoaJuridica::getCNPJ() const {
     return this->cnpj;
 }
 
-string PessoaJuridica::getCPFProprietarioMajor(){
+string PessoaJuridica::getCPFProprietarioMajor() const {
     return this->cpf_proprietario_major;
 }
 
-string PessoaJuridica::getRamoAtuacao(){
+string PessoaJuridica::getRamoAtuacao() const {
     return this->ramo_atuacao;
 }
 
-Data* PessoaJuridica::getDataFundacao(){
+Data* PessoaJuridica::getDataFundacao() const {
     return data_fundacao;
 }
 
-Data* PessoaJuridica::getDataUltimaAtt(){
+Data* PessoaJuridica::getDataUltimaAtt() const {
     return data_ultima_att;
 }

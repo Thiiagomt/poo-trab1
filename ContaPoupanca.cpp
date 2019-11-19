@@ -22,17 +22,15 @@ ContaPoupanca::ContaPoupanca(PessoaFisica &x, int y, int a, int b, int c, float 
 // Destrutor
 ContaPoupanca::~ContaPoupanca() = default;
 
-// Imprime info da conta
-string ContaPoupanca::toString() {
-    string saida;
+// toString
+// toString
+string ContaPoupanca::toString() const {
+    ostringstream sContaCorrente;
+    sContaCorrente << "\n\nO CPF do dono desta conta é: " << getCPFPessoaFisica() <<
+                        "\nO número da conta é: 000" << to_string(getNumConta()) <<
+                            Conta::toString() << "\n";
 
-    saida = "\n\nO CPF do dono desta conta é: " + getCPFPessoaFisica() +
-        "\nO número da conta é: 000" + to_string(getNumConta()) +
-            "\nA data de abertura da conta é: " + to_string(this->getDataAbertura()->getDia()) + "/" + to_string(this->getDataAbertura()->getMes()) + "/" + to_string(this->getDataAbertura()->getAno()) +
-                "\nO saldo atual da conta é: R$" + to_string_with_precision(getSaldoAtual(), 2)
-                    + "\n";
-
-    return saida;
+    return sContaCorrente.str();
 }
 
 // Setters
@@ -44,9 +42,9 @@ void ContaPoupanca::setCPFPessoaFisica(PessoaFisica x){
 }
 
 // Getters
-int ContaPoupanca::getNumConta(){
+int ContaPoupanca::getNumConta() const {
     return this->numConta;
 }
-string ContaPoupanca::getCPFPessoaFisica() {
+string ContaPoupanca::getCPFPessoaFisica() const {
     return this->cpf;
 }

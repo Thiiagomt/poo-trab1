@@ -21,16 +21,16 @@ public:
     // Destrutor
     ~ContaPoupanca();
 
-    // Imprime info conta
-    string toString();
+    // toString
+    virtual string toString() const;
 
     // Setters
     void setNumConta(int);
     void setCPFPessoaFisica(PessoaFisica);
 
     // Getters
-    int getNumConta();
-    string getCPFPessoaFisica();
+    int getNumConta() const;
+    string getCPFPessoaFisica() const;
 
 private:
     int numConta;

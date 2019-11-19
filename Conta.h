@@ -11,7 +11,7 @@ class Conta {
 public:
 
     //Função para transformar float em string com 2 casas decimais
-    std::string to_string_with_precision(const float valor, const int num_casas){
+    std::string to_string_with_precision(const float valor, const int num_casas) const {
         std::ostringstream out;
         out.precision(num_casas);
         out << std::fixed << valor;
@@ -27,6 +27,9 @@ public:
     // Destrutor
     ~Conta();
 
+    // toString
+    virtual string toString() const;
+
     // Setters
     void setDataAbertura();
     void setDataAbertura(int a, int b, int c);
@@ -34,8 +37,8 @@ public:
     void setSaldoAtual(float x);
 
     // Getters
-    Data* getDataAbertura();
-    float getSaldoAtual();
+    Data* getDataAbertura() const;
+    float getSaldoAtual() const;
 
 private:
     Data *dataAbertura;

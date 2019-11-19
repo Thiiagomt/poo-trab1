@@ -22,7 +22,7 @@ public:
     ~PessoaJuridica();
 
     // Imprime info PessoaFisica
-    string toString();
+    virtual string toString() const;
 
     // Setters
     void setCNPJ();
@@ -37,11 +37,11 @@ public:
     void setDataUltimaAtt(int, int, int);
 
     // Getters
-    string getCNPJ();
-    string getCPFProprietarioMajor();
-    string getRamoAtuacao();
-    Data* getDataFundacao();
-    Data* getDataUltimaAtt();
+    string getCNPJ() const;
+    string getCPFProprietarioMajor() const;
+    string getRamoAtuacao() const;
+    Data* getDataFundacao() const;
+    Data* getDataUltimaAtt() const;
 
 private:
     string cnpj;

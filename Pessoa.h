@@ -26,6 +26,9 @@ public:
     // Destrutor
     ~Pessoa();
 
+    // toString
+    virtual string toString() const;
+
     // Setters
     void setNome();
     void setEndereco();
@@ -38,11 +41,11 @@ public:
     void setContaCorrenteAtiva(int);
 
     // Getters
-    string getNome();
-    Endereco* getEndereco();
-    string getTelefone();
-    string getEmail();
-    int getContaCorrenteAtiva();
+    string getNome() const;
+    Endereco* getEndereco() const;
+    string getTelefone() const;
+    string getEmail() const;
+    int getContaCorrenteAtiva() const;
 
 private:
     string nome;

@@ -28,6 +28,19 @@ Pessoa::Pessoa() {
 // Destrutor
 Pessoa::~Pessoa() = default;
 
+// toString
+string Pessoa::toString() const {
+    ostringstream sPessoa;
+    sPessoa << "\nCliente/Empresa: " << this->getNome() <<
+                    "\nRua " << this->getEndereco()->getRua() << ", " << this->getEndereco()->getNumero() <<
+                        "\nBairro " << this->getEndereco()->getBairro() << " - " << "CEP: " << this->getEndereco()->getCep() <<
+                            "\nReside em: " << this->getEndereco()->getCidade() << "- " << this->getEndereco()->getUf() <<
+                                "\nTelefone: " << this->getTelefone() <<
+                                    "\nE-mail: " << this->getEmail() <<
+                                        "\n";
+    return sPessoa.str();
+}
+
 // Setters sem parametros.  Usados no construtor sem parametros. As entradas vem do teclado
 void Pessoa::setNome() {
     cout << "Digite seu Nome/Nome da Empresa: ";
@@ -65,19 +78,19 @@ void Pessoa::setEmail(string x) {
 }
 
 // Getters
-string Pessoa::getNome(){
+string Pessoa::getNome() const {
     return this->nome;
 }
-Endereco* Pessoa::getEndereco(){
+Endereco* Pessoa::getEndereco() const {
     return endereco;
 }
-string Pessoa::getTelefone(){
+string Pessoa::getTelefone() const {
     return this->telefone;
 }
-string Pessoa::getEmail(){
+string Pessoa::getEmail() const {
     return this->email;
 }
 
-int Pessoa::getContaCorrenteAtiva(){
+int Pessoa::getContaCorrenteAtiva() const {
     return this->conta_corrente_ativa;
 }

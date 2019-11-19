@@ -38,18 +38,15 @@ ContaCorrente::ContaCorrente(int a, int b, int c, float d, int n, PessoaJuridica
 // Destrutor
 ContaCorrente::~ContaCorrente() = default;
 
-// Imprime info da conta
-string ContaCorrente::toString() {
-    string saida;
-
-    saida = "\n\nO CPF/CNPJ do dono desta conta é: " + this->getCPFouCNPJ() +
-                "\nO número da conta é: 000" + to_string(this->getNumConta()) +
-                    "\nA data de abertura da conta é: " + to_string(this->getDataAbertura()->getDia()) + "/" + to_string(this->getDataAbertura()->getMes()) + "/" + to_string(this->getDataAbertura()->getAno()) +
-                        "\nO saldo atual da conta é: R$" + to_string_with_precision(this->getSaldoAtual(), 2) +
-                            "\nO limite de cheque especial é: R$" + to_string_with_precision(this->getLimiteCheque(), 2)
-                            + "\n";
-
-    return saida;
+// toString
+string ContaCorrente::toString() const {
+    ostringstream sContaCorrente;
+    sContaCorrente << "\n\nO CPF/CNPJ do dono desta conta é: " << this->getCPFouCNPJ() <<
+                        "\nO número da conta é: 000" << to_string(this->getNumConta()) <<
+                            Conta::toString() <<
+                                "\nO limite de cheque especial é: R$" << to_string_with_precision(this->getLimiteCheque(), 2) << 
+                                    "\n";
+    return sContaCorrente.str();
 }
 
 // Setters
@@ -75,17 +72,17 @@ void ContaCorrente::setLimiteCheque(float x){
 }
 
 // Getters
-int ContaCorrente::getNumConta(){
+int ContaCorrente::getNumConta() const {
     return this->numConta;
 }
 
-string ContaCorrente::getCPFouCNPJ() {
+string ContaCorrente::getCPFouCNPJ() const {
     // Para o cpf ser maior que o cnpj, cnpj não pode estar sendo ocupado aqui
     if (this->cpf > this->cnpj)
         return this->cpf;
     else
         return this->cnpj;
 }
-float ContaCorrente::getLimiteCheque(){
+float ContaCorrente::getLimiteCheque() const {
     return this->limitecheque;
 }

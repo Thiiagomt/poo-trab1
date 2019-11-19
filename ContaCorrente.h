@@ -26,8 +26,8 @@ public:
     // Destrutor
     ~ContaCorrente();
 
-    // Imprime info conta
-    string toString();
+    // toString
+    virtual string toString() const;
 
     // Setters
     void setNumConta(int num);
@@ -37,9 +37,9 @@ public:
     void setLimiteCheque(float x);
 
     // Getters
-    int getNumConta();
-    string getCPFouCNPJ();
-    float getLimiteCheque();
+    int getNumConta() const;
+    string getCPFouCNPJ() const;
+    float getLimiteCheque() const;
 
 private:
     int numConta;
