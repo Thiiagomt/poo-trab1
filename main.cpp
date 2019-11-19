@@ -563,13 +563,6 @@ void Cenario4() {
         numLancamentosEfetuados++;
     }
     cout << "Saldo atual de C1 = " + to_string_with_precision(id_ContaPoupanca[numContasPoupanca-1]->getSaldoAtual(), 2) + "\n";     
-    
-    /*
-    id_Lancamentos[numLancamentosEfetuados] = new Lancamento(1, 1, 100000, saldoAnterior, saldoAtualizado, 15, 11, 2019);
-    numLancamentosEfetuados++;    
-    // Output: saldo atual de c1 = 900,000.00
-    cout << "Saldo atual de C1 = " + to_string_with_precision(saldoAtualizado, 2) + "\n" + "Debitado, Mas Nao Negativado\n"; 
-    */
 
     // Remoção de conta com lançamentos
     // Como a verificação é feita na main, simulamos aqui uma função similar que testa a verificacao de lancamentos 
@@ -587,14 +580,7 @@ void Cenario4() {
         }
         l++;
     }
-/*
-    if (verifica_lancamentos == 1) {
-        cout << "Essa Conta Possui Lancamentos Vinculadas A Ela!\n";
-    } else {
-        delete id_Lancamentos[l];
-        cout << "Conta Deletada Com Sucesso!\n";
-    }
-*/
+
     // Remoção de cliente com contas associadas
     cout << "\nTentativa De Deletar Cliente Fisico com Conta Corrente Vinculada...\n";
     cout << "Criando Um Novo Cliente Fisico...\n";
