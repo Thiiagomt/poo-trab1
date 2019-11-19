@@ -534,10 +534,41 @@ void Cenario4() {
         cout << "CPF Não Corresponde A Nenhum Cliente Fisico! Falha Na Criacao Das Contas!\n"; 
 
     // Lançamento que geraria saldo negativo em Conta Poupança
-    // ---
+    cout << "Criando Conta Poupanca Para Testar Lancamentos...\n";
+    id_ContaPoupanca[numContasPoupanca] = new ContaPoupanca(*id_ClienteFisico[numClientesFisicos-1], numProxConta, 12, 12, 12, 200);
+    numContasPoupanca++;
+    cout << "Conta Poupanca Criada Com Sucesso!\n";
+    cout << "\nEfetuando primeiro lançamento em C1 em 15/11/2019 - débito de 100,000.00 em uma conta com 100.00 ...\n";
+    float saldoAnterior=0, saldoAtualizado=0;
+    lancamento(1, 1, 100000.0, &saldoAnterior, &saldoAtualizado);
+    id_Lancamentos[numLancamentosEfetuados] = new Lancamento(1, 1, 100000, saldoAnterior, saldoAtualizado, 15, 11, 2019);
+    numLancamentosEfetuados++;    
+    // Output: saldo atual de c1 = 900,000.00
+    cout << "Saldo atual de C1 = " + to_string_with_precision(saldoAtualizado, 2) + "\n" + "Debitado, Mas Nao Negativado\n"; 
 
     // Remoção de conta com lançamentos
-    // ---
+    // Como a verificação é feita na main, simulamos aqui uma função similar que testa a verificacao de lancamentos 
+    // vinculados a conta, deletando-a ou não
+    cout << "Tentativa De Deletar Conta Com Base No Lancamento Na Conta Usada Acima\n";
+    int verifica_lancamentos=0, l=0;
+    while (!verifica_lancamentos && l<numLancamentosEfetuados) {
+        if (id_Lancamentos[l]->getNumConta() == id_ContaPoupanca[numContasPoupanca-1]->getNumConta()) {
+            cout << "Essa Conta Possui Lancamentos Vinculadas A Ela!\n";
+            verifica_lancamentos = 1;
+        }
+        else {
+            delete id_Lancamentos[l];
+            cout << "Conta Deletada Com Sucesso!\n";
+        }
+        l++;
+    }
+
+    if (verifica_lancamentos == 1) {
+        cout << "Essa Conta Possui Lancamentos Vinculadas A Ela!\n";
+    } else {
+        delete id_Lancamentos[l];
+        cout << "Conta Deletada Com Sucesso!\n";
+    }
 
     // Remoção de cliente com contas associadas
     cout << "Tentativa De Deletar Cliente Fisico com Conta Corrente Vinculada...\n";
@@ -1069,25 +1100,36 @@ void menuContaPoupanca(){
         }
         case 3: {
             // Deleta a conta segundo o número da conta
-            int aux, i=0, quebra=0;
+            int aux, i=0, quebra=0, k=0, verifica_lancamentos=0;
             string cpf_aux;
             cout << "Digite o numero da conta: ";
             cin >> aux;
             do {
                 // Varre até obter a conta baseada no numero digitado
                 if (aux == (id_ContaPoupanca[i]->getNumConta())) {
-                    cpf_aux = id_ContaPoupanca[i]->getCPFPessoaFisica();
-                    delete id_ContaPoupanca[i];
-                    numContasPoupanca--;
-                    for (int j=i; j<numClientesFisicos; j++) {
-                        id_ContaPoupanca[j] = id_ContaPoupanca[j+1];
+                    while (k<numLancamentosEfetuados && !verifica_lancamentos) {
+                        if (id_Lancamentos[k]->getNumConta() == aux) {
+                            verifica_lancamentos = 1;
+                        }
+                        k++;
                     }
-                    for (int j=0; j<numClientesFisicos; j++) {
-                        if (cpf_aux == id_ClienteFisico[j]->getCPF())
-                            id_ClienteFisico[j]->setContaPoupancaAtiva(0);
+                    if (verifica_lancamentos == 1) {
+                        cout << "A conta possui lancamentos vinculados\nNao foi possivel realizar tal operacao\n";
                     }
-                    quebra = 1;
-                    cout << "Conta excluida com sucesso!\n";
+                    else {
+                        cpf_aux = id_ContaPoupanca[i]->getCPFPessoaFisica();
+                        delete id_ContaPoupanca[i];
+                        numContasPoupanca--;
+                        for (int j=i; j<numClientesFisicos; j++) {
+                            id_ContaPoupanca[j] = id_ContaPoupanca[j+1];
+                        }
+                        for (int j=0; j<numClientesFisicos; j++) {
+                            if (cpf_aux == id_ClienteFisico[j]->getCPF())
+                                id_ClienteFisico[j]->setContaPoupancaAtiva(0);
+                        }
+                        quebra = 1;
+                        cout << "Conta excluida com sucesso!\n";
+                    }
                 }
                 i++;
             } while ((i < numContasPoupanca) && !quebra);
@@ -1271,28 +1313,77 @@ void menuContaCorrente(){
         }
         case 3: {
             // Deleta a conta segundo o número da conta
-            int aux, i=0, quebra=0;
+            int aux, i=0, quebra=0, k=0;
             string cpf_aux;
             cout << "Digite o numero da conta: ";
             cin >> aux;
+            int verifica_lancamentos=0;
             do {
                 // Varre até obter a conta baseada no numero digitado
                 if (aux == (id_ContaCorrente[i]->getNumConta())) {
-                    cpf_aux = id_ContaCorrente[i]->getCPFouCNPJ();
-                    delete id_ContaCorrente[i];
-                    numContasCorrente--;
-                    for (int j=i; j<numClientesFisicos; j++) {
-                        id_ContaCorrente[j] = id_ContaCorrente[j+1];
+                    // Verificamdo se há lançamentos efetuados com relação a conta
+                    while (k<numLancamentosEfetuados && !verifica_lancamentos) {
+                        if (id_Lancamentos[k]->getNumConta() == aux) {
+                            verifica_lancamentos = 1;
+                        }
+                        k++;
                     }
-                    for (int j=0; j<numClientesFisicos; j++) {
-                        if (cpf_aux == id_ClienteFisico[j]->getCPF())
-                            id_ClienteFisico[j]->setContaCorrenteAtiva(0);
+                    if (verifica_lancamentos == 1) {
+                        cout << "A conta possui lancamentos vinculados\nNao foi possivel realizar tal operacao\n";
                     }
-                    quebra = 1;
-                    cout << "Conta excluida com sucesso!\n";
+                    else {
+                        cpf_aux = id_ContaCorrente[i]->getCPFouCNPJ();
+                        delete id_ContaCorrente[i];
+                        numContasCorrente--;
+                        for (int j=i; j<numClientesFisicos; j++) {
+                            id_ContaCorrente[j] = id_ContaCorrente[j+1];
+                        }
+                        for (int j=0; j<numClientesFisicos; j++) {
+                            if (cpf_aux == id_ClienteFisico[j]->getCPF())
+                                id_ClienteFisico[j]->setContaCorrenteAtiva(0);
+                        }
+                        quebra = 1;
+                        cout << "Conta de cliente fisico excluida com sucesso!\n";
+                    }
                 }
                 i++;
             } while ((i < numContasCorrente) && !quebra);
+
+            // Caso não ache o cliente fisico vinculado, procura em clientes juridicos
+            i = 0;
+            k = 0;
+            if (quebra == 0) {
+                do {
+                // Varre até obter a conta baseada no numero digitado
+                if (aux == (id_ContaCorrente[i]->getNumConta())) {
+                    // Verificamdo se há lançamentos efetuados com relação a conta
+                    while (k<numLancamentosEfetuados && !verifica_lancamentos) {
+                        if (id_Lancamentos[k]->getNumConta() == aux) {
+                            verifica_lancamentos = 1;
+                        }
+                        k++;
+                    }
+                    if (verifica_lancamentos == 1) {
+                        cout << "A conta possui lancamentos vinculados\nNao foi possivel realizar tal operacao\n";
+                    }
+                    else {
+                        cpf_aux = id_ContaCorrente[i]->getCPFouCNPJ();
+                        delete id_ContaCorrente[i];
+                        numContasCorrente--;
+                        for (int j=i; j<numClientesFisicos; j++) {
+                            id_ContaCorrente[j] = id_ContaCorrente[j+1];
+                        }
+                        for (int j=0; j<numClientesFisicos; j++) {
+                            if (cpf_aux == id_ClienteFisico[j]->getCPF())
+                                id_ClienteFisico[j]->setContaCorrenteAtiva(0);
+                        }
+                        quebra = 1;
+                        cout << "Conta de cliente fisico excluida com sucesso!\n";
+                    }
+                }
+                i++;
+            } while ((i < numContasCorrente) && !quebra);
+            }
 
             if (quebra == 0) {
                 cout << "Cliente não encontrado!";
