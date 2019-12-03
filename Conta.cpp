@@ -40,6 +40,9 @@ void Conta::setSaldoAtual(){
 void Conta::setSaldoAtual(float x){
     this->saldoAtual = x;
 }
+void Conta::setTipoConta(int x){
+    this->tipo_conta = x;
+}
 
 // Setters com parâmetros
 void Conta::setDataAbertura(int x, int y, int z){
@@ -52,4 +55,7 @@ Data* Conta::getDataAbertura() const {
 }
 float Conta::getSaldoAtual() const {
     return this->saldoAtual;
+}
+int Conta::getTipoConta() const {
+    return this->tipo_conta;
 }

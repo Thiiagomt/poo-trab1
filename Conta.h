@@ -35,14 +35,17 @@ public:
     void setDataAbertura(int a, int b, int c);
     void setSaldoAtual();
     void setSaldoAtual(float x);
+    void setTipoConta(int x);
 
     // Getters
     Data* getDataAbertura() const;
     float getSaldoAtual() const;
+    int getTipoConta() const;
 
 private:
     Data *dataAbertura;
     float saldoAtual;
+    int tipo_conta; //1 = conta poupança ; 2 = conta corrente; 
 };
 
 #endif //TRAB2_CONTA_H
