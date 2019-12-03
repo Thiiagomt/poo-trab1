@@ -1,5 +1,5 @@
 /*
-Trabalho 1 de Programação Orientada a Objetos - Sistema de Gerenciamento de Banco
+Trabalho 3 de Programação Orientada a Objetos - Sistema de Gerenciamento de Banco
 Felipe Tavoni                       RA:758707
 Guilherme Lorençato G Lamonato      RA:758665
 Nathaelly Boni                      RA:758963
