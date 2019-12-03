@@ -62,6 +62,9 @@ void Pessoa::setEmail() {
 void Pessoa::setContaCorrenteAtiva(int x) {
     this->conta_corrente_ativa = x;
 }
+void Pessoa::setTipoPessoa(int x){
+    this->tipo_pessoa = x;
+}
 
 // Setters com parametros.  Usados no construtor com parametros. As entradas sao passadas pos parametros
 void Pessoa::setNome(string x) {
@@ -93,4 +96,8 @@ string Pessoa::getEmail() const {
 
 int Pessoa::getContaCorrenteAtiva() const {
     return this->conta_corrente_ativa;
+}
+
+int Pessoa::getTipoPessoa() const {
+    return this->tipo_pessoa;
 }

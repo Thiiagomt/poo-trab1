@@ -39,6 +39,7 @@ public:
     void setTelefone(string);
     void setEmail(string);
     void setContaCorrenteAtiva(int);
+    void setTipoPessoa(int);
 
     // Getters
     string getNome() const;
@@ -46,6 +47,7 @@ public:
     string getTelefone() const;
     string getEmail() const;
     int getContaCorrenteAtiva() const;
+    int getTipoPessoa() const;
 
 private:
     string nome;
@@ -53,6 +55,7 @@ private:
     string telefone;
     string email;
     int conta_corrente_ativa;
+    int tipo_pessoa; //1 = jurídica ; 2 = física
 };
 
 #endif //TRAB2_PESSOA_H
