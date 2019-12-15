@@ -10,6 +10,7 @@ Clara Gruber                        RA:769817
 #include <string>
 #include <cstring>
 #include <sstream>
+#include <fstream>
 // N° de contas nunca será superior ao de clientes
 #define N_CLIENTES_CONTAS 20
 
@@ -52,6 +53,11 @@ void printLancamento(int numConta, int diaInicio,int mesInicio, int anoInicio, i
 int getQuantidadeDeContas();
 int getQuantidadeDeClientes();
 float getMontanteTotal();
+void writePessoa(ofstream &arq, PessoaFisica *pf, PessoaJuridica *pj);
+void readPessoa(ifstream &arq, PessoaFisica *pf, PessoaJuridica *pj);
+void writeConta(ofstream &arq, ContaPoupanca *cp, ContaCorrente *cc);
+void readConta(ifstream &arq, ContaPoupanca *cp, ContaCorrente *cc);
+void atualizaSistema();
 
 int numContasPoupanca = 0;
 int numContasCorrente = 0;
@@ -62,6 +68,17 @@ int numLancamentosEfetuados = 0;
 // Esse contador sempre sera incrementado, determinando o numero da conta (nunca será repetido)
 int numProxConta = 1;
 
+// Arquivos no escopo global para melhor manipular
+ofstream arq1("PessoaFisica.bin", ios::app);
+ofstream arq2("PessoaJuridica.bin", ios::app);
+ofstream arq3("ContaPoupanca.bin", ios::app);
+ofstream arq4("ContaCorrente.bin", ios::app);
+
+ifstream arq5("PessoaFisica.bin", ios::in);
+ifstream arq6("PessoaJuridica.bin", ios::in);
+ifstream arq7("ContaPoupanca.bin", ios::in);
+ifstream arq8("ContaCorrente.bin", ios::in);
+
 PessoaFisica * id_ClienteFisico[N_CLIENTES_CONTAS];
 PessoaJuridica * id_ClienteJuridico[N_CLIENTES_CONTAS];
 ContaPoupanca * id_ContaPoupanca[N_CLIENTES_CONTAS];
@@ -70,6 +87,7 @@ Lancamento * id_Lancamentos[N_CLIENTES_CONTAS];
 
 int main() {
 
+    atualizaSistema();
     menuPrincipal();
 
     return 0;
@@ -834,6 +852,10 @@ void menuClienteFisico(){
             int quebra=0, i=0;
             // Cadastra-se um cliente em ordem
             id_ClienteFisico[numClientesFisicos] = new PessoaFisica;
+            
+            // Atualiza o arquivo
+            writePessoa(arq1, id_ClienteFisico[i], NULL);
+
             numClientesFisicos++;
             // Cria o cliente e verifica se tal já existe por meio  do CPF.
             // Se já existir (CPF já usado), então é deletado o objeto criado
@@ -1767,4 +1789,51 @@ float getMontanteTotal(){
 
         return montanteTotal;
     }
+}
+
+// Funções que lidam com leitura e escrita de arquivo
+
+void writePessoa(ofstream &arq, PessoaFisica *pf, PessoaJuridica *pj) {
+    // para gravar todos os atributos da classe
+    if (pf == NULL)
+        arq.write(reinterpret_cast<const char*>(pj),sizeof(*pj));
+    if (pj == NULL)
+        arq.write(reinterpret_cast<const char*>(pf),sizeof(*pf));
+}
+
+void readPessoa(ifstream &arq, PessoaFisica *pf, PessoaJuridica *pj) {
+    // para ler todos os atributos da classe
+    if (pf == NULL)
+        arq.read(reinterpret_cast<char*>(pj),sizeof(*pj));
+    if (pj == NULL)
+        arq.read(reinterpret_cast<char*>(pf),sizeof(*pf));
+}
+
+void writeConta(ofstream &arq, ContaPoupanca *cp, ContaCorrente *cc) {
+    // para gravar todos os atributos da classe
+    if (cp == NULL)
+        arq.write(reinterpret_cast<const char*>(cc),sizeof(*cc));
+    if (cc == NULL)
+        arq.write(reinterpret_cast<const char*>(cp),sizeof(*cp));
+}
+
+void readConta(ifstream &arq, ContaPoupanca *cp, ContaCorrente *cc) {
+    // para ler todos os atributos da classe
+    if (cp == NULL)
+        arq.read(reinterpret_cast<char*>(cc),sizeof(*cc));
+    if (cc == NULL)
+        arq.read(reinterpret_cast<char*>(cp),sizeof(*cp));
+}
+
+// Só deve ser chamado uma vez, ao iniciar o executável
+void atualizaSistema() {
+    // Atualizando as Pessoas Fisicas
+    PessoaFisica *aux;
+    arq5.seekg(0);                                                       // Posição inicial do arquivo
+    do {
+        aux = new PessoaFisica(" ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
+        readPessoa(arq5, aux, NULL);                                     // Inicia os campos de aux com os dados do arquivo
+        id_ClienteFisico[numClientesFisicos] = aux;
+        numClientesFisicos++;                                            // Incrementa o numero de PessoasFisicas cadastradas
+    } while (! arq5.eof());                                              // Enquanto !EOF
 }
