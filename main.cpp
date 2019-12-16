@@ -79,18 +79,6 @@ int numLancamentosEfetuados = 0;
 // Esse contador sempre sera incrementado, determinando o numero da conta (nunca será repetido)
 int numProxConta = 1;
 
-/*
-// Arquivos no escopo global para melhor manipular
-ofstream arq1("PessoaFisica.bin", ios::binary);
-ofstream arq2("PessoaJuridica.bin", ios::binary);
-ofstream arq3("ContaPoupanca.bin", ios::binary);
-ofstream arq4("ContaCorrente.bin", ios::binary);
-
-ifstream arq5("PessoaFisica.bin", ios::binary);
-ifstream arq6("PessoaJuridica.bin", ios::binary);
-ifstream arq7("ContaPoupanca.bin", ios::binary);
-ifstream arq8("ContaCorrente.bin", ios::binary);
-*/
 PessoaFisica * id_ClienteFisico[N_CLIENTES_CONTAS];
 PessoaJuridica * id_ClienteJuridico[N_CLIENTES_CONTAS];
 ContaPoupanca * id_ContaPoupanca[N_CLIENTES_CONTAS];
