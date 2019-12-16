@@ -5,10 +5,13 @@ using namespace std;
 
 #include "PessoaFisica.h"
 
+PessoaFisica::PessoaFisica(){}
+/*
 PessoaFisica::PessoaFisica(){
     this->setCPF();
     this->setContaPoupancaAtiva(0);
 }
+*/
 // Nome, Telefone, Email, Rua, Bairro, Cidade, Uf, Cep, Numero, Cpf
 PessoaFisica::PessoaFisica(string a, string b, string c, string d, string e, string f, string g, string h, string i, string j) : Pessoa(a, b, c, d, e, f, g, h, i) {
     this->setCPF(j);
