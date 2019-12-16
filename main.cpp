@@ -40,6 +40,7 @@ void Cenario1();
 void Cenario2();
 void Cenario3();
 void Cenario4();
+void SystemUpdate();
 void menuCliente();
 void menuClienteJuridico();
 void menuClienteFisico();
@@ -53,11 +54,21 @@ void printLancamento(int numConta, int diaInicio,int mesInicio, int anoInicio, i
 int getQuantidadeDeContas();
 int getQuantidadeDeClientes();
 float getMontanteTotal();
-void writePessoa(ofstream &arq, PessoaFisica *pf, PessoaJuridica *pj);
-void readPessoa(ifstream &arq, PessoaFisica *pf, PessoaJuridica *pj);
-void writeConta(ofstream &arq, ContaPoupanca *cp, ContaCorrente *cc);
-void readConta(ifstream &arq, ContaPoupanca *cp, ContaCorrente *cc);
-void atualizaSistema();
+void writePessoaFisica(ofstream &arq, PessoaFisica &p);
+void readPessoaFisica(ifstream &arq, PessoaFisica &p);
+void writePessoaJuridica(ofstream &arq, PessoaJuridica &p);
+void readPessoaJuridica(ifstream &arq, PessoaJuridica &p);
+void writeContaCorrente(ofstream &arq, ContaCorrente &c);
+void readContaCorrente(ifstream &arq, ContaCorrente &c);
+void writeContaPoupanca(ofstream &arq, ContaPoupanca &c);
+void readContaPoupanca(ifstream &arq, ContaPoupanca &c);
+void writeLancamento(ofstream &arq, Lancamento &l);
+void readLancamento(ifstream &arq, Lancamento &l);
+void imprimePessoaFisica(PessoaFisica &p);
+void imprimePessoaJuridica(PessoaJuridica &p);
+void imprimeContaCorrente(ContaCorrente &c);
+void imprimeContaPoupanca(ContaPoupanca &c);
+void imprimeLancamento(Lancamento &l);
 
 int numContasPoupanca = 0;
 int numContasCorrente = 0;
@@ -68,17 +79,18 @@ int numLancamentosEfetuados = 0;
 // Esse contador sempre sera incrementado, determinando o numero da conta (nunca será repetido)
 int numProxConta = 1;
 
+/*
 // Arquivos no escopo global para melhor manipular
-ofstream arq1("PessoaFisica.bin", ios::app);
-ofstream arq2("PessoaJuridica.bin", ios::app);
-ofstream arq3("ContaPoupanca.bin", ios::app);
-ofstream arq4("ContaCorrente.bin", ios::app);
+ofstream arq1("PessoaFisica.bin", ios::binary);
+ofstream arq2("PessoaJuridica.bin", ios::binary);
+ofstream arq3("ContaPoupanca.bin", ios::binary);
+ofstream arq4("ContaCorrente.bin", ios::binary);
 
-ifstream arq5("PessoaFisica.bin", ios::in);
-ifstream arq6("PessoaJuridica.bin", ios::in);
-ifstream arq7("ContaPoupanca.bin", ios::in);
-ifstream arq8("ContaCorrente.bin", ios::in);
-
+ifstream arq5("PessoaFisica.bin", ios::binary);
+ifstream arq6("PessoaJuridica.bin", ios::binary);
+ifstream arq7("ContaPoupanca.bin", ios::binary);
+ifstream arq8("ContaCorrente.bin", ios::binary);
+*/
 PessoaFisica * id_ClienteFisico[N_CLIENTES_CONTAS];
 PessoaJuridica * id_ClienteJuridico[N_CLIENTES_CONTAS];
 ContaPoupanca * id_ContaPoupanca[N_CLIENTES_CONTAS];
@@ -87,7 +99,7 @@ Lancamento * id_Lancamentos[N_CLIENTES_CONTAS];
 
 int main() {
 
-    atualizaSistema();
+    //atualizaSistema();
     menuPrincipal();
 
     return 0;
@@ -101,14 +113,11 @@ void menuPrincipal(){
 
         cout << endl << "--- BEM VINDO AO SISTEMA DO BANCO ---" << endl
              << "ESCOLHA O MENU QUE DESEJAR" << endl
-             << "0 - SAIR" << endl
-             << "1 - MENU CLIENTES" << endl
-             << "2 - MENU CONTAS" << endl
-             << "3 - GERENCIAMENTO DO BANCO" << endl
-             << "4 - CENARIO 1" << endl
-             << "5 - CENARIO 2" << endl
-             << "6 - CENARIO 3" << endl
-             << "7 - CENARIO 4" << endl;
+             << "1 - CENARIO 1" << endl
+             << "2 - CENARIO 2" << endl
+             << "3 - CENARIO 3" << endl
+             << "4 - CENARIO 4" << endl
+             << "5 - REINICIALIZAÇÃO DO SISTEMA (NECESSARIO APOS EXECUCAO DE CADA CENARIO)" << endl;
 
         cin >> option;
         if(option<0 || option>7)
@@ -118,35 +127,24 @@ void menuPrincipal(){
             }
 
         switch(option){
-            case 0:{
-                exit(1);
-            }
             case 1: {
-                menuCliente();
-                break;
-            }
-            case 2: {
-                menuConta();
-                break;
-            }
-            case 3: {
-                menuBanco();
-                break;
-            }
-            case 4: {
                 Cenario1();
                 break;
             }
-            case 5: {
-            	Cenario2();
-            	break;
+            case 2: {
+                Cenario2();
+                break;
             }
-            case 6: {
-            	Cenario3();
-            	break;
+            case 3: {
+                Cenario3();
+                break;
             }
-            case 7: {
-            	Cenario4();
+            case 4: {
+                Cenario4();
+                break;
+            }
+            case 5:{
+            	SystemUpdate();
             	break;
             }
             default:
@@ -158,56 +156,105 @@ void menuPrincipal(){
 
 void Cenario1() {
 
+	//ABRINDO ARQUIVOS QUE SERÃO UTILIZADOS PARA GUARDAR INFORMAÇÕES DE PESSOAS CONTAS E LANCAMENTOS SE NECESSÁRIO
+	ofstream arq1, arq2, arq3, arq4, arq10;
+	arq1.open ("PessoaFisica.bin", ios::out | ios::app | ios::binary);
+	arq2.open ("PessoaJuridica.bin", ios::out | ios::app | ios::binary);
+	arq3.open ("ContaPoupanca.bin", ios::out | ios::app | ios::binary);
+	arq4.open ("ContaCorrente.bin", ios::out | ios::app | ios::binary);
+	arq10.open ("Lancamentos.bin", ios::out | ios::app | ios::binary);
+
 	cout << "-----------------------------------------------------------------" << endl
 	<< "-----------------------INICIANDO CENÁRIO 1-----------------------" << endl
 	<< "-----------------------------------------------------------------\n\n";
 
     // Criar um cliente Pessoa Física pf1 (com todos os dados)
     cout << "Criando Cliente Fisico 1...\n";
+    PessoaFisica * pf1 = new PessoaFisica("Pessoa X", "33002211", "PessoaX@ufscar.com", "Universidade", "Federal", "Sao Carlos", "SP", "12345678", "123", "11111111111");
     id_ClienteFisico[numClientesFisicos] = new PessoaFisica("Pessoa X", "33002211", "PessoaX@ufscar.com", "Universidade", "Federal", "Sao Carlos", "SP", "12345678", "123", "11111111111");
     numClientesFisicos++;
+    writePessoaFisica(arq1, *pf1);
 
     // Criar conta corrente c1 para pf1 com saldo inicial 100.00
     cout << "Criando Conta Corrente(C1) Do Cliente Fisico 1 com saldo inicial de 100.00 ...\n";
+    ContaCorrente * cc1 = new ContaCorrente(12, 12, 2012, 100.0, numProxConta, *id_ClienteFisico[numClientesFisicos-1], 0.0);
     id_ContaCorrente[numContasCorrente] = new ContaCorrente(12, 12, 2012, 100.0, numProxConta, *id_ClienteFisico[numClientesFisicos-1], 0.0);
     numContasCorrente++;
     numProxConta++;
+    writeContaCorrente(arq4, *cc1);
 
     // Criar conta poupanca p1 para pf1 com saldo inicial 200.00
     cout << "Criando Conta Poupanca(P1) Do Cliente Fisico 1 com saldo inicial de 200.00 ..\n";
+    ContaPoupanca * cp1 = new ContaPoupanca(*id_ClienteFisico[numClientesFisicos-1], numProxConta, 12, 12, 12, 200);
     id_ContaPoupanca[numContasPoupanca] = new ContaPoupanca(*id_ClienteFisico[numClientesFisicos-1], numProxConta, 12, 12, 12, 200);
     numContasPoupanca++;
     numProxConta++;
+    writeContaPoupanca(arq3, *cp1);
 
     // Criar um cliente Pessoa Física pf2 (com todos os dados)
     cout << "\nCriando Cliente Fisico 2...\n";
-    id_ClienteFisico[numClientesFisicos] = new PessoaFisica("Pessoa Y", "981011692", "PessoaY@ufscar.com", "Universidade", "Federal", "Sao Carlos", "SP", "12345678", "123", "22222222222");
+    PessoaFisica * pf2 = new PessoaFisica("Pessoa Y", "981011692", "PessoaY@ufscar.com", "Universidade", "Federal", "Sao Carlos", "SP", "12345678", "123", "22222222222");
+    id_ClienteFisico[numClientesFisicos] = new PessoaFisica("Pessoa Y", "981011692", "PessoaY@ufscar.com", "Universidade", "Federal", "Sao Carlos", "SP", "12345678", "123", "22222222222");    
     numClientesFisicos++;
+    writePessoaFisica(arq1, *pf2);
 
     // Criar conta corrente c2 para pf2 com saldo inicial 0.00
     cout << "Criando Conta Corrente(C2) Do Cliente Fisico 2 com saldo inicial de 0.00 ...\n";
+    ContaCorrente * cc2 = new ContaCorrente(12, 12, 2012, 0.0, numProxConta, *id_ClienteFisico[numClientesFisicos-1], 0.0);
     id_ContaCorrente[numContasCorrente] = new ContaCorrente(12, 12, 2012, 0.0, numProxConta, *id_ClienteFisico[numClientesFisicos-1], 0.0);
     numContasCorrente++;
     numProxConta++;
+    writeContaCorrente(arq4, *cc2);
 
     // Criar conta poupanca p2 para pf2 com saldo inicial 50.00
     cout << "Criando Conta Poupanca(P2) Do Cliente Fisico 2 com saldo inicial de 50.00 ...\n";
-    id_ContaPoupanca[numContasPoupanca] = new ContaPoupanca(*id_ClienteFisico[numClientesFisicos-1], 1, 12, 12, 2012, 50.0);
+    ContaPoupanca * cp2 = new ContaPoupanca(*id_ClienteFisico[numClientesFisicos-1], numProxConta, 12, 12, 2012, 50.0);
+    id_ContaPoupanca[numContasPoupanca] = new ContaPoupanca(*id_ClienteFisico[numClientesFisicos-1], numProxConta, 12, 12, 2012, 50.0);
     numContasPoupanca++;
     numProxConta++;
+    writeContaPoupanca(arq3, *cp2);
+    
+    //FECHANDO ARQUIVOS
+    arq1.close();
+    arq2.close();
+    arq3.close();
+    arq4.close();
+    arq10.close();
+    
+    //ABRINDO ARQUIVOS EM MODO DE LEITURA, PARA REALIZAR A IMPRESSÃO DAS INFORMAÇÕES
+    ifstream arq5, arq6, arq7, arq8;
+    arq5.open ("PessoaFisica.bin", ios::in | ios::binary);
+	arq6.open ("PessoaJuridica.bin", ios::in | ios::binary);
+	arq7.open ("ContaPoupanca.bin", ios::in | ios::binary);
+	arq8.open ("ContaCorrente.bin", ios::in | ios::binary);
+
+	//OBJETOS GENÉRICOS DE CADA CLASSE QUE SERÃO UTILIZADOS PARA RECEBER AS INFORMAÇÕES QUE SERÃO LIDAS DOS ARQUIVOS
+    PessoaFisica * imprimirPessoaFisica = new PessoaFisica("Pessoa Y", "981011692", "PessoaY@ufscar.com", "Universidade", "Federal", "Sao Carlos", "SP", "12345678", "123", "22222222222");
+    PessoaJuridica * imprimirPessoaJuridica = new PessoaJuridica("Empresa1", "00000000", "Empresa1@empresas.com", "Universidade", "Federal", "Sao Carlos", "SP", "12345678", "123", "12312312312312", id_ClienteFisico[numClientesFisicos-1]->getCPF(), "Programacao Orientada a Objetos", 12, 12, 2012, 12, 12, 2012);
+    ContaCorrente * imprimirContaCorrente = new ContaCorrente(12, 12, 2012, 0.0, numProxConta, *id_ClienteFisico[numClientesFisicos-1], 0.0);
+    ContaPoupanca * imprimirContaPoupanca = new ContaPoupanca(*id_ClienteFisico[numClientesFisicos-1], 1, 12, 12, 2012, 50.0);
+
     // Listar todos os clientes (ambos os tipos)
     cout << "\n\n---> LISTANDO TODOS OS CLIENTES DE AMBOS OS TIPOS <---";
-    
+
+    //FUNÇÕES READ E IMPRIME UTILIZAM OS OBJETOS GENÉRICOS PARA RECEBER AS INFORMAÇÕES GRAVADAS EM CADA ARQUIVO 
     if(numClientesFisicos != 0){ 
 	    cout << "\n\n--- PESSOAS FÍSICA --- ";
-	    for (int i=0; i<numClientesFisicos; i++)
-	        cout << id_ClienteFisico[i]->toString();
+	    for(int i=0; i<numClientesFisicos; i++){
+	    	arq5.seekg(i * sizeof(PessoaFisica));
+	    	readPessoaFisica(arq5, *imprimirPessoaFisica);
+	    	imprimePessoaFisica(*imprimirPessoaFisica);
+		}
 	}
               
     if(numClientesJuridicos != 0){
 	    cout << "\n\n---PESSOAS JURÍDICA --- ";
-	    for(int i=0; i<numClientesJuridicos; i++)
-	        cout << id_ClienteJuridico[i]->toString();
+	    for(int i=0; i<numClientesJuridicos; i++){
+	    	arq6.seekg(i * sizeof(PessoaJuridica));
+	    	readPessoaJuridica(arq6, *imprimirPessoaJuridica);
+	    	imprimePessoaJuridica(*imprimirPessoaJuridica);
+	    }
+	        
 	}
 
     // Listar todas as contas (ambos os tipos)
@@ -215,52 +262,95 @@ void Cenario1() {
 
     if(numContasCorrente != 0){
 	    cout << "\n\n--- CONTAS CORRENTE --- ";
-	    for(int i=0; i<numContasCorrente; i++)
-	    	cout << id_ContaCorrente[i]->toString();
+	    for(int i=0; i<numContasCorrente; i++){
+	    	arq8.seekg(i * sizeof(ContaCorrente));
+	    	readContaCorrente(arq8, *imprimirContaCorrente);
+	    	imprimeContaCorrente(*imprimirContaCorrente);
+	    }
 	}
 
 	if(numContasPoupanca != 0){
 	    cout << "\n\n--- CONTAS POUPANCA --- ";
-	    for(int i=0; i<numContasPoupanca; i++)
-	    	cout << id_ContaPoupanca[i]->toString();
+	    for(int i=0; i<numContasPoupanca; i++){
+	    	arq7.seekg(i * sizeof(ContaPoupanca));
+	    	readContaPoupanca(arq7, *imprimirContaPoupanca);
+	    	imprimeContaPoupanca(*imprimirContaPoupanca);
+	    }
 	}
+
+	//FECHAMENTO DOS ARQUIVOS EM MODO DE LEITURA 
+	arq5.close();
+	arq6.close();
+	arq7.close();
+	arq8.close();
+
+	//ABRINDO OS ARQUIVOS NOVAMENTE EM MODO DE SAÍDA PARA EFETUAR MAIS GRAVAÇÕES (DEPENDENDO DO CENÁRIO)
+	arq1.open ("PessoaFisica.bin", ios::out | ios::app | ios::binary);
+	arq2.open ("PessoaJuridica.bin", ios::out | ios::app | ios::binary);
+	arq3.open ("ContaPoupanca.bin", ios::out | ios::app | ios::binary);
+	arq4.open ("ContaCorrente.bin", ios::out | ios::app | ios::binary);	
 
 	cout << "\n\n";
     // Criar um Cliente Pessoa Jurídica pj1 (com todos os dados)
     cout << "Criando Cliente Juridico 1...\n";
+    PessoaJuridica * pj1 = new PessoaJuridica("Empresa1", "00000000", "Empresa1@empresas.com", "Universidade", "Federal", "Sao Carlos", "SP", "12345678", "123", "12312312312312", id_ClienteFisico[numClientesFisicos-2]->getCPF(), "Programacao Orientada a Objetos", 12, 12, 2012, 12, 12, 2012);    
     id_ClienteJuridico[numClientesJuridicos] = new PessoaJuridica("Empresa1", "00000000", "Empresa1@empresas.com", "Universidade", "Federal", "Sao Carlos", "SP", "12345678", "123", "12312312312312", id_ClienteFisico[numClientesFisicos-2]->getCPF(), "Programacao Orientada a Objetos", 12, 12, 2012, 12, 12, 2012);
     numClientesJuridicos++;
+    writePessoaJuridica(arq2, *pj1);
 
     // Criar Conta Corrente c3 para pj1 com saldo inicial 1,000,000.00
     cout << "Criando Conta Corrente(C3) Do Cliente Juridico 1 com saldo inicial ed 1,000,000.00 ...\n";
+    ContaCorrente * cc3 = new ContaCorrente(12, 12, 2012, 1000000.0, numProxConta, *id_ClienteJuridico[numClientesJuridicos-1], 0.0);    
     id_ContaCorrente[numContasCorrente] = new ContaCorrente(12, 12, 2012, 1000000.0, numProxConta, *id_ClienteJuridico[numClientesJuridicos-1], 0.0);
     numContasCorrente++;
     numProxConta++;
+    writeContaCorrente(arq4, *cc3);
 
     // Criar um Cliente Pessoa Jurídica pj2 (com todos os dados)
     cout << "Criando Cliente Juridico 2...\n";
+    PessoaJuridica * pj2 = new PessoaJuridica("Empresa2", "00000000", "Empresa2@empresas.com", "Universidade", "Federal", "Sao Carlos", "SP", "12345678", "123", "23423423423423", id_ClienteFisico[numClientesFisicos-1]->getCPF(), "Sistemas Operacionais", 12, 12, 2012, 12, 12, 2012);    
     id_ClienteJuridico[numClientesJuridicos] = new PessoaJuridica("Empresa2", "00000000", "Empresa2@empresas.com", "Universidade", "Federal", "Sao Carlos", "SP", "12345678", "123", "23423423423423", id_ClienteFisico[numClientesFisicos-1]->getCPF(), "Sistemas Operacionais", 12, 12, 2012, 12, 12, 2012);
     numClientesJuridicos++;
+    writePessoaJuridica(arq2, *pj2);
 
     // Criar Conta Corrente c4 para pj2 com saldo inicial 500,000.00
     cout << "Criando Conta Corrente(C4) Do Cliente Juridico 2 com saldo inicial de 500,000.00 ...\n";
+    ContaCorrente * cc4 = new ContaCorrente(12, 12, 2012, 500000.0, numProxConta, *id_ClienteJuridico[numClientesJuridicos-1], 0.0);    
     id_ContaCorrente[numContasCorrente] = new ContaCorrente(12, 12, 2012, 500000.0, numProxConta, *id_ClienteJuridico[numClientesJuridicos-1], 0.0);
     numContasCorrente++;
     numProxConta++;
+    writeContaCorrente(arq4, *cc4);
+
+    arq1.close();
+    arq2.close();
+    arq3.close();
+    arq4.close();
+    
+    arq5.open ("PessoaFisica.bin", ios::in | ios::binary);
+	arq6.open ("PessoaJuridica.bin", ios::in | ios::binary);
+	arq7.open ("ContaPoupanca.bin", ios::in | ios::binary);
+	arq8.open ("ContaCorrente.bin", ios::in | ios::binary);    
 
     // Listar todos os clientes (ambos os tipos)
     cout << "\n\n---> LISTANDO TODOS OS CLIENTES DE AMBOS OS TIPOS <---";
 
     if(numClientesFisicos != 0){ 
 	    cout << "\n\n--- PESSOAS FÍSICA --- ";
-	    for (int i=0; i<numClientesFisicos; i++)
-	        cout << id_ClienteFisico[i]->toString();
+	    for(int i=0; i<numClientesFisicos; i++){
+	    	arq5.seekg(i * sizeof(PessoaFisica));
+	    	readPessoaFisica(arq5, *imprimirPessoaFisica);
+	    	imprimePessoaFisica(*imprimirPessoaFisica);
+		}
 	}
               
     if(numClientesJuridicos != 0){
 	    cout << "\n\n---PESSOAS JURÍDICA --- ";
-	    for(int i=0; i<numClientesJuridicos; i++)
-	        cout << id_ClienteJuridico[i]->toString();
+	    for(int i=0; i<numClientesJuridicos; i++){
+	    	arq6.seekg(i * sizeof(PessoaJuridica));
+	    	readPessoaJuridica(arq6, *imprimirPessoaJuridica);
+	    	imprimePessoaJuridica(*imprimirPessoaJuridica);
+	    }
+	        
 	}
     
     // Listar todas as contas (ambos os tipos)
@@ -268,26 +358,44 @@ void Cenario1() {
 
     if(numContasCorrente != 0){
 	    cout << "\n\n--- CONTAS CORRENTE --- ";
-	    for(int i=0; i<numContasCorrente; i++)
-	    	cout << id_ContaCorrente[i]->toString();
+	    for(int i=0; i<numContasCorrente; i++){
+	    	arq8.seekg(i * sizeof(ContaCorrente));
+	    	readContaCorrente(arq8, *imprimirContaCorrente);
+	    	imprimeContaCorrente(*imprimirContaCorrente);
+	    }
 	}
 
 	if(numContasPoupanca != 0){
 	    cout << "\n\n--- CONTAS POUPANCA --- ";
-	    for(int i=0; i<numContasPoupanca; i++)
-	    	cout << id_ContaPoupanca[i]->toString();
+	    for(int i=0; i<numContasPoupanca; i++){
+	    	arq7.seekg(i * sizeof(ContaPoupanca));
+	    	readContaPoupanca(arq7, *imprimirContaPoupanca);
+	    	imprimeContaPoupanca(*imprimirContaPoupanca);
+	    }
 	}
+
+	arq5.close();
+	arq6.close();
+	arq7.close();
+	arq8.close();	
 
 	// Exibir montante total do banco
     cout << "\n-- MONTANTE TOTAL DO BANCO --\n";
     cout << to_string_with_precision(getMontanteTotal(), 2) << endl << endl;
     // output: total = 1,500,350.00
 
-    exit(0);
+    menuPrincipal();
 }
 
 void Cenario2() {
 
+	//ABRINDO ARQUIVOS QUE SERÃO UTILIZADOS PARA GUARDAR INFORMAÇÕES DE PESSOAS CONTAS E LANCAMENTOS SE NECESSÁRIO
+	ofstream arq1, arq2, arq3, arq4, arq10;
+	arq1.open ("PessoaFisica.bin", ios::out | ios::app | ios::binary);
+	arq2.open ("PessoaJuridica.bin", ios::out | ios::app | ios::binary);
+	arq3.open ("ContaPoupanca.bin", ios::out | ios::app | ios::binary);
+	arq4.open ("ContaCorrente.bin", ios::out | ios::app | ios::binary);
+	arq10.open ("Lancamentos.bin", ios::out | ios::app | ios::binary);
 
 	cout << "\n-----------------------------------------------------------------" << endl
 	<< "-----------------------INICIANDO CENÁRIO 2-----------------------" << endl
@@ -295,122 +403,210 @@ void Cenario2() {
     // Criar um cliente Pessoa Física pf1 (com todos os dados)
     cout << "\nCriando Cliente Fisico 1...\n";
     id_ClienteFisico[numClientesFisicos] = new PessoaFisica("Pessoa X", "33002211", "PessoaX@ufscar.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12345678910");
+    PessoaFisica * pf1 = new PessoaFisica("Pessoa X", "33002211", "PessoaX@ufscar.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12345678910");
     numClientesFisicos++;
+    writePessoaFisica(arq1, *pf1);
 
     // Criar conta corrente c1 para pf1 com saldo inicial 100.00
     cout << "Criando Conta Corrente(C1) Do Cliente Fisico 1 com saldo inicial de 100.00...\n";
     id_ContaCorrente[numContasCorrente] = new ContaCorrente(12, 12, 2012, 100.0, numProxConta, *id_ClienteFisico[numClientesFisicos-1], 0.0);
+    ContaCorrente * cc1 = new ContaCorrente(12, 12, 2012, 100.0, numProxConta, *id_ClienteFisico[numClientesFisicos-1], 0.0);
     numContasCorrente++;
     numProxConta++;
+    writeContaCorrente(arq4, *cc1);
 
     // Criar conta poupanca p1 para pf1 com saldo inicial 200.00
     cout << "Criando Conta Poupanca(P1) Do Cliente Fisico 1 com saldo inicial de 200.00...\n";
     id_ContaPoupanca[numContasPoupanca] = new ContaPoupanca(*id_ClienteFisico[numClientesFisicos-1], numProxConta, 12, 12, 12, 200);
+    ContaPoupanca * cp1 = new ContaPoupanca(*id_ClienteFisico[numClientesFisicos-1], numProxConta, 12, 12, 12, 200);
     numContasPoupanca++;
     numProxConta++;
+    writeContaPoupanca(arq3, *cp1);
 
     // Lançar débito de 100.0 em c1
     cout << "\nEfetuando primeiro lançamento em C1 - débito de 100.0...\n";
     float saldoAnterior=0, saldoAtualizado=0;
     lancamento(1, 1, 100.0, &saldoAnterior, &saldoAtualizado);
     id_Lancamentos[numLancamentosEfetuados] = new Lancamento(1, 1, 100, saldoAnterior, saldoAtualizado, 12, 12, 2019);
+    Lancamento * lancamento1 = new Lancamento(1, 1, 100, saldoAnterior, saldoAtualizado, 12, 12, 2019);
     numLancamentosEfetuados++;
     cout << "Saldo atual de C1 = " + to_string_with_precision(saldoAtualizado, 2) + "\n";
+    writeLancamento(arq10, *lancamento1);
 
     // Lançar crédito de 50.0 em c1
     cout << "\nEfetuando segundo lançamento em C1 - crédito de 50.0...\n";
     saldoAnterior=0, saldoAtualizado=0;
     lancamento(1, 2, 50.0, &saldoAnterior, &saldoAtualizado);
     id_Lancamentos[numLancamentosEfetuados] = new Lancamento(1, 2, 50, saldoAnterior, saldoAtualizado, 15, 12, 2019);
+    Lancamento * lancamento2 = new Lancamento(1, 2, 50, saldoAnterior, saldoAtualizado, 15, 12, 2019);
     numLancamentosEfetuados++;
     cout << "Saldo atual de C1 = " + to_string_with_precision(saldoAtualizado, 2) + "\n";
+    writeLancamento(arq10, *lancamento2);
 
     // Lançar crédito de 30.00 em p1
     cout << "\nEfetuando primeiro lançamento em P1 - crédito de 30.0...\n";
     saldoAnterior=0, saldoAtualizado=0;
     lancamento(2, 2, 30.0, &saldoAnterior, &saldoAtualizado);
     id_Lancamentos[numLancamentosEfetuados] = new Lancamento(2, 2, 30, saldoAnterior, saldoAtualizado, 13, 12, 2019);
+    Lancamento * lancamento3 = new Lancamento(2, 2, 30, saldoAnterior, saldoAtualizado, 13, 12, 2019);
     numLancamentosEfetuados++;
     cout << "Saldo atual de P1 = " + to_string_with_precision(saldoAtualizado, 2) + "\n";
+    writeLancamento(arq10, *lancamento3);
+
+    //FECHAR ARQUIVO DE LANCAMENTOS 
+    arq10.close();
+
+    //ABRINDO ARQUIVO DE LANCAMENTOS EM MODO LEITURA PARA IMPRIMIR AS INFORMAÇÕES DENTRO DELE
+    ifstream arq11;
+    arq11.open ("Lancamentos.bin", ios::in | ios::binary);
+
+    //OBJETO GENÉRICO PARA RECEBER OS DADOS LIDOS DO ARQUIVO
+    Lancamento * imprimirLancamentos = new Lancamento(2, 2, 30, saldoAnterior, saldoAtualizado, 13, 12, 2019);
 
     // Exibir extrato de c1 considerando todo o período
     cout << "\n-- LANÇAMENTOS PARA A CONTA CORRENTE C1 --";
-    printLancamento(1, 0, 0, 0, 0, 0, 0);
+    for(int j=0; j<numLancamentosEfetuados; j++){
+    	if(id_Lancamentos[j]->getNumConta() == 1){
+    		arq11.seekg(j * sizeof(Lancamento));
+    		readLancamento(arq11, *imprimirLancamentos);
+    		imprimeLancamento(*imprimirLancamentos);
+    	}
+    }
 
     // Exibir extrato de p1 considerando todo o período
     cout << "\n-- LANÇAMENTOS PARA A CONTA POUPANCA P1 --";
-    printLancamento(2, 0, 0, 0, 0, 0, 0);
+    for(int j=0; j<numLancamentosEfetuados; j++){
+    	if(id_Lancamentos[j]->getNumConta() == 2){
+    		arq11.seekg(j * sizeof(Lancamento));
+    		readLancamento(arq11, *imprimirLancamentos);
+    		imprimeLancamento(*imprimirLancamentos);
+    	}
+    }
+
+    //FECHANDO O ARQUIVO EM MODO DE LEITURA, POIS VAMOS EFETUAR MAIS GRAVAÇÕES NELE ABAIXO
+    arq11.close();
+
+    //ABRINDO ARQUIVO PARA GRAVAR INFORMAÇÕES NELE
+	arq10.open ("Lancamentos.bin", ios::out | ios::app | ios::binary);
 
     // Criar um Cliente Pessoa Jurídica pj1 (com todos os dados, data atual)
     cout << "\nCriando Cliente Juridico 1...\n";
     id_ClienteJuridico[numClientesJuridicos] = new PessoaJuridica("Empresa1", "00000000", "Empresa1@empresas.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12312312312312", id_ClienteFisico[numClientesFisicos-1]->getCPF(), "Programacao Orientada a Objetos", 12, 12, 2012, 12, 12, 2012);
+    PessoaJuridica * pj1 = new PessoaJuridica("Empresa1", "00000000", "Empresa1@empresas.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12312312312312", id_ClienteFisico[numClientesFisicos-1]->getCPF(), "Programacao Orientada a Objetos", 12, 12, 2012, 12, 12, 2012);
     numClientesJuridicos++;
+    writePessoaJuridica(arq2, *pj1);
 
     // Criar Conta Corrente c3 para pj1 com saldo inicial 1,000,000.00
     cout << "Criando Conta Corrente(C3) Do Cliente Juridico 1 com saldo inicial de 1,000,000.00...\n";
     id_ContaCorrente[numContasCorrente] = new ContaCorrente(12, 12, 2012, 1000000.0, numProxConta, *id_ClienteJuridico[numClientesJuridicos-1], 0.0);
+    ContaCorrente * cc3 = new ContaCorrente(12, 12, 2012, 1000000.0, numProxConta, *id_ClienteJuridico[numClientesJuridicos-1], 0.0);
     numContasCorrente++;
     numProxConta++;
+    writeContaCorrente(arq4, *cc3);
 
     // Criar um Cliente Pessoa Jurídica pj2 (com todos os dados, data atual)
     cout << "\nCriando Cliente Juridico 2...\n";
     id_ClienteJuridico[numClientesJuridicos] = new PessoaJuridica("Empresa2", "11111111", "Empresa2@empresas.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "23423423423423", id_ClienteFisico[numClientesFisicos-1]->getCPF(), "Sistemas Operacionais", 12, 12, 2012, 12, 12, 2012);
+    PessoaJuridica * pj2 = new PessoaJuridica("Empresa2", "11111111", "Empresa2@empresas.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "23423423423423", id_ClienteFisico[numClientesFisicos-1]->getCPF(), "Sistemas Operacionais", 12, 12, 2012, 12, 12, 2012);
     numClientesJuridicos++;
+    writePessoaJuridica(arq2, *pj2);
 
     // Criar Conta Corrente c4 para pj2 com saldo inicial 500,000.00
     cout << "Criando Conta Corrente(C4) Do Cliente Juridico 2 com saldo inicial de 500,000.00...\n";
     id_ContaCorrente[numContasCorrente] = new ContaCorrente(12, 12, 2012, 500000.0, numProxConta, *id_ClienteJuridico[numClientesJuridicos-1], 0.0);
+    ContaCorrente * cc4 = new ContaCorrente(12, 12, 2012, 500000.0, numProxConta, *id_ClienteJuridico[numClientesJuridicos-1], 0.0);
     numContasCorrente++;
     numProxConta++;
+    writeContaCorrente(arq4, *cc4);
 
     // Lançar débito de 100,000.00 em c3
     cout << "\nEfetuando primeiro lançamento em C3 - débito de 100,000.00...\n";
     saldoAnterior=0, saldoAtualizado=0;
     lancamento(3, 1, 100000.0, &saldoAnterior, &saldoAtualizado);
     id_Lancamentos[numLancamentosEfetuados] = new Lancamento(3, 1, 100000, saldoAnterior, saldoAtualizado, 12, 12, 2019);
+    Lancamento * lancamento4 = new Lancamento(3, 1, 100000, saldoAnterior, saldoAtualizado, 12, 12, 2019);
     numLancamentosEfetuados++;
     // Output: saldo atual de c3 = 900,000.00
     cout << "Saldo atual de C3 = " + to_string_with_precision(saldoAtualizado, 2) + "\n";    
+    writeLancamento(arq10, *lancamento4);
 
     // Lançar débito de 200,000.00 em c3
     cout << "\nEfetuando segundo lançamento em C3 - débito de 200,000.00...\n";
     saldoAnterior=0, saldoAtualizado=0;
     lancamento(3, 1, 200000.0, &saldoAnterior, &saldoAtualizado);
     id_Lancamentos[numLancamentosEfetuados] = new Lancamento(3, 1, 200000, saldoAnterior, saldoAtualizado, 12, 12, 2019);
+    Lancamento * lancamento5 = new Lancamento(3, 1, 200000, saldoAnterior, saldoAtualizado, 12, 12, 2019);
     numLancamentosEfetuados++;
     // Output: saldo atual de c3 = 700,000.00
     cout << "Saldo atual de C3 = " + to_string_with_precision(saldoAtualizado, 2) + "\n";
+    writeLancamento(arq10, *lancamento5);
 
     // Lançar débito de 30,000.00 em c4
     cout << "\nEfetuando primeiro lançamento em C4 - débito de 30,000.00...\n";
     saldoAnterior=0, saldoAtualizado=0;
     lancamento(4, 1, 30000.0, &saldoAnterior, &saldoAtualizado);
     id_Lancamentos[numLancamentosEfetuados] = new Lancamento(4, 1, 30000, saldoAnterior, saldoAtualizado, 12, 12, 2019);
+    Lancamento * lancamento6 = new Lancamento(4, 1, 30000, saldoAnterior, saldoAtualizado, 12, 12, 2019);
     numLancamentosEfetuados++;
     // Output: saldo atual de c4 = 470,000.00
     cout << "Saldo atual de C4 = " + to_string_with_precision(saldoAtualizado, 2) + "\n";
+    writeLancamento(arq10, *lancamento6);
+
+    //FECHANDO ARQUIVO APÓS AS GRAVAÇÕES 
+    arq10.close();
+
+    //ABRINDO ARQUIVO NOVAMENTE EM MODO LEITURA PARA IMPRIMIR AS INFORMAÇÕES CONTIDAS NELE
+    arq11.open ("Lancamentos.bin", ios::in | ios::binary);
 
     // Exibir extrato de c3 considerando todo o período
     cout << "\n-- LANÇAMENTOS PARA A CONTA CORRENTE C3 --";
-    printLancamento(3, 0, 0, 0, 0, 0, 0);
+    for(int j=0; j<numLancamentosEfetuados; j++){
+    	if(id_Lancamentos[j]->getNumConta() == 3){
+    		arq11.seekg(j * sizeof(Lancamento));
+    		readLancamento(arq11, *imprimirLancamentos);
+    		imprimeLancamento(*imprimirLancamentos);
+    	}
+    }
     // Output: 2 lançamentos exibidos
     // Saldo final = 700,000.00
 
     // Exibir extrato de c4 considerando todo o período
     cout << "\n-- LANÇAMENTOS PARA A CONTA CORRENTE C4 --";
-    printLancamento(4, 0, 0, 0, 0, 0, 0);
+    for(int j=0; j<numLancamentosEfetuados; j++){
+    	if(id_Lancamentos[j]->getNumConta() == 4){
+    		arq11.seekg(j * sizeof(Lancamento));
+    		readLancamento(arq11, *imprimirLancamentos);
+    		imprimeLancamento(*imprimirLancamentos);
+    	}
+    }
     // Output: 1 lançamento exibido
     // Saldo final = 470,000.00
+
+    //FECHANDO TODOS OS ARQUIVOS QUE ESTAVAM ABERTOS 
+    arq11.close();
+    arq1.close();
+    arq2.close();
+    arq3.close();
+    arq4.close();
+
 
     // Exibir montante total do banco
     cout << "\n-- MONTANTE TOTAL DO BANCO --\n";
     cout << to_string_with_precision(getMontanteTotal(), 2) << endl << endl;
     // Output: total = 1,170.280.00
 
-    exit(0);
+    menuPrincipal();
 }
 
 void Cenario3() {
+
+	//ABRINDO ARQUIVOS QUE SERÃO UTILIZADOS PARA GUARDAR INFORMAÇÕES DE PESSOAS CONTAS E LANCAMENTOS SE NECESSÁRIO
+	ofstream arq1, arq2, arq3, arq4, arq10;
+	arq1.open ("PessoaFisica.bin", ios::out | ios::app | ios::binary);
+	arq2.open ("PessoaJuridica.bin", ios::out | ios::app | ios::binary);
+	arq3.open ("ContaPoupanca.bin", ios::out | ios::app | ios::binary);
+	arq4.open ("ContaCorrente.bin", ios::out | ios::app | ios::binary);
+	arq10.open ("Lancamentos.bin", ios::out | ios::app | ios::binary);
 
 	cout << "\n-----------------------------------------------------------------" << endl
 	<< "-----------------------INICIANDO CENÁRIO 3-----------------------" << endl
@@ -420,7 +616,9 @@ void Cenario3() {
 	cout << "\n!!! HÁ A NECESSIDADE DE CADASTRAR UMA PESSOA FÍSICA PRIMEIRO, POIS A CONTA JURÍDICA É VINCULADA A UMA CONTA FÍSICA PELO PROPRIETÁRIO MAJORITÁRIO !!!";
     cout << "\nCriando Cliente Fisico...\n";
     id_ClienteFisico[numClientesFisicos] = new PessoaFisica("Pessoa X", "33002211", "PessoaX@ufscar.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12345678910");
+    PessoaFisica * pf1 = new PessoaFisica("Pessoa X", "33002211", "PessoaX@ufscar.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12345678910");
     numClientesFisicos++;
+    writePessoaFisica(arq1, *pf1);
     
 
     // OBJETIVO: testar emissão de extratos em períodos específicos
@@ -428,66 +626,120 @@ void Cenario3() {
     // Criar um Cliente Pessoa Jurídica pj1 (com todos os dados, data atual)
     cout << "\nCriando Cliente Juridico 1...\n";
     id_ClienteJuridico[numClientesJuridicos] = new PessoaJuridica("Empresa1", "00000000", "Empresa1@empresas.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12312312312312", id_ClienteFisico[numClientesFisicos-1]->getCPF(), "Programacao Orientada a Objetos", 12, 12, 2012, 12, 12, 2012);
+    PessoaJuridica * pj1 = new PessoaJuridica("Empresa1", "00000000", "Empresa1@empresas.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12312312312312", id_ClienteFisico[numClientesFisicos-1]->getCPF(), "Programacao Orientada a Objetos", 12, 12, 2012, 12, 12, 2012);
     numClientesJuridicos++;    
+    writePessoaJuridica(arq2, *pj1);
 
     // Criar Conta Corrente c3 para pj1 com saldo inicial 1,000,000.00
     cout << "Criando Conta Corrente(C1) Do Cliente Juridico 1 com saldo inicial de 1,000,000.00...\n";
     id_ContaCorrente[numContasCorrente] = new ContaCorrente(12, 12, 2012, 1000000.0, numProxConta, *id_ClienteJuridico[numClientesJuridicos-1], 0.0);
+    ContaCorrente * cc1 = new ContaCorrente(12, 12, 2012, 1000000.0, numProxConta, *id_ClienteJuridico[numClientesJuridicos-1], 0.0);
     numContasCorrente++;
     numProxConta++;
+    writeContaCorrente(arq4, *cc1);
 
     // Lançar débito de 100,000.00 em 15/11/2019 em c1
     cout << "\nEfetuando primeiro lançamento em C1 em 15/11/2019 - débito de 100,000.00...\n";
     float saldoAnterior=0, saldoAtualizado=0;
     lancamento(1, 1, 100000.0, &saldoAnterior, &saldoAtualizado);
     id_Lancamentos[numLancamentosEfetuados] = new Lancamento(1, 1, 100000, saldoAnterior, saldoAtualizado, 15, 11, 2019);
+    Lancamento * lancamento1 = new Lancamento(1, 1, 100000, saldoAnterior, saldoAtualizado, 15, 11, 2019);
     numLancamentosEfetuados++;    
     // Output: saldo atual de c1 = 900,000.00
     cout << "Saldo atual de C1 = " + to_string_with_precision(saldoAtualizado, 2) + "\n";    
+    writeLancamento(arq10, *lancamento1);
 
     // Lançar débito de 200,000.00 em 16/11/2019 em c1
     cout << "\nEfetuando segundo lançamento em C1 em 16/11/2019 - débito de 200,000.00...\n";
     saldoAnterior=0, saldoAtualizado=0;
     lancamento(1, 1, 200000.0, &saldoAnterior, &saldoAtualizado);
     id_Lancamentos[numLancamentosEfetuados] = new Lancamento(1, 1, 200000, saldoAnterior, saldoAtualizado, 16, 11, 2019);
+    Lancamento * lancamento2 = new Lancamento(1, 1, 200000, saldoAnterior, saldoAtualizado, 16, 11, 2019);
     numLancamentosEfetuados++;
     // Output: saldo atual de c1 = 700,000.00
     cout << "Saldo atual de C1 = " + to_string_with_precision(saldoAtualizado, 2) + "\n";
+    writeLancamento(arq10, *lancamento2);
 
     // Lançar crédito de 400,000.00 em 17/11/2019 em c1
     cout << "\nEfetuando terceiro lançamento em C1 em 17/11/2019 - crédito de 400,000.00...\n";
     saldoAnterior=0, saldoAtualizado=0;
     lancamento(1, 2, 400000.0, &saldoAnterior, &saldoAtualizado);
     id_Lancamentos[numLancamentosEfetuados] = new Lancamento(1, 2, 400000, saldoAnterior, saldoAtualizado, 17, 11, 2019);
+    Lancamento * lancamento3 = new Lancamento(1, 2, 400000, saldoAnterior, saldoAtualizado, 17, 11, 2019);
     numLancamentosEfetuados++;    
     // Output: saldo atual de c1 = 1,100,000.00
     cout << "Saldo atual de C1 = " + to_string_with_precision(saldoAtualizado, 2) + "\n";
+    writeLancamento(arq10, *lancamento3);
+
+    //FECHANDO ARQUIVO NO MODO DE ESCRITA
+    arq10.close();
+
+    //REABRINDO ARQUIVO NO MODO DE LEITURA PARA IMPRIMIR AS INFORMAÇÕES CONTIDAS NELE
+    ifstream arq11;
+    arq11.open ("Lancamentos.bin", ios::in | ios::binary);
+
+    //OBJETO GENÉRICO PARA RECEBER OS DADOS LIDOS DO ARQUIVO
+    Lancamento * imprimirLancamentos = new Lancamento(2, 2, 30, saldoAnterior, saldoAtualizado, 13, 12, 2019);    
 
     // Exibir extrato de c1 considerando todo o período
     cout << "\n-- LANÇAMENTOS DE TODO O PERÍODO PARA C1 --";
-    printLancamento(1, 0, 0, 0, 0, 0, 0);
-    // Output: 3 lançamentos exibidos
+    for(int j=0; j<numLancamentosEfetuados; j++){
+    	if(id_Lancamentos[j]->getNumConta() == 1){
+    		arq11.seekg(j * sizeof(Lancamento));
+    		readLancamento(arq11, *imprimirLancamentos);
+    		imprimeLancamento(*imprimirLancamentos);
+    	}
+    }    // Output: 3 lançamentos exibidos
     // Saldo inicial de c1 = 1,000,000.00
     // Saldo final de c1 = 1,100,000.00
 
     // Exibir extrato de c1 de 15/11/2019 a 16/11/2019
     cout << "\n-- LANÇAMENTOS PARA C1 DE 15/11/2019 A 16/11/2019 --";
-    printLancamento(1, 15, 11, 2019, 16, 11, 2019);
+    for(int j=0; j<numLancamentosEfetuados; j++)
+    	if(id_Lancamentos[j]->getNumConta() == 1)
+    		if(((id_Lancamentos[j]->getDataLancamento().getDia() >= 15 && id_Lancamentos[j]->getDataLancamento().getMes() >= 11)) && id_Lancamentos[j]->getDataLancamento().getAno() >= 2019)
+                if(((id_Lancamentos[j]->getDataLancamento().getDia() <= 16 && id_Lancamentos[j]->getDataLancamento().getMes() <= 11)) && id_Lancamentos[j]->getDataLancamento().getAno() <= 2019){
+    				arq11.seekg(j * sizeof(Lancamento));
+    				readLancamento(arq11, *imprimirLancamentos);
+    				imprimeLancamento(*imprimirLancamentos);
+    			}
     // Output: 2 lançamentos exibidos
     // Saldo inicial de c1 = 1,000,000.00
     // Saldo final de c1 = 700,000.00
 
     // Exibir extrato de c1 de 16/11/2019 a 17/11/2019
     cout << "\n-- LANÇAMENTOS PARA C1 DE 16/11/2019 A 17/11/2019 --";
-    printLancamento(1, 16, 11, 2019, 17, 11, 2019);
+    for(int j=0; j<numLancamentosEfetuados; j++)
+    	if(id_Lancamentos[j]->getNumConta() == 1)
+    		if(((id_Lancamentos[j]->getDataLancamento().getDia() >= 16 && id_Lancamentos[j]->getDataLancamento().getMes() >= 11)) && id_Lancamentos[j]->getDataLancamento().getAno() >= 2019)
+                if(((id_Lancamentos[j]->getDataLancamento().getDia() <= 17 && id_Lancamentos[j]->getDataLancamento().getMes() <= 11)) && id_Lancamentos[j]->getDataLancamento().getAno() <= 2019){
+    				arq11.seekg(j * sizeof(Lancamento));
+    				readLancamento(arq11, *imprimirLancamentos);
+    				imprimeLancamento(*imprimirLancamentos);
+    			}
     // Output: 2 lançamentos exibidos
     // Saldo inicial de c1 = 900,000.00
     // Saldo final de c1 = 1,100,000.00
 
-    exit(0);
+    //FECHANDO TODOS OS ARQUIVOS QUE ESTAVAM ABERTOS 
+    arq11.close();
+    arq1.close();
+    arq2.close();
+    arq3.close();
+    arq4.close();    			
+
+    menuPrincipal();
 }
 
 void Cenario4() {
+
+	//ABRINDO ARQUIVOS QUE SERÃO UTILIZADOS PARA GUARDAR INFORMAÇÕES DE PESSOAS CONTAS E LANCAMENTOS SE NECESSÁRIO
+	ofstream arq1, arq2, arq3, arq4, arq10;
+	arq1.open ("PessoaFisica.bin", ios::out | ios::app | ios::binary);
+	arq2.open ("PessoaJuridica.bin", ios::out | ios::app | ios::binary);
+	arq3.open ("ContaPoupanca.bin", ios::out | ios::app | ios::binary);
+	arq4.open ("ContaCorrente.bin", ios::out | ios::app | ios::binary);
+	arq10.open ("Lancamentos.bin", ios::out | ios::app | ios::binary);	
 
 	cout << "\n-----------------------------------------------------------------" << endl
 	<< "-----------------------INICIANDO CENÁRIO 4-----------------------" << endl
@@ -501,30 +753,55 @@ void Cenario4() {
     // cadastrados, efetuando ou não o cadastramento (aqui não se deve efetuar o cadastro!)
     cout << "Criando Um Cliente Fisico Qualquer (1)...\n";
     id_ClienteFisico[numClientesFisicos] = new PessoaFisica("Teste01", "33002211", "Teste01@gmail.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12345678901");
+    PessoaFisica * pf1 = new PessoaFisica("Teste01", "33002211", "Teste01@gmail.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12345678901");
     numClientesFisicos++;
+    writePessoaFisica(arq1, *pf1);
     cout << "Criando Um Cliente Fisico Qualquer (2)...\n";
     id_ClienteFisico[numClientesFisicos] = new PessoaFisica("Teste02", "33002211", "Teste02@gmail.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12345678902");
+    PessoaFisica * pf2 = new PessoaFisica("Teste02", "33002211", "Teste02@gmail.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12345678902");
     numClientesFisicos++;
+    writePessoaFisica(arq1, *pf2);
     cout << "Criando Um Cliente Fisico Qualquer (3)...\n";
     id_ClienteFisico[numClientesFisicos] = new PessoaFisica("Teste03", "33002211", "Teste03@gmail.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12345678903");
+    PessoaFisica * pf3 = new PessoaFisica("Teste03", "33002211", "Teste03@gmail.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12345678903");
     numClientesFisicos++;
+    writePessoaFisica(arq1, *pf3);
     cout << "Criando Um Cliente Fisico Qualquer (4)...\n";
     id_ClienteFisico[numClientesFisicos] = new PessoaFisica("Teste04", "33002211", "Teste04@gmail.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12345678905");
+    PessoaFisica * pf4 = new PessoaFisica("Teste04", "33002211", "Teste04@gmail.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12345678905");
     numClientesFisicos++;
+    writePessoaFisica(arq1, *pf4);
     cout << "Criando Um Cliente Fisico Qualquer (5)...\n";
     id_ClienteFisico[numClientesFisicos] = new PessoaFisica("Teste05", "33002211", "Teste05@gmail.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12345678906");
+    PessoaFisica * pf5 = new PessoaFisica("Teste05", "33002211", "Teste05@gmail.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12345678906");
     numClientesFisicos++;
+    writePessoaFisica(arq1, *pf5);
+
+    //FECHANDO ARQUIVO NO MODO GRAVAÇÃO
+    arq1.close();
+
+    //ABRINDO ARQUIVO NO MODO LEITURA 
+    ifstream arq5;
+    arq5.open ("PessoaFisica.bin", ios::in | ios::binary);
+
+	//OBJETOS GENÉRICOS DE CADA CLASSE QUE SERÃO UTILIZADOS PARA RECEBER AS INFORMAÇÕES QUE SERÃO LIDAS DOS ARQUIVOS
+    PessoaFisica * DadosPessoaFisica = new PessoaFisica("Pessoa Y", "981011692", "PessoaY@ufscar.com", "Universidade", "Federal", "Sao Carlos", "SP", "12345678", "123", "22222222222");    
+
     // CPF não localizado entre os cadastros criados...a conta não deve ser criada (não deve adetrar o 'if'...)
     int achado=0;
     // Laço para encontrar os cadastros...simulando a ideia da main
     for (int i=0; i<numClientesFisicos; i++) {
-        if ("12345678904" == id_ClienteFisico[i]->getCPF())
+    	arq5.seekg(i * sizeof(PessoaFisica));
+    	readPessoaFisica(arq5, *DadosPessoaFisica);
+        if ("12345678904" == DadosPessoaFisica->getCPF())
             achado = 1;
     }
     if (achado) {
         cout << "Cliente Juridico Cadastrado e Vinculado Com A Pessoa Fisica...\n";  // CPF (12345678910) não cadastrado.
         id_ClienteJuridico[numClientesJuridicos] = new PessoaJuridica("Empresa1", "00000000", "Empresa1@empresas.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12312312312312", "12345678904", "Programacao Orientada a Objetos", 12, 12, 2012, 12, 12, 2012);
+        PessoaJuridica * pj1 = new PessoaJuridica("Empresa1", "00000000", "Empresa1@empresas.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12312312312312", "12345678904", "Programacao Orientada a Objetos", 12, 12, 2012, 12, 12, 2012);
         numClientesJuridicos++;
+        writePessoaJuridica(arq2, *pj1);
     }
     else
         cout << "\nCPF Não Corresponde A Nenhum Cliente Fisico!\n"; 
@@ -538,27 +815,41 @@ void Cenario4() {
     cout << "Tentativa De Criar Conta Corrente Sem Cliente...\n";
     
     for (int i=0; i<numClientesFisicos; i++) {
-        if ("12345678904" == id_ClienteFisico[i]->getCPF())
+    	arq5.seekg(i * sizeof(PessoaFisica));
+    	readPessoaFisica(arq5, *DadosPessoaFisica);
+        if ("12345678904" == DadosPessoaFisica->getCPF())
             achado = 1;
     }
     if (achado) {
         id_ContaPoupanca[numContasPoupanca] = new ContaPoupanca(*id_ClienteFisico[numClientesFisicos-1], numProxConta, 12, 12, 12, 200);
+        ContaPoupanca * cp1 = new ContaPoupanca(*id_ClienteFisico[numClientesFisicos-1], numProxConta, 12, 12, 12, 200);
         numContasPoupanca++;
         numProxConta++;
+        writeContaPoupanca(arq3, *cp1);
         cout << "Conta Poupanca Criada Com Sucesso!\n";
         id_ContaCorrente[numContasCorrente] = new ContaCorrente(12, 12, 2012, 100.0, numProxConta, *id_ClienteFisico[numClientesFisicos-1], 0.0);
+        ContaCorrente * cc1 = new ContaCorrente(12, 12, 2012, 100.0, numProxConta, *id_ClienteFisico[numClientesFisicos-1], 0.0);
         numContasCorrente++;
         numProxConta++;
+        writeContaCorrente(arq4, *cc1);
         cout << "Conta Corrente Criada Com Sucesso!\n";
     }
     else
         cout << "CPF Não Corresponde A Nenhum Cliente Fisico! Falha Na Criacao Das Contas!\n"; 
 
+    //FECHANDO ARQUIVO PESSOA FISICA NO MODO LEITURA
+    arq5.close();
+
+    //REABRINDO NO MODO DE GRAVAÇÃO 
+    arq1.open ("PessoaFisica.bin", ios::out | ios::app | ios::binary);
+
     // Lançamento que geraria saldo negativo em Conta Poupança
     cout << "\nCriando Conta Poupanca Para Testar Lancamentos...\n";
     id_ContaPoupanca[numContasPoupanca] = new ContaPoupanca(*id_ClienteFisico[numClientesFisicos-1], numProxConta, 12, 12, 12, 200);
+    ContaPoupanca * cp2 = new ContaPoupanca(*id_ClienteFisico[numClientesFisicos-1], numProxConta, 12, 12, 12, 200);
     numContasPoupanca++;
     numProxConta++;
+    writeContaPoupanca(arq3, *cp2);
     cout << "Conta Poupanca(C1) Criada Com Sucesso Com Saldo De 200.00!\n";
     
     int int_lancamento;
@@ -577,7 +868,9 @@ void Cenario4() {
     if(int_lancamento == 0){
         cout << endl << "Lançamento Realizado Com Sucesso!!" << endl;
         id_Lancamentos[numLancamentosEfetuados] = new Lancamento(1, 1, 50.0, saldoAnterior, saldoAtualizado, 16, 11, 2019);
+        Lancamento * lancamento1 = new Lancamento(1, 1, 50.0, saldoAnterior, saldoAtualizado, 16, 11, 2019);
         numLancamentosEfetuados++;
+        writeLancamento(arq10, *lancamento1);
     }
     cout << "Saldo atual de C1 = " + to_string_with_precision(id_ContaPoupanca[numContasPoupanca-1]->getSaldoAtual(), 2) + "\n";     
 
@@ -602,20 +895,58 @@ void Cenario4() {
     cout << "\nTentativa De Deletar Cliente Fisico com Conta Corrente Vinculada...\n";
     cout << "Criando Um Novo Cliente Fisico...\n";
     id_ClienteFisico[numClientesFisicos] = new PessoaFisica("Pessoa X", "33002211", "PessoaX@ufscar.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12345678910");
+    PessoaFisica * pf6 = new PessoaFisica("Pessoa X", "33002211", "PessoaX@ufscar.com", "Universidade", "Federal", "Sao", "Carlos", "12345678", "123", "12345678910");
     numClientesFisicos++;
+    writePessoaFisica(arq1, *pf6);
     cout << "Criando Uma Conta Poupanca Para o Cliente Fisico Acima...\n";
     id_ContaPoupanca[numContasPoupanca] = new ContaPoupanca(*id_ClienteFisico[numClientesFisicos-1], numProxConta, 12, 12, 12, 200);
+    ContaPoupanca * cp3 = new ContaPoupanca(*id_ClienteFisico[numClientesFisicos-1], numProxConta, 12, 12, 12, 200);
     numContasPoupanca++;
     numProxConta++;
-    if (id_ClienteFisico[numClientesFisicos-1]->getContaPoupancaAtiva() == 0) {
-        delete id_ClienteFisico[numClientesFisicos-1];
-        cout << "Cliente Deletado Com Sucesso!\n";
-    }
-    else
-        cout << "Erro Ao Excluir...Cliente Com Conta Poupanca Ativa...\n";
+    writeContaPoupanca(arq3, *cp3);
 
-    exit(0);
+    //FECHANDO ARQUIVO PESSOAS FISICAS NO MODO GRAVAÇÃO
+    arq1.close();
+
+    //REABRINDO PARA FAZER A LEITURA DAS INFORMAÇÕES
+    arq5.open ("PessoaFisica.bin", ios::in | ios::binary);
+
+    for(int i=0; i<numClientesFisicos; i++){
+    	arq5.seekg(i * sizeof(PessoaFisica));
+    	readPessoaFisica(arq5, *DadosPessoaFisica);
+	    if (DadosPessoaFisica->getContaPoupancaAtiva() == 1) {
+	        delete id_ClienteFisico[numClientesFisicos-1];
+	        cout << "Cliente Deletado Com Sucesso!\n";
+	    }	    
+	}
+    cout << "Erro Ao Excluir...Cliente Com Conta Poupanca Ativa...\n";
+
+    //FECHANDO TODOS OS ARQUIVOS QUE ESTAVAM ABERTOS
+    arq5.close();
+    arq2.close();
+    arq3.close();
+    arq4.close();
+    arq10.close();
+
+    menuPrincipal();
     
+}
+
+void SystemUpdate(){
+	system("rm PessoaJuridica.bin");
+	system("rm PessoaFisica.bin");
+	system("rm ContaCorrente.bin");
+	system("rm ContaPoupanca.bin");
+	system("rm Lancamentos.bin");
+	
+	numContasPoupanca = 0;
+	numContasCorrente = 0;
+	numClientesFisicos = 0;
+	numClientesJuridicos = 0;
+	numLancamentosEfetuados = 0;
+	numProxConta = 1;
+
+	menuPrincipal();
 }
 
 void menuCliente(){
@@ -852,10 +1183,6 @@ void menuClienteFisico(){
             int quebra=0, i=0;
             // Cadastra-se um cliente em ordem
             id_ClienteFisico[numClientesFisicos] = new PessoaFisica;
-            
-            // Atualiza o arquivo
-            writePessoa(arq1, id_ClienteFisico[i], NULL);
-
             numClientesFisicos++;
             // Cria o cliente e verifica se tal já existe por meio  do CPF.
             // Se já existir (CPF já usado), então é deletado o objeto criado
@@ -1793,47 +2120,105 @@ float getMontanteTotal(){
 
 // Funções que lidam com leitura e escrita de arquivo
 
-void writePessoa(ofstream &arq, PessoaFisica *pf, PessoaJuridica *pj) {
-    // para gravar todos os atributos da classe
-    if (pf == NULL)
-        arq.write(reinterpret_cast<const char*>(pj),sizeof(*pj));
-    if (pj == NULL)
-        arq.write(reinterpret_cast<const char*>(pf),sizeof(*pf));
+void writePessoaFisica(ofstream &arq, PessoaFisica &p){
+	// para gravar todos os atributos da classe
+	arq.write(reinterpret_cast<const char*>(&p),sizeof(p));
+}
+void writePessoaJuridica(ofstream &arq, PessoaJuridica &p){
+	// para gravar todos os atributos da classe
+	arq.write(reinterpret_cast<const char*>(&p),sizeof(p));
 }
 
-void readPessoa(ifstream &arq, PessoaFisica *pf, PessoaJuridica *pj) {
-    // para ler todos os atributos da classe
-    if (pf == NULL)
-        arq.read(reinterpret_cast<char*>(pj),sizeof(*pj));
-    if (pj == NULL)
-        arq.read(reinterpret_cast<char*>(pf),sizeof(*pf));
+void readPessoaFisica(ifstream &arq, PessoaFisica &p){
+	// para ler todos os atributos da classe
+	arq.read(reinterpret_cast<char*>(&p),sizeof(p));
+}
+void readPessoaJuridica(ifstream &arq, PessoaJuridica &p){
+	// para ler todos os atributos da classe
+	arq.read(reinterpret_cast<char*>(&p),sizeof(p));
 }
 
-void writeConta(ofstream &arq, ContaPoupanca *cp, ContaCorrente *cc) {
-    // para gravar todos os atributos da classe
-    if (cp == NULL)
-        arq.write(reinterpret_cast<const char*>(cc),sizeof(*cc));
-    if (cc == NULL)
-        arq.write(reinterpret_cast<const char*>(cp),sizeof(*cp));
+void writeContaCorrente(ofstream &arq, ContaCorrente &c){
+	// para gravar todos os atributos da classe
+	arq.write(reinterpret_cast<const char*>(&c),sizeof(c));
+}
+void writeContaPoupanca(ofstream &arq, ContaPoupanca &c){
+	// para gravar todos os atributos da classe
+	arq.write(reinterpret_cast<const char*>(&c),sizeof(c));
 }
 
-void readConta(ifstream &arq, ContaPoupanca *cp, ContaCorrente *cc) {
-    // para ler todos os atributos da classe
-    if (cp == NULL)
-        arq.read(reinterpret_cast<char*>(cc),sizeof(*cc));
-    if (cc == NULL)
-        arq.read(reinterpret_cast<char*>(cp),sizeof(*cp));
+void readContaCorrente(ifstream &arq, ContaCorrente &c){
+	// para ler todos os atributos da classe
+	arq.read(reinterpret_cast<char*>(&c),sizeof(c));
+}
+void readContaPoupanca(ifstream &arq, ContaPoupanca &c){
+	// para ler todos os atributos da classe
+	arq.read(reinterpret_cast<char*>(&c),sizeof(c));
 }
 
-// Só deve ser chamado uma vez, ao iniciar o executável
-void atualizaSistema() {
-    // Atualizando as Pessoas Fisicas
-    PessoaFisica *aux;
-    arq5.seekg(0);                                                       // Posição inicial do arquivo
-    do {
-        aux = new PessoaFisica(" ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
-        readPessoa(arq5, aux, NULL);                                     // Inicia os campos de aux com os dados do arquivo
-        id_ClienteFisico[numClientesFisicos] = aux;
-        numClientesFisicos++;                                            // Incrementa o numero de PessoasFisicas cadastradas
-    } while (! arq5.eof());                                              // Enquanto !EOF
+void writeLancamento(ofstream &arq, Lancamento &l){
+	// para gravar todos os atributos da classe
+	arq.write(reinterpret_cast<const char*>(&l),sizeof(l));
+}
+void readLancamento(ifstream &arq, Lancamento &l){
+	// para ler todos os atributos da classe
+	arq.read(reinterpret_cast<char*>(&l),sizeof(l));
+}
+
+void imprimePessoaFisica(PessoaFisica &p){
+    cout << "\nCliente/Empresa: " << p.getNome() <<
+                    "\nRua " << p.getEndereco()->getRua() << ", " << p.getEndereco()->getNumero() <<
+                        "\nBairro " << p.getEndereco()->getBairro() << " - " << "CEP: " << p.getEndereco()->getCep() <<
+                            "\nReside em: " << p.getEndereco()->getCidade() << "- " << p.getEndereco()->getUf() <<
+                                "\nTelefone: " << p.getTelefone() <<
+                                    "\nE-mail: " << p.getEmail() <<
+                                    	"\nPortador do CPF: " << p.getCPF() <<
+                                        	"\n";
+}
+void imprimePessoaJuridica(PessoaJuridica &p){
+    cout << "\nCliente/Empresa: " << p.getNome() <<
+                    "\nRua " << p.getEndereco()->getRua() << ", " << p.getEndereco()->getNumero() <<
+                        "\nBairro " << p.getEndereco()->getBairro() << " - " << "CEP: " << p.getEndereco()->getCep() <<
+                            "\nReside em: " << p.getEndereco()->getCidade() << "- " << p.getEndereco()->getUf() <<
+                                "\nTelefone: " << p.getTelefone() <<
+                                    "\nE-mail: " << p.getEmail() <<
+                                    	"\nPortador do CNPJ: " << p.getCNPJ() <<
+                        					"\nCPF do proprietario majoritario é " << p.getCPFProprietarioMajor() <<
+                            					"\nTrabalha no ramo de atuacao de: " << p.getRamoAtuacao() <<
+                                					"\nFundada em: " << to_string(p.getDataFundacao()->getDia()) << "/" << to_string(p.getDataFundacao()->getMes()) << "/" << to_string(p.getDataFundacao()->getAno()) <<
+                                    					"\nA ultima atualizacao do contrato social foi no dia: " << to_string(p.getDataUltimaAtt()->getDia()) << "/" << to_string(p.getDataUltimaAtt()->getMes()) << "/" << to_string(p.getDataUltimaAtt()->getAno()) <<
+                                        					"\n";
+}
+
+void imprimeContaCorrente(ContaCorrente &c){
+	cout << "\nO CPF/CNPJ do dono desta conta é: " << c.getCPFouCNPJ() <<
+            	"\nO número da conta é: 000" << to_string(c.getNumConta()) <<
+					"\nA data de abertura da conta é: " << c.getDataAbertura()->getDia() << "/" << c.getDataAbertura()->getMes() << "/" << c.getDataAbertura()->getAno() <<
+                        "\nO saldo atual da conta é: R$" << to_string_with_precision(c.getSaldoAtual(), 2) <<
+                        	"\nO limite de cheque especial é: R$" << to_string_with_precision(c.getLimiteCheque(), 2) << 
+                                "\n";
+}
+void imprimeContaPoupanca(ContaPoupanca &c){
+	cout << "\nO CPF do dono desta conta é: " << c.getCPFPessoaFisica() <<
+                "\nO número da conta é: 000" << to_string(c.getNumConta()) <<
+					"\nA data de abertura da conta é: " << c.getDataAbertura()->getDia() << "/" << c.getDataAbertura()->getMes() << "/" << c.getDataAbertura()->getAno() <<
+                        "\nO saldo atual da conta é: R$" << to_string_with_precision(c.getSaldoAtual(), 2) << 
+                        	"\n";
+}
+
+void imprimeLancamento(Lancamento &l){
+	string operation;
+
+    if(l.getOperacao() == 1)
+        operation = "Debito";
+    else
+        operation = "Credito";
+
+    cout << "\nOperacao de: " + operation +
+                "\nCom o valor de: R$" + to_string_with_precision(l.getValorLancamento(), 2) +
+                    "\nA data do lancamento na conta foi: " + to_string(l.getDataLancamento().getDia()) + "/" + to_string(l.getDataLancamento().getMes()) + "/" + to_string(l.getDataLancamento().getAno()) +
+                        "\nO saldo anterior era de: " + to_string_with_precision(l.getSaldoAnterior(), 2) + 
+                            "\nO saldo após o lancamento é: " + to_string_with_precision(l.getSaldoAtualizado(), 2) +
+                                "\n";
+
 }
