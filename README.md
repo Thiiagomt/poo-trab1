@@ -1,8 +1,11 @@
 Trabalhos práticos da disciplina de Programação Orientada a Objetos 2019/2
 
 Os 3 trabalhos práticos foram dividos dentro de cada branch.
+
 Branch master - Trabalho 1
+
 Branch Trab2 - Trabalho 2
+
 Branch Trab3 - Trabalho 3
 
 Overview
