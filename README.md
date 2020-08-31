@@ -6,9 +6,9 @@
 
 ### Branch master - Trabalho 1
 
-### [https://github.com/thiagomtt/poo-trab1/tree/Trab2](Branch Trab2 - Trabalho 2)
+### Branch Trab2 - [https://github.com/thiagomtt/poo-trab1/tree/Trab2](Trabalho 2)
 
-### [https://github.com/thiagomtt/poo-trab1/tree/Trab3](Branch Trab3 - Trabalho 3)
+### Branch Trab3 - [https://github.com/thiagomtt/poo-trab1/tree/Trab3](Trabalho 3)
 
 <br>
 
